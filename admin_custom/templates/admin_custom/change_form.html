@@ -1,0 +1,48 @@
+{% extends "admin/change_form.html" %}
+{% load static i18n admin_urls admin_modify %}
+
+{% block content %}
+<div class="card card-primary card-outline">
+    <div class="card-header border-0">
+        <h3 class="card-title">
+            <i class="fas fa-{% if add %}plus-circle{% else %}edit{% endif %}"></i>
+            {% if add %}
+                Ajouter {{ opts.verbose_name }}
+            {% else %}
+                Modifier {{ original|truncatewords:"18" }}
+            {% endif %}
+        </h3>
+        <div class="card-tools">
+            <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                <i class="fas fa-minus"></i>
+            </button>
+        </div>
+    </div>
+    <div class="card-body" style="padding: var(--space-6, 24px);">
+        {{ block.super }}
+    </div>
+</div>
+{% endblock %}
+
+{% block submit_buttons_bottom %}
+<div class="card-footer bg-light border-top">
+    <div class="d-flex align-items-center justify-content-between flex-wrap gap-3">
+        <div class="btn-group" role="group">
+            <button type="submit" class="btn btn-primary btn-lg" name="_save">
+                <i class="fas fa-save"></i> {% if add %}Ajouter{% else %}Enregistrer{% endif %}
+            </button>
+            {% if not add %}
+            <button type="submit" class="btn btn-info btn-lg" name="_continue">
+                <i class="fas fa-save"></i> Enregistrer et continuer
+            </button>
+            <button type="submit" class="btn btn-success btn-lg" name="_addanother">
+                <i class="fas fa-plus"></i> Enregistrer et ajouter
+            </button>
+            {% endif %}
+        </div>
+        <a href="{% url opts|admin_urlname:'changelist' %}" class="btn btn-secondary btn-lg">
+            <i class="fas fa-times"></i> Annuler
+        </a>
+    </div>
+</div>
+{% endblock %}

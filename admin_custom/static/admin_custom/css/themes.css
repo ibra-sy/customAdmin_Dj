@@ -1,0 +1,1230 @@
+/* Thème Liquid Glass - Glassmorphism sobre et élégant */
+:root[data-theme="liquid-glass"] {
+    --primary-color: #5A6C7D;
+    --secondary-color: #6B7D8E;
+    --accent-color: #7A8B9C;
+    --bg-color: #E8EAED;
+    --bg-secondary: rgba(255, 255, 255, 0.1);
+    --text-color: #2C3E50;
+    --text-secondary: #5A6C7D;
+    --border-color: rgba(255, 255, 255, 0.3);
+    --hover-bg: rgba(255, 255, 255, 0.15);
+    --dashboard-bg: #E8EAED;
+    --card-bg: rgba(255, 255, 255, 0.15);
+    --shadow: rgba(0, 0, 0, 0.08);
+    --shadow-hover: rgba(0, 0, 0, 0.12);
+    --gradient-primary: #5A6C7D;
+    --gradient-secondary: #6B7D8E;
+    --glass-effect: rgba(255, 255, 255, 0.15);
+    --glass-border: rgba(255, 255, 255, 0.25);
+    --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.1);
+    --glass-inner-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.1);
+    --border-radius: 16px;
+    --font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    /* Variables pour boutons */
+    --btn-primary-bg: rgba(90, 108, 125, 0.3);
+    --btn-primary-hover: rgba(90, 108, 125, 0.4);
+    --btn-secondary-bg: rgba(255, 255, 255, 0.2);
+    --btn-secondary-hover: rgba(255, 255, 255, 0.3);
+    /* Variables pour grilles/tables */
+    --table-bg: rgba(255, 255, 255, 0.15);
+    --table-header-bg: rgba(90, 108, 125, 0.35);
+    --table-border: rgba(255, 255, 255, 0.25);
+    --table-row-hover: rgba(255, 255, 255, 0.2);
+    --table-stripe: rgba(255, 255, 255, 0.08);
+}
+
+/* Thème Nostalgie - Sobre et élégant */
+:root[data-theme="nostalgie"] {
+    --primary-color: #8B7D6B;
+    --secondary-color: #9B8D7B;
+    --accent-color: #7B6D5B;
+    --bg-color: #F5F3F0;
+    --bg-secondary: #EDEBE8;
+    --text-color: #3E3A35;
+    --text-secondary: #6B6762;
+    --border-color: #D7D3CE;
+    --hover-bg: #E8E6E3;
+    --dashboard-bg: #FAF9F7;
+    --card-bg: #FFFFFF;
+    --shadow: rgba(0, 0, 0, 0.08);
+    --shadow-hover: rgba(0, 0, 0, 0.12);
+    --gradient-primary: #8B7D6B;
+    --gradient-secondary: #9B8D7B;
+    --paper-texture: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%238B7D6B' fill-opacity='0.01'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    --font-family: 'Inter', sans-serif;
+}
+
+/* Thème Océan - Sobre et apaisant */
+:root[data-theme="ocean"] {
+    --primary-color: #6B8FA3;
+    --secondary-color: #7B9FB3;
+    --accent-color: #5B7F93;
+    --bg-color: #F0F4F7;
+    --bg-secondary: #E8ECEF;
+    --text-color: #2C3E50;
+    --text-secondary: #5A6C7D;
+    --border-color: #D1D9DE;
+    --hover-bg: #E0E8EB;
+    --dashboard-bg: #F5F7FA;
+    --card-bg: #FFFFFF;
+    --shadow: rgba(0, 0, 0, 0.08);
+    --shadow-hover: rgba(0, 0, 0, 0.12);
+    --gradient-primary: #6B8FA3;
+    --gradient-secondary: #7B9FB3;
+    --wave-pattern: repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(107, 143, 163, 0.02) 10px, rgba(107, 143, 163, 0.02) 20px);
+    --font-family: 'Inter', sans-serif;
+}
+
+/* Thème Sunset - Sobre et doux */
+:root[data-theme="sunset"] {
+    --primary-color: #A68B7B;
+    --secondary-color: #B69B8B;
+    --accent-color: #967B6B;
+    --bg-color: #F7F5F3;
+    --bg-secondary: #F0EDEA;
+    --text-color: #3E3A35;
+    --text-secondary: #6B6762;
+    --border-color: #D7D3CE;
+    --hover-bg: #E8E5E2;
+    --dashboard-bg: #FAF9F7;
+    --card-bg: #FFFFFF;
+    --shadow: rgba(0, 0, 0, 0.08);
+    --shadow-hover: rgba(0, 0, 0, 0.12);
+    --gradient-primary: #A68B7B;
+    --gradient-secondary: #B69B8B;
+    --font-family: 'Inter', sans-serif;
+}
+
+/* Thème Forêt - Sobre et naturel */
+:root[data-theme="forest"] {
+    --primary-color: #6B7D5B;
+    --secondary-color: #7B8D6B;
+    --accent-color: #5B6D4B;
+    --bg-color: #F0F2ED;
+    --bg-secondary: #E8EAE5;
+    --text-color: #2C3E2A;
+    --text-secondary: #5A6C58;
+    --border-color: #D1D9CE;
+    --hover-bg: #E0E8DD;
+    --dashboard-bg: #F5F7F2;
+    --card-bg: #FFFFFF;
+    --shadow: rgba(0, 0, 0, 0.08);
+    --shadow-hover: rgba(0, 0, 0, 0.12);
+    --gradient-primary: #6B7D5B;
+    --gradient-secondary: #7B8D6B;
+    --font-family: 'Inter', sans-serif;
+}
+
+/* Thème Sombre - Moderne et sobre */
+:root[data-theme="dark"] {
+    --primary-color: #6B7D8E;
+    --secondary-color: #7B8D9E;
+    --accent-color: #5B6D7E;
+    --bg-color: #1A1F2E;
+    --bg-secondary: #252A3A;
+    --text-color: #E8EAED;
+    --text-secondary: #B8BAC3;
+    --border-color: #3A3F4E;
+    --hover-bg: #2A2F3E;
+    --dashboard-bg: #1A1F2E;
+    --card-bg: #252A3A;
+    --shadow: rgba(0, 0, 0, 0.4);
+    --shadow-hover: rgba(0, 0, 0, 0.5);
+    --gradient-primary: #6B7D8E;
+    --gradient-secondary: #7B8D9E;
+    --font-family: 'Inter', sans-serif;
+}
+
+/* Navigation Dark - Style moderne sombre */
+[data-theme="dark"] .custom-admin-nav {
+    background: var(--bg-secondary);
+    border-bottom: 2px solid var(--border-color);
+    box-shadow: 0 4px 16px var(--shadow);
+    padding: 12px 20px;
+}
+
+[data-theme="dark"] .custom-admin-nav::before {
+    background: linear-gradient(90deg, 
+        transparent 0%, 
+        rgba(107, 125, 142, 0.15) 50%, 
+        transparent 100%);
+}
+
+[data-theme="dark"] .custom-admin-nav .nav-link {
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    color: var(--text-color);
+    box-shadow: 0 2px 6px var(--shadow);
+}
+
+[data-theme="dark"] .custom-admin-nav .nav-link:hover {
+    background: var(--hover-bg);
+    border-color: var(--primary-color);
+    color: var(--primary-color);
+    box-shadow: 0 4px 12px var(--shadow-hover);
+    transform: translateY(-2px);
+}
+
+[data-theme="dark"] .custom-admin-nav .nav-link.active {
+    background: var(--gradient-primary);
+    border-color: var(--primary-color);
+    color: white;
+    box-shadow: 0 4px 16px var(--shadow-hover);
+}
+
+/* Thème par défaut - Sobre et professionnel */
+:root[data-theme="default"] {
+    --primary-color: #5A6C7D;
+    --secondary-color: #6B7D8E;
+    --accent-color: #4A5C6D;
+    --bg-color: #ffffff;
+    --bg-secondary: #f8f9fa;
+    --text-color: #2C3E50;
+    --text-secondary: #5A6C7D;
+    --border-color: #E0E4E8;
+    --hover-bg: #F0F2F5;
+    --dashboard-bg: #f8f9fa;
+    --card-bg: #ffffff;
+    --shadow: rgba(0, 0, 0, 0.08);
+    --shadow-hover: rgba(0, 0, 0, 0.12);
+    --gradient-primary: #5A6C7D;
+    --gradient-secondary: #6B7D8E;
+    --font-family: 'Inter', sans-serif;
+}
+
+/* Navigation Default - Style classique */
+[data-theme="default"] .custom-admin-nav {
+    background: var(--bg-secondary);
+    border-bottom: 2px solid var(--border-color);
+    box-shadow: 0 2px 4px var(--shadow);
+    padding: 12px 20px;
+}
+
+[data-theme="default"] .custom-admin-nav::before {
+    background: linear-gradient(90deg, 
+        transparent 0%, 
+        rgba(90, 108, 125, 0.1) 50%, 
+        transparent 100%);
+}
+
+[data-theme="default"] .custom-admin-nav .nav-link {
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    color: var(--text-color);
+    box-shadow: 0 1px 3px var(--shadow);
+}
+
+[data-theme="default"] .custom-admin-nav .nav-link:hover {
+    background: var(--hover-bg);
+    border-color: var(--primary-color);
+    color: var(--primary-color);
+    box-shadow: 0 2px 6px var(--shadow-hover);
+    transform: translateY(-2px);
+}
+
+[data-theme="default"] .custom-admin-nav .nav-link.active {
+    background: var(--gradient-primary);
+    border-color: var(--primary-color);
+    color: white;
+    box-shadow: 0 4px 12px var(--shadow-hover);
+}
+
+/* Application globale des variables */
+body {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    font-family: var(--font-family, 'Inter', sans-serif);
+    transition: background-color 0.5s ease, color 0.5s ease;
+}
+
+/* Thème Liquid Glass - Effets glassmorphism sobre */
+[data-theme="liquid-glass"] body {
+    background: #E8EAED;
+    background-attachment: fixed;
+    min-height: 100vh;
+    position: relative;
+}
+
+[data-theme="liquid-glass"] body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: 
+        radial-gradient(circle at 20% 50%, rgba(90, 108, 125, 0.05) 0%, transparent 50%),
+        radial-gradient(circle at 80% 80%, rgba(107, 125, 142, 0.05) 0%, transparent 50%),
+        radial-gradient(circle at 40% 20%, rgba(122, 139, 156, 0.03) 0%, transparent 50%);
+    pointer-events: none;
+    z-index: 0;
+}
+
+[data-theme="liquid-glass"] #container {
+    position: relative;
+    z-index: 1;
+}
+
+/* Optimisation des performances - réduire le blur sur les éléments nombreux */
+[data-theme="liquid-glass"] table tbody tr,
+[data-theme="liquid-glass"] .dataTables_wrapper tbody tr {
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+}
+
+[data-theme="liquid-glass"] .card,
+[data-theme="liquid-glass"] .module {
+    background: var(--glass-effect);
+    backdrop-filter: blur(10px) saturate(180%);
+    -webkit-backdrop-filter: blur(10px) saturate(180%);
+    border: 1px solid var(--glass-border);
+    box-shadow: 
+        var(--glass-shadow),
+        var(--glass-inner-shadow);
+    border-radius: var(--border-radius);
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+    /* Optimisation des performances - réduire le blur pour éviter les bugs */
+    isolation: isolate;
+}
+
+[data-theme="liquid-glass"] .card::before,
+[data-theme="liquid-glass"] .module::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 1px;
+    background: linear-gradient(90deg, 
+        transparent 0%, 
+        rgba(255, 255, 255, 0.4) 50%, 
+        transparent 100%);
+    pointer-events: none;
+}
+
+[data-theme="liquid-glass"] .card:hover,
+[data-theme="liquid-glass"] .module:hover {
+    transform: translateY(-4px);
+    box-shadow: 
+        0 12px 40px 0 rgba(0, 0, 0, 0.2),
+        inset 0 1px 0 0 rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.3);
+}
+
+[data-theme="liquid-glass"] .card-header,
+[data-theme="liquid-glass"] .module h2 {
+    background: rgba(90, 108, 125, 0.2);
+    backdrop-filter: blur(10px) saturate(180%);
+    -webkit-backdrop-filter: blur(10px) saturate(180%);
+    border-bottom: 1px solid var(--glass-border);
+    position: relative;
+}
+
+[data-theme="liquid-glass"] .card-header::after,
+[data-theme="liquid-glass"] .module h2::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 1px;
+    background: linear-gradient(90deg, 
+        transparent 0%, 
+        rgba(255, 255, 255, 0.3) 50%, 
+        transparent 100%);
+}
+
+[data-theme="liquid-glass"] .btn-primary,
+[data-theme="liquid-glass"] .btn-success,
+[data-theme="liquid-glass"] .btn-info,
+[data-theme="liquid-glass"] .btn-warning,
+[data-theme="liquid-glass"] .btn-danger {
+    background: var(--btn-primary-bg);
+    backdrop-filter: blur(10px) saturate(180%);
+    -webkit-backdrop-filter: blur(10px) saturate(180%);
+    border: 1px solid var(--glass-border);
+    color: white;
+    box-shadow: 
+        0 4px 15px rgba(0, 0, 0, 0.15),
+        inset 0 1px 0 0 rgba(255, 255, 255, 0.2);
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+[data-theme="liquid-glass"] .btn-primary::before,
+[data-theme="liquid-glass"] .btn-success::before,
+[data-theme="liquid-glass"] .btn-info::before,
+[data-theme="liquid-glass"] .btn-warning::before,
+[data-theme="liquid-glass"] .btn-danger::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, 
+        transparent, 
+        rgba(255, 255, 255, 0.2), 
+        transparent);
+    transition: left 0.5s;
+}
+
+[data-theme="liquid-glass"] .btn-primary:hover::before,
+[data-theme="liquid-glass"] .btn-success:hover::before,
+[data-theme="liquid-glass"] .btn-info:hover::before,
+[data-theme="liquid-glass"] .btn-warning:hover::before,
+[data-theme="liquid-glass"] .btn-danger:hover::before {
+    left: 100%;
+}
+
+[data-theme="liquid-glass"] .btn-primary:hover,
+[data-theme="liquid-glass"] .btn-success:hover,
+[data-theme="liquid-glass"] .btn-info:hover,
+[data-theme="liquid-glass"] .btn-warning:hover,
+[data-theme="liquid-glass"] .btn-danger:hover {
+    background: var(--btn-primary-hover);
+    box-shadow: 
+        0 6px 20px rgba(0, 0, 0, 0.2),
+        inset 0 1px 0 0 rgba(255, 255, 255, 0.3);
+    transform: translateY(-2px);
+    border-color: rgba(255, 255, 255, 0.3);
+}
+
+[data-theme="liquid-glass"] table,
+[data-theme="liquid-glass"] .dataTables_wrapper {
+    background: var(--table-bg);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border: 1px solid var(--table-border);
+    border-radius: var(--border-radius);
+    overflow: hidden;
+    box-shadow: 
+        var(--glass-shadow),
+        var(--glass-inner-shadow);
+}
+
+[data-theme="liquid-glass"] table thead th {
+    background: var(--table-header-bg);
+    backdrop-filter: blur(10px) saturate(180%);
+    -webkit-backdrop-filter: blur(10px) saturate(180%);
+    color: white;
+    border-bottom: 1px solid var(--glass-border);
+    position: relative;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+[data-theme="liquid-glass"] table thead th::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 1px;
+    background: linear-gradient(90deg, 
+        transparent 0%, 
+        rgba(255, 255, 255, 0.3) 50%, 
+        transparent 100%);
+}
+
+[data-theme="liquid-glass"] table tbody tr {
+    background: transparent;
+    border-bottom: 1px solid var(--table-border);
+    transition: all 0.3s ease;
+}
+
+[data-theme="liquid-glass"] table tbody tr:nth-child(even) {
+    background: var(--table-stripe);
+}
+
+[data-theme="liquid-glass"] table tbody tr:hover {
+    background: var(--table-row-hover);
+    backdrop-filter: blur(5px);
+    transform: scale(1.01);
+    box-shadow: inset 0 0 20px rgba(255, 255, 255, 0.1);
+}
+
+[data-theme="liquid-glass"] .form-control,
+[data-theme="liquid-glass"] select,
+[data-theme="liquid-glass"] input,
+[data-theme="liquid-glass"] textarea {
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(10px) saturate(180%);
+    -webkit-backdrop-filter: blur(10px) saturate(180%);
+    border: 1px solid var(--glass-border);
+    color: var(--text-color);
+    box-shadow: 
+        inset 0 2px 4px rgba(0, 0, 0, 0.1),
+        0 1px 0 rgba(255, 255, 255, 0.1);
+    transition: all 0.3s ease;
+}
+
+[data-theme="liquid-glass"] .form-control:focus,
+[data-theme="liquid-glass"] select:focus,
+[data-theme="liquid-glass"] input:focus,
+[data-theme="liquid-glass"] textarea:focus {
+    background: rgba(255, 255, 255, 0.25);
+    border-color: rgba(90, 108, 125, 0.6);
+    box-shadow: 
+        0 0 0 3px rgba(90, 108, 125, 0.15),
+        inset 0 2px 4px rgba(0, 0, 0, 0.1),
+        0 1px 0 rgba(255, 255, 255, 0.2);
+    outline: none;
+}
+
+[data-theme="liquid-glass"] .small-box {
+    background: var(--glass-effect) !important;
+    backdrop-filter: blur(10px) saturate(180%);
+    -webkit-backdrop-filter: blur(10px) saturate(180%);
+    isolation: isolate;
+    border: 1px solid var(--glass-border);
+    box-shadow: 
+        var(--glass-shadow),
+        var(--glass-inner-shadow);
+    color: white;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+[data-theme="liquid-glass"] .small-box::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+    pointer-events: none;
+}
+
+[data-theme="liquid-glass"] .small-box:hover {
+    transform: translateY(-4px);
+    box-shadow: 
+        0 12px 40px 0 rgba(0, 0, 0, 0.2),
+        inset 0 1px 0 0 rgba(255, 255, 255, 0.2);
+    border-color: rgba(255, 255, 255, 0.3);
+}
+
+/* Navigation Liquid Glass - Effets avancés */
+[data-theme="liquid-glass"] .custom-admin-nav {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px) saturate(180%);
+    -webkit-backdrop-filter: blur(10px) saturate(180%);
+    border-bottom: 1px solid var(--glass-border);
+    box-shadow: 
+        0 4px 16px rgba(0, 0, 0, 0.1),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    position: relative;
+    overflow: visible;
+    /* Optimisation pour éviter les bugs */
+    isolation: isolate;
+}
+
+[data-theme="liquid-glass"] .custom-admin-nav::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 1px;
+    background: linear-gradient(90deg, 
+        transparent 0%, 
+        rgba(255, 255, 255, 0.4) 50%, 
+        transparent 100%);
+    pointer-events: none;
+}
+
+[data-theme="liquid-glass"] .custom-admin-nav .nav-link {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px) saturate(180%);
+    -webkit-backdrop-filter: blur(10px) saturate(180%);
+    border: 1px solid var(--glass-border);
+    box-shadow: 
+        0 2px 8px rgba(0, 0, 0, 0.1),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+    color: rgba(255, 255, 255, 0.9);
+    position: relative;
+    overflow: hidden;
+}
+
+[data-theme="liquid-glass"] .custom-admin-nav .nav-link::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, 
+        transparent, 
+        rgba(255, 255, 255, 0.2), 
+        transparent);
+    transition: left 0.5s;
+    z-index: 0;
+}
+
+[data-theme="liquid-glass"] .custom-admin-nav .nav-link::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 1px;
+    background: linear-gradient(90deg, 
+        transparent 0%, 
+        rgba(255, 255, 255, 0.4) 50%, 
+        transparent 100%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+[data-theme="liquid-glass"] .custom-admin-nav .nav-link span,
+[data-theme="liquid-glass"] .custom-admin-nav .nav-link i {
+    position: relative;
+    z-index: 1;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+[data-theme="liquid-glass"] .custom-admin-nav .nav-link:hover {
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(12px) saturate(180%);
+    -webkit-backdrop-filter: blur(12px) saturate(180%);
+    box-shadow: 
+        0 4px 16px rgba(31, 38, 135, 0.4),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    transform: translateY(-2px);
+    border-color: rgba(255, 255, 255, 0.3);
+    color: white;
+}
+
+[data-theme="liquid-glass"] .custom-admin-nav .nav-link:hover::before {
+    left: 100%;
+}
+
+[data-theme="liquid-glass"] .custom-admin-nav .nav-link:hover::after {
+    opacity: 1;
+}
+
+[data-theme="liquid-glass"] .custom-admin-nav .nav-link.active {
+    background: rgba(90, 108, 125, 0.3);
+    border-color: rgba(90, 108, 125, 0.5);
+    box-shadow: 
+        0 4px 16px rgba(0, 0, 0, 0.15),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    color: white;
+}
+
+[data-theme="liquid-glass"] .custom-admin-nav .nav-link.active::after {
+    opacity: 1;
+}
+
+/* Thème Nostalgie - Texture papier */
+[data-theme="nostalgie"] body {
+    background: var(--bg-color);
+    background-image: var(--paper-texture);
+}
+
+[data-theme="nostalgie"] .card,
+[data-theme="nostalgie"] .module {
+    background: var(--card-bg);
+    border: 2px solid var(--border-color);
+    box-shadow: 0 4px 12px var(--shadow);
+    position: relative;
+}
+
+[data-theme="nostalgie"] .card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: var(--gradient-primary);
+}
+
+/* Navigation Nostalgie - Style rétro */
+[data-theme="nostalgie"] .custom-admin-nav {
+    background: var(--bg-secondary);
+    border-bottom: 3px solid var(--primary-color);
+    box-shadow: 0 4px 12px var(--shadow);
+    padding: 12px 20px;
+}
+
+[data-theme="nostalgie"] .custom-admin-nav::before {
+    background: linear-gradient(90deg, 
+        transparent 0%, 
+        rgba(139, 125, 107, 0.15) 50%, 
+        transparent 100%);
+}
+
+[data-theme="nostalgie"] .custom-admin-nav .nav-link {
+    background: var(--card-bg);
+    border: 2px solid var(--border-color);
+    color: var(--text-color);
+    box-shadow: 0 2px 4px var(--shadow);
+    font-weight: 600;
+}
+
+[data-theme="nostalgie"] .custom-admin-nav .nav-link:hover {
+    background: var(--hover-bg);
+    border-color: var(--primary-color);
+    color: var(--primary-color);
+    box-shadow: 0 4px 8px var(--shadow-hover);
+    transform: translateY(-2px);
+}
+
+[data-theme="nostalgie"] .custom-admin-nav .nav-link.active {
+    background: var(--gradient-primary);
+    border-color: var(--primary-color);
+    color: white;
+    box-shadow: 0 4px 12px var(--shadow-hover);
+}
+
+/* Thème Océan - Motif vague */
+[data-theme="ocean"] body {
+    background: var(--bg-color);
+    background-image: var(--wave-pattern);
+}
+
+[data-theme="ocean"] .card,
+[data-theme="ocean"] .module {
+    background: var(--card-bg);
+    border: 2px solid var(--border-color);
+    box-shadow: 0 4px 16px var(--shadow);
+    border-radius: var(--border-radius, 8px);
+}
+
+/* Navigation Océan - Style frais */
+[data-theme="ocean"] .custom-admin-nav {
+    background: var(--bg-secondary);
+    border-bottom: 3px solid var(--primary-color);
+    box-shadow: 0 4px 16px var(--shadow);
+    padding: 12px 20px;
+}
+
+[data-theme="ocean"] .custom-admin-nav::before {
+    background: linear-gradient(90deg, 
+        transparent 0%, 
+        rgba(107, 143, 163, 0.15) 50%, 
+        transparent 100%);
+}
+
+[data-theme="ocean"] .custom-admin-nav .nav-link {
+    background: var(--card-bg);
+    border: 2px solid var(--border-color);
+    color: var(--text-color);
+    box-shadow: 0 2px 6px var(--shadow);
+}
+
+[data-theme="ocean"] .custom-admin-nav .nav-link:hover {
+    background: var(--hover-bg);
+    border-color: var(--primary-color);
+    color: var(--primary-color);
+    box-shadow: 0 4px 12px var(--shadow-hover);
+    transform: translateY(-2px);
+}
+
+[data-theme="ocean"] .custom-admin-nav .nav-link.active {
+    background: var(--gradient-primary);
+    border-color: var(--primary-color);
+    color: white;
+    box-shadow: 0 4px 16px var(--shadow-hover);
+}
+
+/* Thème Sunset - Dégradés chaleureux */
+[data-theme="sunset"] .card-header,
+[data-theme="sunset"] .module h2 {
+    background: var(--gradient-primary);
+    color: white;
+}
+
+[data-theme="sunset"] .small-box {
+    background: var(--gradient-primary) !important;
+}
+
+/* Navigation Sunset - Style chaleureux */
+[data-theme="sunset"] .custom-admin-nav {
+    background: var(--bg-secondary);
+    border-bottom: 3px solid var(--primary-color);
+    box-shadow: 0 4px 16px var(--shadow);
+    padding: 12px 20px;
+}
+
+[data-theme="sunset"] .custom-admin-nav::before {
+    background: linear-gradient(90deg, 
+        transparent 0%, 
+        rgba(166, 139, 123, 0.15) 50%, 
+        transparent 100%);
+}
+
+[data-theme="sunset"] .custom-admin-nav .nav-link {
+    background: var(--card-bg);
+    border: 2px solid var(--border-color);
+    color: var(--text-color);
+    box-shadow: 0 2px 6px var(--shadow);
+}
+
+[data-theme="sunset"] .custom-admin-nav .nav-link:hover {
+    background: var(--hover-bg);
+    border-color: var(--primary-color);
+    color: var(--primary-color);
+    box-shadow: 0 4px 12px var(--shadow-hover);
+    transform: translateY(-2px);
+}
+
+[data-theme="sunset"] .custom-admin-nav .nav-link.active {
+    background: var(--gradient-primary);
+    border-color: var(--primary-color);
+    color: white;
+    box-shadow: 0 4px 16px var(--shadow-hover);
+}
+
+/* Thème Forêt - Nature */
+[data-theme="forest"] .card,
+[data-theme="forest"] .module {
+    border-left: 4px solid var(--primary-color);
+}
+
+/* Navigation Forêt - Style nature */
+[data-theme="forest"] .custom-admin-nav {
+    background: var(--bg-secondary);
+    border-bottom: 3px solid var(--primary-color);
+    box-shadow: 0 4px 16px var(--shadow);
+    padding: 12px 20px;
+}
+
+[data-theme="forest"] .custom-admin-nav::before {
+    background: linear-gradient(90deg, 
+        transparent 0%, 
+        rgba(107, 125, 91, 0.15) 50%, 
+        transparent 100%);
+}
+
+[data-theme="forest"] .custom-admin-nav .nav-link {
+    background: var(--card-bg);
+    border: 2px solid var(--border-color);
+    color: var(--text-color);
+    box-shadow: 0 2px 6px var(--shadow);
+}
+
+[data-theme="forest"] .custom-admin-nav .nav-link:hover {
+    background: var(--hover-bg);
+    border-color: var(--primary-color);
+    color: var(--primary-color);
+    box-shadow: 0 4px 12px var(--shadow-hover);
+    transform: translateY(-2px);
+}
+
+[data-theme="forest"] .custom-admin-nav .nav-link.active {
+    background: var(--gradient-primary);
+    border-color: var(--primary-color);
+    color: white;
+    box-shadow: 0 4px 16px var(--shadow-hover);
+}
+
+/* Application des couleurs - Header amélioré */
+#header {
+    background: var(--gradient-primary) !important;
+    border-bottom: 3px solid var(--accent-color);
+    box-shadow: 0 2px 8px var(--shadow);
+    position: relative;
+    overflow: hidden;
+}
+
+#header::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 1px;
+    background: linear-gradient(90deg, 
+        transparent 0%, 
+        rgba(255, 255, 255, 0.3) 50%, 
+        transparent 100%);
+    pointer-events: none;
+}
+
+#header a {
+    color: white !important;
+}
+
+/* Header Liquid Glass */
+[data-theme="liquid-glass"] #header {
+    background: rgba(90, 108, 125, 0.2) !important;
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border-bottom: 1px solid var(--glass-border);
+    box-shadow: 
+        0 4px 16px rgba(0, 0, 0, 0.15),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+[data-theme="liquid-glass"] #header::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 1px;
+    background: linear-gradient(90deg, 
+        transparent 0%, 
+        rgba(255, 255, 255, 0.4) 50%, 
+        transparent 100%);
+    pointer-events: none;
+}
+
+[data-theme="liquid-glass"] #header a {
+    color: rgba(255, 255, 255, 0.95) !important;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+[data-theme="liquid-glass"] .brand-link {
+    backdrop-filter: blur(10px);
+    border-radius: 12px;
+    padding: 8px 16px;
+    transition: all 0.3s ease;
+}
+
+[data-theme="liquid-glass"] .brand-link:hover {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(12px);
+}
+
+.card,
+.module {
+    background: var(--card-bg);
+    border-color: var(--border-color);
+    color: var(--text-color);
+    box-shadow: 0 2px 8px var(--shadow);
+    transition: all 0.3s ease;
+    border-radius: var(--border-radius, 8px);
+}
+
+.card:hover,
+.module:hover {
+    box-shadow: 0 8px 24px var(--shadow-hover);
+    transform: translateY(-2px);
+}
+
+.card-header,
+.module h2 {
+    background: var(--gradient-primary);
+    color: white;
+    border-bottom: 2px solid var(--accent-color);
+    font-weight: 600;
+}
+
+.small-box {
+    background: var(--gradient-primary) !important;
+    color: white;
+    border-radius: var(--border-radius, 8px);
+    box-shadow: 0 4px 12px var(--shadow);
+    transition: all 0.3s ease;
+}
+
+.small-box:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 20px var(--shadow-hover);
+}
+
+.form-control,
+select,
+input {
+    border-color: var(--border-color);
+    background-color: var(--card-bg);
+    color: var(--text-color);
+    border-radius: var(--border-radius, 6px);
+    transition: all 0.3s ease;
+}
+
+.form-control:focus,
+select:focus,
+input:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(var(--primary-color-rgb), 0.1);
+    outline: none;
+}
+
+/* Boutons avec support de thème dynamique */
+.btn-primary,
+.btn-success,
+.btn-info,
+.btn-warning,
+.btn-danger,
+.btn-secondary {
+    background: var(--gradient-primary, var(--btn-primary-bg, #417690));
+    border: none;
+    color: white;
+    border-radius: var(--border-radius, 6px);
+    transition: all 0.3s ease;
+    font-weight: 600;
+    box-shadow: 0 2px 8px var(--shadow, rgba(0, 0, 0, 0.1));
+}
+
+.btn-primary:hover,
+.btn-success:hover,
+.btn-info:hover,
+.btn-warning:hover,
+.btn-danger:hover {
+    background: var(--gradient-secondary, var(--btn-primary-hover, #79aec8));
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px var(--shadow-hover, rgba(0, 0, 0, 0.2));
+}
+
+.btn-secondary {
+    background: var(--btn-secondary-bg, var(--bg-secondary, #f8f9fa));
+    color: var(--text-color, #333);
+}
+
+.btn-secondary:hover {
+    background: var(--btn-secondary-hover, var(--hover-bg, #f5f5f5));
+}
+
+/* Grilles et tables avec support de thème */
+table,
+.dataTables_wrapper {
+    background: var(--table-bg, var(--card-bg, white));
+    border: 1px solid var(--table-border, var(--border-color, #ddd));
+    border-radius: var(--border-radius, 8px);
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+table thead th {
+    background: var(--table-header-bg, var(--gradient-primary, #417690));
+    color: white;
+    border-bottom: 2px solid var(--table-border, var(--accent-color, #5b80d2));
+    padding: 12px;
+    font-weight: 600;
+}
+
+table tbody tr {
+    background: transparent;
+    border-bottom: 1px solid var(--table-border, var(--border-color, #ddd));
+    transition: all 0.2s ease;
+}
+
+table tbody tr:nth-child(even) {
+    background: var(--table-stripe, var(--bg-secondary, #f8f9fa));
+}
+
+table tbody tr:hover {
+    background: var(--table-row-hover, var(--hover-bg, #f5f5f5));
+    transform: scale(1.01);
+}
+
+table tbody td {
+    padding: 12px;
+    color: var(--text-color, #333);
+}
+
+/* Navigation personnalisée - Améliorée avec liquid glass */
+.custom-admin-nav {
+    background: var(--bg-secondary);
+    padding: 12px 20px;
+    border-bottom: 2px solid var(--border-color);
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+    box-shadow: 0 2px 4px var(--shadow);
+    position: relative;
+    overflow: hidden;
+}
+
+.custom-admin-nav::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 1px;
+    background: linear-gradient(90deg, 
+        transparent 0%, 
+        rgba(255, 255, 255, 0.3) 50%, 
+        transparent 100%);
+    pointer-events: none;
+}
+
+.custom-admin-nav .nav-link {
+    color: var(--text-color);
+    text-decoration: none;
+    padding: 10px 18px;
+    border-radius: var(--border-radius, 6px);
+    transition: all 0.3s ease;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    position: relative;
+    overflow: hidden;
+}
+
+.custom-admin-nav .nav-link::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: var(--hover-bg);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: 0;
+}
+
+.custom-admin-nav .nav-link span,
+.custom-admin-nav .nav-link i {
+    position: relative;
+    z-index: 1;
+}
+
+.custom-admin-nav .nav-link:hover {
+    background: var(--hover-bg);
+    color: var(--primary-color);
+    transform: translateY(-2px);
+}
+
+.custom-admin-nav .nav-link:hover::before {
+    opacity: 1;
+}
+
+/* Style général pour le lien actif - utilise les variables CSS */
+.custom-admin-nav .nav-link.active {
+    background: var(--gradient-primary, var(--primary-color));
+    border-color: var(--primary-color);
+    color: white;
+    box-shadow: 0 4px 12px var(--shadow-hover, var(--shadow));
+    font-weight: 600;
+}
+
+/* Content wrapper */
+.content-wrapper {
+    background: var(--dashboard-bg);
+    min-height: calc(100vh - 200px);
+}
+
+.content {
+    padding: 20px;
+}
+
+/* ============================================
+   AMÉLIORATIONS GLOBALES POUR TOUS LES THÈMES
+   ============================================ */
+
+/* Boutons - Support dynamique de thème */
+.btn,
+button[type="submit"],
+input[type="submit"],
+.btn-primary,
+.btn-success,
+.btn-info,
+.btn-warning,
+.btn-danger,
+.btn-secondary {
+    transition: all 0.3s ease;
+    font-weight: 600;
+    box-shadow: 0 2px 8px var(--shadow, rgba(0, 0, 0, 0.1));
+}
+
+.btn-primary,
+.btn-success,
+.btn-info,
+.btn-warning,
+.btn-danger {
+    background: var(--gradient-primary, #417690);
+    border: none;
+    color: white;
+    border-radius: var(--border-radius, 6px);
+}
+
+.btn-primary:hover,
+.btn-success:hover,
+.btn-info:hover,
+.btn-warning:hover,
+.btn-danger:hover {
+    background: var(--gradient-secondary, #79aec8);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px var(--shadow-hover, rgba(0, 0, 0, 0.2));
+}
+
+.btn-secondary {
+    background: var(--btn-secondary-bg, var(--bg-secondary, #f8f9fa));
+    color: var(--text-color, #333);
+    border: 1px solid var(--border-color, #ddd);
+}
+
+.btn-secondary:hover {
+    background: var(--btn-secondary-hover, var(--hover-bg, #f5f5f5));
+}
+
+/* Grilles DataTables - Support dynamique de thème */
+.dataTables_wrapper {
+    background: var(--table-bg, var(--card-bg, white));
+    border: 1px solid var(--table-border, var(--border-color, #ddd));
+    border-radius: var(--border-radius, 8px);
+    padding: 20px;
+    transition: all 0.3s ease;
+}
+
+.dataTables_wrapper .dataTables_filter input,
+.dataTables_wrapper .dataTables_length select {
+    background: var(--card-bg, white);
+    border: 1px solid var(--border-color, #ddd);
+    color: var(--text-color, #333);
+    border-radius: var(--border-radius, 6px);
+    padding: 8px 12px;
+    transition: all 0.3s ease;
+}
+
+.dataTables_wrapper .dataTables_filter input:focus,
+.dataTables_wrapper .dataTables_length select:focus {
+    border-color: var(--primary-color, #417690);
+    box-shadow: 0 0 0 3px rgba(var(--primary-color-rgb, 65, 118, 144), 0.1);
+    outline: none;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button {
+    background: var(--card-bg, white);
+    border: 1px solid var(--border-color, #ddd);
+    color: var(--text-color, #333) !important;
+    border-radius: var(--border-radius, 6px);
+    transition: all 0.3s ease;
+    margin: 0 2px;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button:hover {
+    background: var(--hover-bg, #f5f5f5);
+    border-color: var(--primary-color, #417690);
+    color: var(--primary-color, #417690) !important;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button.current {
+    background: var(--gradient-primary, #417690) !important;
+    border-color: var(--primary-color, #417690);
+    color: white !important;
+}
+
+/* Liens */
+a {
+    color: var(--primary-color, #417690);
+    transition: color 0.3s ease;
+}
+
+a:hover {
+    color: var(--accent-color, #5b80d2);
+}
+
+/* Badges et labels */
+.badge,
+.label {
+    background: var(--gradient-primary, #417690);
+    color: white;
+    border-radius: var(--border-radius, 6px);
+    padding: 4px 8px;
+    font-weight: 600;
+}

@@ -1,0 +1,31 @@
+{% extends "admin/change_list.html" %}
+{% load static i18n admin_urls %}
+
+{% block result_list %}
+<div class="card card-primary card-outline">
+    <div class="card-header border-0">
+        <div class="d-flex align-items-center justify-content-between w-100">
+            <h3 class="card-title mb-0">
+                <i class="fas fa-list"></i> {{ cl.opts.verbose_name_plural|capfirst }}
+            </h3>
+            <div class="card-tools d-flex align-items-center gap-2">
+                {% if cl.has_add_permission %}
+                <a href="{% url cl.opts|admin_urlname:'add' %}" class="btn btn-primary btn-lg btn-add-modern">
+                    <i class="fas fa-plus"></i> <span class="btn-text">Ajouter</span>
+                </a>
+                {% endif %}
+                <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                    <i class="fas fa-minus"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+    <div class="card-body p-0">
+        {{ block.super }}
+    </div>
+</div>
+{% endblock %}
+
+{% block pagination %}
+{{ block.super }}
+{% endblock %}
