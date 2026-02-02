@@ -23,6 +23,23 @@ class CustomAdminSite(admin.AdminSite):
     site_title = "Admin Personnalisé"
     index_title = "Tableau de bord"
     
+    # Templates personnalisés - Utiliser nos templates namespacés
+    index_template = 'admin_custom/index.html'
+    app_index_template = 'admin/index.html'  # Utiliser le template Django par défaut pour app_index
+    login_template = 'admin/login.html'  # Utiliser le template Django par défaut pour login
+    logout_template = 'admin/logout.html'  # Utiliser le template Django par défaut pour logout
+    password_change_template = 'admin/password_change_form.html'
+    password_change_done_template = 'admin/password_change_done.html'
+    
+    def each_context(self, request):
+        """
+        Ajoute le contexte pour tous les templates.
+        On s'assure que base_site.html personnalisé est utilisé.
+        """
+        context = super().each_context(request)
+        # Le template base_site.html sera automatiquement utilisé car il est dans admin_custom/templates/admin_custom/
+        return context
+    
     def get_urls(self):
         """
         Ajoute les URLs personnalisées (charts, grids, dashboard)
