@@ -1,0 +1,24 @@
+# Inclure les fichiers de documentation
+include README.md
+include LICENSE
+include CHANGELOG.md
+
+# Inclure les fichiers statiques (CSS, JS, images)
+recursive-include admin_custom/static *
+recursive-include admin_custom/templates *
+
+# Inclure les fichiers de configuration
+include pyproject.toml
+include setup.py
+
+# Exclure les fichiers de développement
+global-exclude *.pyc
+global-exclude *.pyo
+global-exclude __pycache__
+global-exclude *.swp
+global-exclude *.swo
+global-exclude .DS_Store
+recursive-exclude * __pycache__
+recursive-exclude * *.py[co]
+recursive-exclude tests *
+recursive-exclude sandbox *
