@@ -21,6 +21,11 @@ class OrderAdmin(ModernTemplateMixin, admin.ModelAdmin):
     search_fields = ['order_number', 'user__username', 'user__email', 'shipping_address', 'shipping_city']
     list_filter = ['status', 'shipping_country', 'created_at']
     readonly_fields = ['created_at', 'updated_at']
+    # 1er qu'on voit : les champs principaux du Parent
+    fieldsets = [
+        ('Informations Générales', {'fields': ['order_number', 'user', 'status']}),
+        ('Détails de Livraison', {'fields': ['shipping_address', 'shipping_city']}),
+    ]
     inlines = [OrderItemInline, InvoiceInline]
 
 
