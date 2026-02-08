@@ -6,14 +6,17 @@ from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.models import User
 from django.utils.translation import gettext_lazy as _
 
+from .modern_model_admin import ModernTemplateMixin
 
-class CustomUserAdmin(BaseUserAdmin):
+
+class CustomUserAdmin(ModernTemplateMixin, BaseUserAdmin):
     """
     UserAdmin personnalisé avec une meilleure disposition des champs
     et une interface améliorée pour les permissions.
     """
-    # Template personnalisé pour l'ajout
-    add_form_template = "admin/auth/user/add_form.html"
+    # Template personnalisé pour l'ajout (classique) / moderne via modern_add_form_template
+    add_form_template = "admin_custom/auth/user/add_form.html"
+    modern_add_form_template = "admin_custom/modern/auth/user/add_form.html"
     
     # Fieldsets améliorés pour l'édition
     fieldsets = (

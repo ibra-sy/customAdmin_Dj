@@ -25,20 +25,29 @@ from admin_custom.autodiscover import autodiscover_models
 # Note: django.contrib.auth est exclu par défaut, on l'ajoute manuellement
 autodiscover_models(custom_admin_site, exclude_apps=['admin_custom'])
 
-# Enregistrer explicitement User et Group avec leurs classes d'admin personnalisées
+# Enregistrer explicitement User, Group et Permission avec leurs classes d'admin personnalisées
 from django.contrib.auth.models import User, Group
 from django.contrib.auth.admin import GroupAdmin
+from django.contrib.auth.models import Permission
 from admin_custom.user_admin import CustomUserAdmin
+from admin_custom.modern_model_admin import ModernTemplateMixin
 
 # Vérifier et désenregistrer si déjà enregistré
 if User in custom_admin_site._registry:
     custom_admin_site.unregister(User)
 if Group in custom_admin_site._registry:
     custom_admin_site.unregister(Group)
+if Permission in custom_admin_site._registry:
+    custom_admin_site.unregister(Permission)
 
 # Enregistrer avec les classes d'admin personnalisées
 custom_admin_site.register(User, CustomUserAdmin)
 custom_admin_site.register(Group, GroupAdmin)
+custom_admin_site.register(Permission, type('PermissionAdmin', (ModernTemplateMixin, admin.ModelAdmin), {
+    'list_display': ['name', 'content_type', 'codename'],
+    'list_filter': ['content_type'],
+    'search_fields': ['name', 'codename'],
+}))
 
 # Enregistrer explicitement les modèles admin_custom avec leurs classes d'admin personnalisées
 from admin_custom.models import DashboardGrid, DashboardChart

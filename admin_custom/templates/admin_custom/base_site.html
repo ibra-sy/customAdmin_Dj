@@ -1,4 +1,4 @@
-{% extends "admin_custom/base.html" %}
+{% extends admin_base_template|default:"admin_custom/base.html" %}
 {% load static i18n %}
 
 {% block title %}{{ title }} | {{ site_title|default:_('Django site admin') }}{% endblock %}
@@ -29,5 +29,14 @@
     <a href="{% url 'admin:admin_grids' %}" class="nav-link">
         <i class="fas fa-table"></i> <span>Grilles</span>
     </a>
+    {% if admin_interface == 'modern' %}
+    <a href="{% url 'admin:modern_settings' %}" class="nav-link" title="Paramètres et choix d'interface">
+        <i class="fas fa-gear"></i> <span>Paramètres</span>
+    </a>
+    {% else %}
+    <a href="{% url 'admin:classic_settings' %}" class="nav-link" title="Paramètres et choix d'interface">
+        <i class="fas fa-gear"></i> <span>Paramètres</span>
+    </a>
+    {% endif %}
 </nav>
 {% endblock %}

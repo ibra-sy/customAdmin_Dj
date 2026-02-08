@@ -191,24 +191,31 @@
 }
 }
 
-/* Thème par défaut */
+/* Thème par défaut - Style classique Django Admin */
 :root[data-theme="default"] {
     --primary-color: #417690;
+    --primary-500: #417690;
+    --primary-600: #417690;
+    --primary-700: #205067;
     --secondary-color: #79aec8;
     --accent-color: #5b80d2;
-    --bg-color: #ffffff;
+    --bg-color: #f4f6f9;
     --bg-secondary: #f8f9fa;
-    --text-color: #333333;
-    --text-secondary: #666666;
-    --border-color: #dddddd;
-    --hover-bg: #f5f5f5;
+    --text-color: #212529;
+    --text-secondary: #6c757d;
+    --border-color: #dee2e6;
+    --hover-bg: #e9ecef;
     --dashboard-bg: #f8f9fa;
     --card-bg: #ffffff;
-    --shadow: rgba(0, 0, 0, 0.1);
-    --shadow-hover: rgba(65, 118, 144, 0.2);
+    --shadow: rgba(0, 0, 0, 0.08);
+    --shadow-hover: rgba(65, 118, 144, 0.15);
     --gradient-primary: linear-gradient(135deg, #417690 0%, #79aec8 100%);
     --gradient-secondary: linear-gradient(135deg, #79aec8 0%, #417690 100%);
     --font-family: 'Inter', sans-serif;
+}
+
+[data-theme="default"] #header {
+    background: linear-gradient(135deg, #417690 0%, #205067 100%) !important;
 }
 
 /* Navigation Default - Style classique */
@@ -264,14 +271,20 @@
     color: white;
     font-weight: 600;
 }
-}
 
-/* Application globale des variables */
+/* Application globale des variables - Thème par défaut propre */
 body {
-    background-color: var(--bg-color);
-    color: var(--text-color);
+    background-color: var(--bg-color, #f4f6f9);
+    color: var(--text-color, #212529);
     font-family: var(--font-family, 'Inter', sans-serif);
     transition: background-color 0.5s ease, color 0.5s ease;
+}
+
+/* Conteneur principal - toujours lisible au-dessus des arrière-plans */
+#container {
+    position: relative;
+    z-index: 1;
+    min-height: 100vh;
 }
 
 /* Thème Liquid Glass - Effets glassmorphism avancés */

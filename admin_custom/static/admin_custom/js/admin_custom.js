@@ -2,22 +2,30 @@
 (function() {
     'use strict';
     
-    // Charger le thème sauvegardé
+    // Interface MODERNE : ne jamais écraser le thème (bleu-moderne, emeraude, etc.)
+    const modernThemes = ['bleu-moderne', 'emeraude', 'coucher-soleil', 'sombre'];
+    const current = document.documentElement.getAttribute('data-theme');
+    if (modernThemes.includes(current) || document.querySelector('.admin-layout')) {
+        return;
+    }
+    
+    // Interface CLASSIQUE : charger le thème sauvegardé
     const savedTheme = localStorage.getItem('admin-theme') || 'default';
-    document.documentElement.setAttribute('data-theme', savedTheme);
+    const validThemes = ['default', 'nostalgie', 'ocean', 'sunset', 'forest', 'dark', 'liquid-glass'];
+    document.documentElement.setAttribute('data-theme', validThemes.includes(savedTheme) ? savedTheme : 'default');
     
     // Marquer le lien de navigation actif
     function setActiveNavLink() {
-        const currentPath = window.location.pathname;
-        const navLinks = document.querySelectorAll('.custom-admin-nav .nav-link');
+        const nav = document.querySelector('.custom-admin-nav');
+        if (!nav) return;
+        const currentPath = window.location.pathname.replace(/\/$/, '') || '/admin';
+        const navLinks = nav.querySelectorAll('.nav-link');
         
         navLinks.forEach(link => {
-            const href = link.getAttribute('href');
-            if (href && currentPath.includes(href.replace('/admin/', ''))) {
-                link.classList.add('active');
-            } else {
-                link.classList.remove('active');
-            }
+            const href = link.getAttribute('href') || '';
+            const linkPath = href.split('?')[0].replace(/\/$/, '');
+            const isMatch = linkPath && (currentPath === linkPath || currentPath.startsWith(linkPath + '/'));
+            link.classList.toggle('active', !!isMatch);
         });
     }
     

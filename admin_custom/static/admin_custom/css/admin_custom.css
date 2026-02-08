@@ -69,9 +69,11 @@
     font-size: var(--text-xs) !important;
 }
 
-/* Logo Admin - Design professionnel */
+/* Logo Admin - Design professionnel (taille raisonnable) */
 .admin-logo {
     height: 42px;
+    max-height: 42px;
+    max-width: 120px;
     width: auto;
     object-fit: contain;
     filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.15));
