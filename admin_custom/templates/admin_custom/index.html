@@ -46,7 +46,7 @@
                             <p>Revenus</p>
                         </div>
                         <div class="icon">
-                            <i class="fas fa-euro-sign"></i>
+                            <i class="fas fa-money-bill"></i>
                         </div>
                         <a href="{% url 'admin:admin_dashboard' %}" class="small-box-footer">
                             Détails <i class="fas fa-arrow-circle-right"></i>
@@ -187,7 +187,7 @@ document.addEventListener('DOMContentLoaded', function() {
             const productsEl = document.getElementById('stat-products');
             
             if (ordersEl) ordersEl.textContent = data.orders || 0;
-            if (revenueEl) revenueEl.textContent = (data.revenue || 0).toLocaleString('fr-FR', {maximumFractionDigits: 0}) + ' €';
+            if (revenueEl) revenueEl.textContent = (data.revenue || 0).toLocaleString('fr-FR', {maximumFractionDigits: 0}) + ' FCFA';
             if (invoicesEl) invoicesEl.textContent = data.invoices || 0;
             if (productsEl) productsEl.textContent = data.products || 0;
         });
@@ -202,7 +202,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 data: {
                     labels: data.labels,
                     datasets: [{
-                        label: 'Revenus (€)',
+                        label: 'Revenus (FCFA)',
                         data: data.data,
                         borderColor: 'rgb(0, 123, 255)',
                         backgroundColor: 'rgba(0, 123, 255, 0.1)',

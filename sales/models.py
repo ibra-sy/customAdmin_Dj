@@ -110,7 +110,7 @@ class Payment(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return f"Paiement {self.transaction_id or 'N/A'} - {self.amount}€"
+        return f"Paiement {self.transaction_id or 'N/A'} - {self.amount} FCFA"
 
     class Meta:
         verbose_name = "Paiement"

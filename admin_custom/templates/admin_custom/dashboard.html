@@ -34,11 +34,11 @@
                 <div class="col-lg-3 col-6">
                     <div class="small-box bg-success">
                         <div class="inner">
-                            <h3>{{ stats.total_revenue|floatformat:2 }} €</h3>
+                            <h3>{{ stats.total_revenue|floatformat:2 }} FCFA</h3>
                             <p>Revenus totaux</p>
                         </div>
                         <div class="icon">
-                            <i class="fas fa-euro-sign"></i>
+                            <i class="fas fa-money-bill"></i>
                         </div>
                         <a href="{% url 'admin:admin_charts' %}" class="small-box-footer">
                             Plus d'infos <i class="fas fa-arrow-circle-right"></i>
@@ -170,7 +170,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 data: {
                     labels: data.labels,
                     datasets: [{
-                        label: 'Revenus (€)',
+                        label: 'Revenus (FCFA)',
                         data: data.data,
                         borderColor: 'rgb(0, 123, 255)',
                         backgroundColor: 'rgba(0, 123, 255, 0.1)',
@@ -261,7 +261,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 data: {
                     labels: data.labels,
                     datasets: [{
-                        label: 'Prix moyen (€)',
+                        label: 'Prix moyen (FCFA)',
                         data: data.data,
                         borderColor: 'rgba(255, 193, 7, 1)',
                         backgroundColor: 'rgba(255, 193, 7, 0.2)',

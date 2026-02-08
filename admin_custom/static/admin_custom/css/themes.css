@@ -1,5 +1,5 @@
 /* Thème Liquid Glass - Glassmorphism moderne et élégant */
-:root[data-theme="liquid-glass"] {
+[data-theme="liquid-glass"] {
     --primary-color: #667EEA;
     --secondary-color: #764BA2;
     --accent-color: #F093FB;
@@ -34,105 +34,125 @@
     --table-stripe: rgba(255, 255, 255, 0.08);
 }
 
-/* Thème Nostalgie - Rétro et chaleureux */
-:root[data-theme="nostalgie"] {
-    --primary-color: #D4A574;
-    --secondary-color: #E8C5A0;
-    --accent-color: #C17A5F;
-    --bg-color: #FDF6E3;
-    --bg-secondary: #F5E6D3;
-    --text-color: #3E2723;
-    --text-secondary: #6D4C41;
-    --border-color: #D7CCC8;
-    --hover-bg: #EFEBE9;
-    --dashboard-bg: #FFF8E1;
-    --card-bg: #FFFFFF;
-    --shadow: rgba(212, 165, 116, 0.15);
-    --shadow-hover: rgba(212, 165, 116, 0.25);
-    --gradient-primary: linear-gradient(135deg, #D4A574 0%, #C17A5F 100%);
-    --gradient-secondary: linear-gradient(135deg, #E8C5A0 0%, #D4A574 100%);
+/* Thème Nostalgie - Rétro et chaleureux (inspiré de daisyUI "retro") */
+[data-theme="nostalgie"] {
+    --primary-color: #ef9fbc;
+    --secondary-color: #e5c07b;
+    --accent-color: #f4b8e4;
+    --bg-color: #fdf5ec;
+    --bg-secondary: #f4e4d4;
+    --text-color: #3b2a2f;
+    --text-secondary: #6d4c41;
+    --border-color: #e0c9b5;
+    --hover-bg: #f1ddd0;
+    --dashboard-bg: #fdf5ec;
+    --card-bg: #ffffff;
+    --shadow: rgba(149, 117, 84, 0.15);
+    --shadow-hover: rgba(149, 117, 84, 0.25);
+    --gradient-primary: linear-gradient(135deg, #ef9fbc 0%, #e5c07b 100%);
+    --gradient-secondary: linear-gradient(135deg, #f4b8e4 0%, #ef9fbc 100%);
     --paper-texture: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23D4A574' fill-opacity='0.02'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
     --font-family: 'Playfair Display', serif;
 }
 
-/* Thème Océan - Frais et apaisant */
-:root[data-theme="ocean"] {
-    --primary-color: #00B4DB;
-    --secondary-color: #0083B0;
-    --accent-color: #00D4FF;
-    --bg-color: #F0F9FF;
-    --bg-secondary: #E0F2FE;
-    --text-color: #0C4A6E;
-    --text-secondary: #075985;
-    --border-color: #BAE6FD;
-    --hover-bg: #D1E7DD;
-    --dashboard-bg: #E0F2FE;
-    --card-bg: #FFFFFF;
-    --shadow: rgba(0, 180, 219, 0.15);
-    --shadow-hover: rgba(0, 180, 219, 0.25);
-    --gradient-primary: linear-gradient(135deg, #00B4DB 0%, #0083B0 100%);
-    --gradient-secondary: linear-gradient(135deg, #00D4FF 0%, #00B4DB 100%);
-    --wave-pattern: repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(0, 180, 219, 0.03) 10px, rgba(0, 180, 219, 0.03) 20px);
+/* Thème Océan - Frais et apaisant (inspiré de daisyUI "aqua") */
+[data-theme="ocean"] {
+    --primary-color: #00bcd4;
+    --secondary-color: #0284c7;
+    --accent-color: #22d3ee;
+    --bg-color: #0f172a;
+    --bg-secondary: #020617;
+    --text-color: #e0f2fe;
+    --text-secondary: #bae6fd;
+    --border-color: #1d4ed8;
+    --hover-bg: rgba(15, 118, 110, 0.3);
+    --dashboard-bg: #020617;
+    --card-bg: #0b1220;
+    --shadow: rgba(15, 23, 42, 0.6);
+    --shadow-hover: rgba(34, 211, 238, 0.35);
+    --gradient-primary: linear-gradient(135deg, #0ea5e9 0%, #22d3ee 100%);
+    --gradient-secondary: linear-gradient(135deg, #22d3ee 0%, #0ea5e9 100%);
+    --wave-pattern: repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(34, 211, 238, 0.05) 10px, rgba(34, 211, 238, 0.05) 20px);
     --font-family: 'Inter', sans-serif;
 }
 
-/* Thème Sunset - Chaleureux et énergique */
-:root[data-theme="sunset"] {
-    --primary-color: #FF6B6B;
-    --secondary-color: #FF8E53;
-    --accent-color: #FFA07A;
-    --bg-color: #FFF5F5;
-    --bg-secondary: #FFE5E5;
-    --text-color: #8B0000;
-    --text-secondary: #A0522D;
-    --border-color: #FFCCCB;
-    --hover-bg: #FFE4E1;
-    --dashboard-bg: #FFF5F5;
-    --card-bg: #FFFFFF;
-    --shadow: rgba(255, 107, 107, 0.2);
-    --shadow-hover: rgba(255, 107, 107, 0.3);
-    --gradient-primary: linear-gradient(135deg, #FF6B6B 0%, #FF8E53 100%);
-    --gradient-secondary: linear-gradient(135deg, #FFA07A 0%, #FF6B6B 100%);
+/* Thème Sunset - Chaleureux et énergique (inspiré de daisyUI "valentine") */
+[data-theme="sunset"] {
+    --primary-color: #fb7185;
+    --secondary-color: #f97316;
+    --accent-color: #fbbf24;
+    --bg-color: #1f1724;
+    --bg-secondary: #2b193d;
+    --text-color: #ffe4e6;
+    --text-secondary: #fecaca;
+    --border-color: #4b1442;
+    --hover-bg: rgba(248, 113, 113, 0.2);
+    --dashboard-bg: #1f1724;
+    --card-bg: #2b193d;
+    --shadow: rgba(127, 29, 29, 0.5);
+    --shadow-hover: rgba(248, 113, 113, 0.4);
+    --gradient-primary: linear-gradient(135deg, #fb7185 0%, #f97316 100%);
+    --gradient-secondary: linear-gradient(135deg, #fbbf24 0%, #fb7185 100%);
     --font-family: 'Inter', sans-serif;
 }
 
-/* Thème Forêt - Nature et serein */
-:root[data-theme="forest"] {
-    --primary-color: #2D5016;
-    --secondary-color: #4A7C2A;
-    --accent-color: #6B8E23;
-    --bg-color: #F5F5DC;
-    --bg-secondary: #E8F5E9;
-    --text-color: #1B4332;
-    --text-secondary: #2D5016;
-    --border-color: #C8E6C9;
-    --hover-bg: #DCEDC8;
-    --dashboard-bg: #E8F5E9;
-    --card-bg: #FFFFFF;
-    --shadow: rgba(45, 80, 22, 0.15);
-    --shadow-hover: rgba(45, 80, 22, 0.25);
-    --gradient-primary: linear-gradient(135deg, #2D5016 0%, #4A7C2A 100%);
-    --gradient-secondary: linear-gradient(135deg, #6B8E23 0%, #4A7C2A 100%);
+/* Thème Forêt - Nature et serein (inspiré de daisyUI "forest") */
+[data-theme="forest"] {
+    --primary-color: #22c55e;
+    --secondary-color: #16a34a;
+    --accent-color: #22c55e;
+    --bg-color: #0f172a;
+    --bg-secondary: #022c22;
+    --text-color: #dcfce7;
+    --text-secondary: #bbf7d0;
+    --border-color: #166534;
+    --hover-bg: rgba(21, 128, 61, 0.3);
+    --dashboard-bg: #022c22;
+    --card-bg: #022c22;
+    --shadow: rgba(6, 95, 70, 0.6);
+    --shadow-hover: rgba(34, 197, 94, 0.45);
+    --gradient-primary: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+    --gradient-secondary: linear-gradient(135deg, #4ade80 0%, #22c55e 100%);
     --font-family: 'Inter', sans-serif;
 }
 
-/* Thème Sombre - Moderne */
-:root[data-theme="dark"] {
-    --primary-color: #6366F1;
-    --secondary-color: #8B5CF6;
-    --accent-color: #A78BFA;
-    --bg-color: #0F172A;
-    --bg-secondary: #1E293B;
-    --text-color: #F1F5F9;
-    --text-secondary: #CBD5E1;
-    --border-color: #334155;
-    --hover-bg: #1E293B;
-    --dashboard-bg: #0F172A;
-    --card-bg: #1E293B;
-    --shadow: rgba(0, 0, 0, 0.5);
-    --shadow-hover: rgba(99, 102, 241, 0.3);
-    --gradient-primary: linear-gradient(135deg, #6366F1 0%, #8B5CF6 100%);
-    --gradient-secondary: linear-gradient(135deg, #A78BFA 0%, #6366F1 100%);
+/* Thème Sombre - Moderne (inspiré de daisyUI "dark") */
+[data-theme="dark"] {
+    --primary-color: #6366f1;
+    --secondary-color: #22c55e;
+    --accent-color: #f97316;
+    --bg-color: #020617;
+    --bg-secondary: #020617;
+    --text-color: #e5e7eb;
+    --text-secondary: #9ca3af;
+    --border-color: #1f2937;
+    --hover-bg: rgba(55, 65, 81, 0.6);
+    --dashboard-bg: #020617;
+    --card-bg: #030712;
+    --shadow: rgba(0, 0, 0, 0.75);
+    --shadow-hover: rgba(99, 102, 241, 0.45);
+    --gradient-primary: linear-gradient(135deg, #4f46e5 0%, #6366f1 40%, #22c55e 100%);
+    --gradient-secondary: linear-gradient(135deg, #22c55e 0%, #4f46e5 60%, #6366f1 100%);
+    --font-family: 'Inter', sans-serif;
+}
+
+/* Thème Black - Ultra sombre (inspiré de daisyUI "black") */
+[data-theme="black"] {
+    --primary-color: #f97316;
+    --secondary-color: #4b5563;
+    --accent-color: #facc15;
+    --bg-color: #000000;
+    --bg-secondary: #020617;
+    --text-color: #f9fafb;
+    --text-secondary: #9ca3af;
+    --border-color: #111827;
+    --hover-bg: rgba(55, 65, 81, 0.7);
+    --dashboard-bg: #020617;
+    --card-bg: #020617;
+    --shadow: rgba(0, 0, 0, 0.85);
+    --shadow-hover: rgba(249, 115, 22, 0.55);
+    --gradient-primary: linear-gradient(135deg, #111827 0%, #020617 40%, #000000 100%);
+    --gradient-secondary: linear-gradient(135deg, #f97316 0%, #facc15 50%, #f97316 100%);
     --font-family: 'Inter', sans-serif;
 }
 
@@ -192,22 +212,23 @@
 }
 
 /* Thème par défaut */
-:root[data-theme="default"] {
-    --primary-color: #417690;
-    --secondary-color: #79aec8;
-    --accent-color: #5b80d2;
-    --bg-color: #ffffff;
-    --bg-secondary: #f8f9fa;
-    --text-color: #333333;
-    --text-secondary: #666666;
-    --border-color: #dddddd;
-    --hover-bg: #f5f5f5;
-    --dashboard-bg: #f8f9fa;
+/* Thème par défaut - sobre et moderne (proche daisyUI "light") */
+[data-theme="default"] {
+    --primary-color: #3b82f6;
+    --secondary-color: #22c55e;
+    --accent-color: #f97316;
+    --bg-color: #f3f4f6;
+    --bg-secondary: #ffffff;
+    --text-color: #111827;
+    --text-secondary: #4b5563;
+    --border-color: #e5e7eb;
+    --hover-bg: #e5e7eb;
+    --dashboard-bg: #f3f4f6;
     --card-bg: #ffffff;
-    --shadow: rgba(0, 0, 0, 0.1);
-    --shadow-hover: rgba(65, 118, 144, 0.2);
-    --gradient-primary: linear-gradient(135deg, #417690 0%, #79aec8 100%);
-    --gradient-secondary: linear-gradient(135deg, #79aec8 0%, #417690 100%);
+    --shadow: rgba(15, 23, 42, 0.08);
+    --shadow-hover: rgba(15, 23, 42, 0.16);
+    --gradient-primary: linear-gradient(135deg, #3b82f6 0%, #22c55e 100%);
+    --gradient-secondary: linear-gradient(135deg, #f97316 0%, #3b82f6 100%);
     --font-family: 'Inter', sans-serif;
 }
 
@@ -272,6 +293,43 @@ body {
     color: var(--text-color);
     font-family: var(--font-family, 'Inter', sans-serif);
     transition: background-color 0.5s ease, color 0.5s ease;
+}
+
+/* Contraste texte global pour thèmes sombres (dark, black, sunset, forest, ocean) */
+[data-theme="dark"] body,
+[data-theme="black"] body,
+[data-theme="sunset"] body,
+[data-theme="forest"] body,
+[data-theme="ocean"] body {
+    color: var(--text-color);
+}
+
+/* Titres principaux : toujours bien contrastés */
+h1, h2, h3, h4, h5, h6 {
+    color: var(--text-color);
+}
+
+[data-theme="dark"] h1, 
+[data-theme="dark"] h2, 
+[data-theme="dark"] h3, 
+[data-theme="dark"] h4,
+[data-theme="black"] h1, 
+[data-theme="black"] h2, 
+[data-theme="black"] h3, 
+[data-theme="black"] h4,
+[data-theme="sunset"] h1, 
+[data-theme="sunset"] h2, 
+[data-theme="sunset"] h3, 
+[data-theme="sunset"] h4,
+[data-theme="forest"] h1, 
+[data-theme="forest"] h2, 
+[data-theme="forest"] h3, 
+[data-theme="forest"] h4,
+[data-theme="ocean"] h1,
+[data-theme="ocean"] h2,
+[data-theme="ocean"] h3,
+[data-theme="ocean"] h4 {
+    color: var(--text-color);
 }
 
 /* Thème Liquid Glass - Effets glassmorphism avancés */
@@ -946,6 +1004,31 @@ body {
     background-image: var(--wave-pattern);
 }
 
+/* Thème Sunset - Fond dégradé chaud (inspiré daisyUI "sunset") */
+[data-theme="sunset"] body {
+    background: radial-gradient(circle at top, #fb7185 0%, #f97316 35%, #1f1724 100%);
+}
+
+/* Thème Forêt - Fond nature sombre (inspiré daisyUI "forest") */
+[data-theme="forest"] body {
+    background: radial-gradient(circle at top, #22c55e 0%, #16a34a 30%, #022c22 100%);
+}
+
+/* Thème Dark - Fond sombre moderne (inspiré daisyUI "dark") */
+[data-theme="dark"] body {
+    background: radial-gradient(circle at top, #4f46e5 0%, #020617 45%, #000000 100%);
+}
+
+/* Thème Default - Fond clair moderne (inspiré daisyUI "light") */
+[data-theme="default"] body {
+    background: radial-gradient(circle at top, #e5f0ff 0%, #f3f4f6 40%, #e5e7eb 100%);
+}
+
+/* Thème Black - Fond ultra sombre (inspiré daisyUI "black") */
+[data-theme="black"] body {
+    background: radial-gradient(circle at top, #111827 0%, #020617 40%, #000000 100%);
+}
+
 [data-theme="ocean"] .card,
 [data-theme="ocean"] .module {
     background: var(--card-bg);
@@ -1299,6 +1382,30 @@ input:focus {
     background: var(--btn-secondary-hover, var(--hover-bg, #f5f5f5));
 }
 
+/* Boutons dans les thèmes sombres : texte clair pour le contraste */
+[data-theme="dark"] .btn,
+[data-theme="dark"] button[type="submit"],
+[data-theme="dark"] input[type="submit"],
+[data-theme="dark"] .btn-secondary,
+[data-theme="black"] .btn,
+[data-theme="black"] button[type="submit"],
+[data-theme="black"] input[type="submit"],
+[data-theme="black"] .btn-secondary,
+[data-theme="sunset"] .btn,
+[data-theme="sunset"] button[type="submit"],
+[data-theme="sunset"] input[type="submit"],
+[data-theme="sunset"] .btn-secondary,
+[data-theme="forest"] .btn,
+[data-theme="forest"] button[type="submit"],
+[data-theme="forest"] input[type="submit"],
+[data-theme="forest"] .btn-secondary,
+[data-theme="ocean"] .btn,
+[data-theme="ocean"] button[type="submit"],
+[data-theme="ocean"] input[type="submit"],
+[data-theme="ocean"] .btn-secondary {
+    color: var(--text-color);
+}
+
 /* Grilles et tables avec support de thème */
 table,
 .dataTables_wrapper {
@@ -1332,10 +1439,20 @@ table tbody tr:hover {
     transform: scale(1.01);
 }
 
+/* Couleur de texte des cellules en fonction du thème */
 table tbody td {
     padding: 12px;
     color: var(--text-color, #333);
     font-weight: 400;
+}
+
+/* Forcer un bon contraste pour les thèmes sombres sur les cellules génériques */
+[data-theme="dark"] table tbody td,
+[data-theme="black"] table tbody td,
+[data-theme="sunset"] table tbody td,
+[data-theme="forest"] table tbody td,
+[data-theme="ocean"] table tbody td {
+    color: var(--text-color);
 }
 
 /* Amélioration de la lisibilité du texte */
@@ -1346,6 +1463,30 @@ table tbody td {
 
 .card-body,
 .module .content {
+    color: var(--text-color);
+}
+
+/* Cartes et contenus dans les thèmes sombres : utiliser la couleur de texte du thème */
+[data-theme="dark"] .card,
+[data-theme="dark"] .module,
+[data-theme="dark"] .card-body,
+[data-theme="dark"] .module .content,
+[data-theme="black"] .card,
+[data-theme="black"] .module,
+[data-theme="black"] .card-body,
+[data-theme="black"] .module .content,
+[data-theme="sunset"] .card,
+[data-theme="sunset"] .module,
+[data-theme="sunset"] .card-body,
+[data-theme="sunset"] .module .content,
+[data-theme="forest"] .card,
+[data-theme="forest"] .module,
+[data-theme="forest"] .card-body,
+[data-theme="forest"] .module .content,
+[data-theme="ocean"] .card,
+[data-theme="ocean"] .module,
+[data-theme="ocean"] .card-body,
+[data-theme="ocean"] .module .content {
     color: var(--text-color);
 }
 
