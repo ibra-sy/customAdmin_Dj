@@ -508,6 +508,14 @@ kbd {
     gap: var(--space-4);
 }
 
+/* Exclure les TabularInline : les <tr> ont .form-row mais doivent rester en table-row */
+.inline-group .tabular .form-row,
+.inline-group .tabular tr.form-row {
+    display: table-row !important;
+    grid-template-columns: unset !important;
+    gap: unset !important;
+}
+
 /* Amélioration des field groups */
 .field-group {
     background: var(--gray-50);

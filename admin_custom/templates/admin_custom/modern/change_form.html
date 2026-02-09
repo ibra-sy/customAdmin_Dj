@@ -6,6 +6,8 @@
 <link rel="stylesheet" href="{% static 'admin_custom/css/modern_admin_unified.css' %}">
 <link rel="stylesheet" href="{% static 'admin_custom/css/themes_modern.css' %}">
 <link rel="stylesheet" href="{% static 'admin_custom/css/theme_override.css' %}">
+<!-- CORRECTION CRITIQUE : TabularInline - DOIT être chargé en dernier -->
+<link rel="stylesheet" href="{% static 'admin_custom/css/tabular_inline_fix.css' %}">
 {% endblock %}
 
 {% block content %}
@@ -29,6 +31,7 @@
 {% block field_sets %}
 <div class="row g-4" style="display:flex; flex-wrap:wrap; gap:var(--space-6);">
   <div class="col-main" style="flex:1; min-width:0;">
+    {# Fieldsets principaux dans des cartes modernes #}
     {% for fieldset in adminform %}
     <div class="card mb-4">
       {% if fieldset.name %}
@@ -41,16 +44,54 @@
     {% endfor %}
 
     {% block after_field_sets %}{% endblock %}
-
-    {% block inline_field_sets %}
-    {% for inline_admin_formset in inline_admin_formsets %}
-    <div class="inline-group mb-4">
-      {{ inline_admin_formset }}
-    </div>
-    {% endfor %}
-    {% endblock %}
   </div>
 </div>
+{% endblock %}
+
+{# Inlines affichés sous forme d'onglets (comme Jazzmin), en respectant les thèmes modernes #}
+{% block inline_field_sets %}
+{% if inline_admin_formsets %}
+<div class="card mb-4 admin-inline-card">
+  <div class="card-header" style="border-bottom: 1px solid var(--color-border);">
+    <ul class="nav nav-tabs admin-inline-tabs" role="tablist" style="border-bottom: none;">
+      {% for inline_admin_formset in inline_admin_formsets %}
+      {% with inline_id=inline_admin_formset.formset.prefix %}
+      <li class="nav-item" role="presentation">
+        <button
+          class="nav-link {% if forloop.first %}active{% endif %}"
+          id="inline-tab-{{ inline_id }}-tab"
+          data-bs-toggle="tab"
+          data-bs-target="#inline-tab-{{ inline_id }}"
+          type="button"
+          role="tab"
+          aria-controls="inline-tab-{{ inline_id }}"
+          aria-selected="{% if forloop.first %}true{% else %}false{% endif %}"
+        >
+          {{ inline_admin_formset.opts.verbose_name_plural|capfirst }}
+        </button>
+      </li>
+      {% endwith %}
+      {% endfor %}
+    </ul>
+  </div>
+  <div class="card-body">
+    <div class="tab-content admin-inline-tab-content">
+      {% for inline_admin_formset in inline_admin_formsets %}
+      {% with inline_id=inline_admin_formset.formset.prefix %}
+      <div
+        class="tab-pane fade {% if forloop.first %}show active{% endif %}"
+        id="inline-tab-{{ inline_id }}"
+        role="tabpanel"
+        aria-labelledby="inline-tab-{{ inline_id }}-tab"
+      >
+        {% include inline_admin_formset.opts.template %}
+      </div>
+      {% endwith %}
+      {% endfor %}
+    </div>
+  </div>
+</div>
+{% endif %}
 {% endblock %}
 
 {% block submit_buttons_bottom %}

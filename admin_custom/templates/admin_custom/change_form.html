@@ -1,6 +1,49 @@
 {% extends "admin/change_form.html" %}
 {% load static i18n admin_urls admin_modify %}
 
+{% block extrahead %}
+{{ block.super }}
+<script>
+// Onglets pour les inlines (style Jazzmin) sans dépendre de Bootstrap JS
+document.addEventListener('DOMContentLoaded', function () {
+  document.querySelectorAll('.admin-inline-tabs').forEach(function (tabsNav) {
+    var card = tabsNav.closest('.card, .card-primary, .card-outline') || document;
+    var tabContent = card.querySelector('.admin-inline-tab-content');
+    if (!tabContent) return;
+
+    tabsNav.querySelectorAll('a[data-toggle="tab"]').forEach(function (link) {
+      link.addEventListener('click', function (e) {
+        e.preventDefault();
+        var targetSelector = this.getAttribute('href');
+        if (!targetSelector || !targetSelector.startsWith('#')) return;
+
+        // Désactiver tous les onglets de cette barre
+        tabsNav.querySelectorAll('.nav-link').forEach(function (l) {
+          l.classList.remove('active');
+          l.setAttribute('aria-selected', 'false');
+        });
+
+        // Masquer tous les panneaux associés
+        tabContent.querySelectorAll('.tab-pane').forEach(function (pane) {
+          pane.classList.remove('show', 'active');
+        });
+
+        // Activer l'onglet cliqué
+        this.classList.add('active');
+        this.setAttribute('aria-selected', 'true');
+
+        // Afficher le panneau ciblé
+        var targetPane = document.querySelector(targetSelector);
+        if (targetPane) {
+          targetPane.classList.add('show', 'active');
+        }
+      });
+    });
+  });
+});
+</script>
+{% endblock %}
+
 {% block content %}
 <div class="content-wrapper">
     <section class="content-header">
@@ -48,6 +91,51 @@
         </div>
     </section>
 </div>
+{% endblock %}
+
+{# Inlines affichés sous forme d'onglets (style Jazzmin) dans l'admin classique #}
+{% block inline_field_sets %}
+{% if inline_admin_formsets %}
+<div class="card card-primary card-outline mt-4">
+    <div class="card-header p-0 border-bottom-0">
+        <ul class="nav nav-tabs admin-inline-tabs" role="tablist">
+            {% for inline_admin_formset in inline_admin_formsets %}
+            {% with inline_id=inline_admin_formset.formset.prefix %}
+            <li class="nav-item">
+                <a
+                    class="nav-link {% if forloop.first %}active{% endif %}"
+                    id="inline-tab-{{ inline_id }}-tab"
+                    data-toggle="tab"
+                    href="#inline-tab-{{ inline_id }}"
+                    role="tab"
+                    aria-controls="inline-tab-{{ inline_id }}"
+                    aria-selected="{% if forloop.first %}true{% else %}false{% endif %}"
+                >
+                    {{ inline_admin_formset.opts.verbose_name_plural|capfirst }}
+                </a>
+            </li>
+            {% endwith %}
+            {% endfor %}
+        </ul>
+    </div>
+    <div class="card-body">
+        <div class="tab-content admin-inline-tab-content">
+            {% for inline_admin_formset in inline_admin_formsets %}
+            {% with inline_id=inline_admin_formset.formset.prefix %}
+            <div
+                class="tab-pane fade {% if forloop.first %}show active{% endif %}"
+                id="inline-tab-{{ inline_id }}"
+                role="tabpanel"
+                aria-labelledby="inline-tab-{{ inline_id }}-tab"
+            >
+                {% include inline_admin_formset.opts.template %}
+            </div>
+            {% endwith %}
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endif %}
 {% endblock %}
 
 {% block submit_buttons_bottom %}
