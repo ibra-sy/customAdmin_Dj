@@ -1,8 +1,9 @@
 from django.contrib import admin
 from .models import DashboardGrid, DashboardChart
+from .modern_model_admin import ModernTemplateMixin
 
 
-class DashboardGridAdmin(admin.ModelAdmin):
+class DashboardGridAdmin(ModernTemplateMixin, admin.ModelAdmin):
     """
     Admin pour DashboardGrid.
     Note: Le modèle doit être enregistré manuellement avec custom_admin_site
@@ -13,7 +14,7 @@ class DashboardGridAdmin(admin.ModelAdmin):
     list_filter = ['created_at']
 
 
-class DashboardChartAdmin(admin.ModelAdmin):
+class DashboardChartAdmin(ModernTemplateMixin, admin.ModelAdmin):
     """
     Admin pour DashboardChart.
     Note: Le modèle doit être enregistré manuellement avec custom_admin_site

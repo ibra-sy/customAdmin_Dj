@@ -1,6 +1,6 @@
 {% load static i18n %}
 <!DOCTYPE html>
-<html lang="{{ LANGUAGE_CODE|default:"en-us" }}" {% if LANGUAGE_BIDI %}dir="rtl"{% endif %}>
+<html lang="{{ LANGUAGE_CODE|default:"en-us" }}" {% if LANGUAGE_BIDI %}dir="rtl"{% endif %} data-theme="default">
 <head>
 <title>{% block title %}{% endblock %}</title>
 <link rel="stylesheet" type="text/css" href="{% block stylesheet %}{% static "admin/css/base.css" %}{% endblock %}">
@@ -21,6 +21,7 @@
 <link rel="stylesheet" href="{% static 'admin_custom/css/professional_admin.css' %}">
 <link rel="stylesheet" href="{% static 'admin_custom/css/ux_enhancements.css' %}">
 <link rel="stylesheet" href="{% static 'admin_custom/css/themes.css' %}">
+<link rel="stylesheet" href="{% static 'admin_custom/css/admin_forms.css' %}">
 <link rel="stylesheet" href="{% static 'admin_custom/css/admin_custom.css' %}">
 <link rel="stylesheet" href="{% static 'admin_custom/css/modern_admin.css' %}">
 <style id="theme-style"></style>

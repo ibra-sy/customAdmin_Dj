@@ -1,9 +1,10 @@
 from django.contrib import admin
+from admin_custom.modern_model_admin import ModernTemplateMixin
 from .models import Category, Product
 
 
 @admin.register(Category)
-class CategoryAdmin(admin.ModelAdmin):
+class CategoryAdmin(ModernTemplateMixin, admin.ModelAdmin):
     list_display = ['name', 'slug', 'parent', 'is_active', 'created_at']
     search_fields = ['name', 'slug', 'description']
     list_filter = ['is_active', 'parent', 'created_at']
@@ -12,7 +13,7 @@ class CategoryAdmin(admin.ModelAdmin):
 
 
 @admin.register(Product)
-class ProductAdmin(admin.ModelAdmin):
+class ProductAdmin(ModernTemplateMixin, admin.ModelAdmin):
     list_display = ['name', 'sku', 'category', 'price', 'stock_quantity', 'is_active', 'is_featured', 'created_at']
     search_fields = ['name', 'sku', 'description', 'short_description']
     list_filter = ['category', 'is_active', 'is_featured', 'created_at']

@@ -2,22 +2,30 @@
 (function() {
     'use strict';
     
-    // Charger le thème sauvegardé
+    // Interface MODERNE : ne jamais écraser le thème (bleu-moderne, emeraude, etc.)
+    const modernThemes = ['bleu-moderne', 'emeraude', 'coucher-soleil', 'sombre'];
+    const current = document.documentElement.getAttribute('data-theme');
+    if (modernThemes.includes(current) || document.querySelector('.admin-layout')) {
+        return;
+    }
+    
+    // Interface CLASSIQUE : charger le thème sauvegardé
     const savedTheme = localStorage.getItem('admin-theme') || 'default';
-    document.documentElement.setAttribute('data-theme', savedTheme);
+    const validThemes = ['default', 'nostalgie', 'ocean', 'sunset', 'forest', 'dark', 'liquid-glass'];
+    document.documentElement.setAttribute('data-theme', validThemes.includes(savedTheme) ? savedTheme : 'default');
     
     // Marquer le lien de navigation actif
     function setActiveNavLink() {
-        const currentPath = window.location.pathname;
-        const navLinks = document.querySelectorAll('.custom-admin-nav .nav-link');
+        const nav = document.querySelector('.custom-admin-nav');
+        if (!nav) return;
+        const currentPath = window.location.pathname.replace(/\/$/, '') || '/admin';
+        const navLinks = nav.querySelectorAll('.nav-link');
         
         navLinks.forEach(link => {
-            const href = link.getAttribute('href');
-            if (href && currentPath.includes(href.replace('/admin/', ''))) {
-                link.classList.add('active');
-            } else {
-                link.classList.remove('active');
-            }
+            const href = link.getAttribute('href') || '';
+            const linkPath = href.split('?')[0].replace(/\/$/, '');
+            const isMatch = linkPath && (currentPath === linkPath || currentPath.startsWith(linkPath + '/'));
+            link.classList.toggle('active', !!isMatch);
         });
     }
     
@@ -319,14 +327,16 @@ function generateChart() {
 
 function getThemeColors(type, border = false) {
     const theme = document.documentElement.getAttribute('data-theme') || 'default';
+    /* Palettes alignées sur daisyUI / specs projet */
     const colors = {
-        default: border ? '#417690' : 'rgba(65, 118, 144, 0.6)',
-        dark: border ? '#6366F1' : 'rgba(99, 102, 241, 0.6)',
-        'liquid-glass': border ? '#667EEA' : 'rgba(102, 126, 234, 0.6)',
-        nostalgie: border ? '#D4A574' : 'rgba(212, 165, 116, 0.6)',
-        ocean: border ? '#00B4DB' : 'rgba(0, 180, 219, 0.6)',
-        sunset: border ? '#FF6B6B' : 'rgba(255, 107, 107, 0.6)',
-        forest: border ? '#2D5016' : 'rgba(45, 80, 22, 0.6)'
+        default: border ? '#3B82F6' : 'rgba(59, 130, 246, 0.6)',
+        dark: border ? '#60A5FA' : 'rgba(96, 165, 250, 0.6)',
+        black: border ? '#60A5FA' : 'rgba(96, 165, 250, 0.6)',
+        'liquid-glass': border ? '#89D2DC' : 'rgba(137, 210, 220, 0.6)',
+        nostalgie: border ? '#D97706' : 'rgba(217, 119, 6, 0.6)',
+        ocean: border ? '#0EA5E9' : 'rgba(14, 165, 233, 0.6)',
+        sunset: border ? '#F97316' : 'rgba(249, 115, 22, 0.6)',
+        forest: border ? '#16A34A' : 'rgba(22, 163, 74, 0.6)'
     };
     
     if (type === 'pie' || type === 'doughnut') {

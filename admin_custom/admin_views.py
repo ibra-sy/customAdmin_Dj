@@ -1,8 +1,10 @@
 from django.contrib import admin
+from django.contrib.admin.views.decorators import staff_member_required
 from django.shortcuts import render
 from django.db.models import Sum
 from django.apps import apps
 
+from .auth_views import SESSION_INTERFACE_KEY, INTERFACE_CLASSIC, INTERFACE_MODERN
 from .autodiscover import get_all_models_for_charts, get_all_models_for_grids
 
 
@@ -90,3 +92,17 @@ def dashboard_view(request):
         'stats': stats,
     })
     return render(request, 'admin_custom/dashboard.html', context)
+
+
+@staff_member_required
+def classic_settings(request):
+    """Page Paramètres - interface classique, avec option pour passer à l'interface moderne."""
+    custom_admin_site = get_custom_admin_site()
+    context = custom_admin_site.each_context(request)
+    context.update({
+        'title': 'Paramètres',
+        'current_interface': request.session.get(SESSION_INTERFACE_KEY, INTERFACE_CLASSIC),
+        'switch_to_classic_url': '/admin/switch-interface/?to=classic',
+        'switch_to_modern_url': '/admin/switch-interface/?to=modern',
+    })
+    return render(request, 'admin_custom/settings.html', context)

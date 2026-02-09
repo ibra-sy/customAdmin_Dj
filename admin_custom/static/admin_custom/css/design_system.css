@@ -206,6 +206,11 @@ body {
     transform: translateY(-1px);
 }
 
+.custom-admin-nav .nav-link.active {
+    background: rgba(255, 255, 255, 0.2);
+    font-weight: 600;
+}
+
 .custom-admin-nav .nav-link i {
     font-size: var(--text-base);
 }

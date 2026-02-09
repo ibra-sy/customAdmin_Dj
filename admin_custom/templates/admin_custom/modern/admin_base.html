@@ -1,0 +1,218 @@
+{% load static i18n %}
+<!DOCTYPE html>
+<html lang="{{ LANGUAGE_CODE|default:"fr" }}" {% if LANGUAGE_BIDI %}dir="rtl"{% endif %} data-theme="bleu-moderne">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script>
+  (function(){
+    var k='admin_modern_theme',valid=['bleu-moderne','emeraude','coucher-soleil','sombre'];
+    var themes={bleu:['#F8FAFC','#0F172A','#FFFFFF','#E2E8F0','#3B82F6'],emeraude:['#F0FDF4','#022C22','#FFFFFF','#A7F3D0','#10B981'],soleil:['#FFFBEB','#292524','#FFFFFF','#FDE68A','#F59E0B'],sombre:['#0F172A','#F8FAFC','#1E293B','#334155','#6366F1']};
+    var s=localStorage.getItem(k);
+    var t=(s&&valid.indexOf(s)!==-1)?s:'bleu-moderne';
+    var sel=t==='emeraude'?'emeraude':t==='coucher-soleil'?'soleil':t==='sombre'?'sombre':'bleu';
+    var c=themes[sel];
+    if(document.documentElement)document.documentElement.setAttribute('data-theme',t);
+    window._themeColors=c;
+    window._themeApply=function(){if(!window._themeColors)return;var c=window._themeColors;var el=document.getElementById('theme-force-style');if(!el){el=document.createElement('style');el.id='theme-force-style';document.head.appendChild(el);}el.textContent='html,body{background:'+c[0]+'!important;color:'+c[1]+'!important}#content,#content-main,.main-content,.main-wrapper,.admin-modern-content,.admin-frontend-changelist,.admin-frontend-changeform,.admin-frontend-delete,.admin-frontend-history,.changelist-form-container,#changelist,.module{background:'+c[0]+'!important;color:'+c[1]+'!important}.card,.card-body{background:'+c[2]+'!important;color:'+c[1]+'!important;border-color:'+c[3]+'!important}.card-header{background:'+(c[4]||c[2])+'!important;color:#fff!important;border-color:'+(c[4]||c[2])+'!important}.table,.table td,.table th,.results,#result_list,.results td,.results th,.table-wrapper{background:'+c[2]+'!important;color:'+c[1]+'!important;border-color:'+c[3]+'!important}.form-control,.form-select,input,select,textarea,#changelist-filter{background:'+c[2]+'!important;color:'+c[1]+'!important;border-color:'+c[3]+'!important}.admin-layout .main-content .page-title,.admin-layout label,.admin-layout td,.admin-layout th,.admin-layout p,.admin-layout span,.admin-layout h1,.admin-layout h2,.admin-layout h3,.admin-layout h4{color:'+c[1]+'!important}.btn-primary,.btn-success,.btn-danger,.btn-warning,.btn-info,input[type=submit].btn-primary{color:#fff!important}.btn-secondary{color:'+c[1]+'!important;background:'+c[2]+'!important}';};
+    window.setModernTheme=function(x){if(valid.indexOf(x)===-1)return;t=x;localStorage.setItem(k,x);sel=x==='emeraude'?'emeraude':x==='coucher-soleil'?'soleil':x==='sombre'?'sombre':'bleu';window._themeColors=themes[sel];c=window._themeColors;document.documentElement.setAttribute('data-theme',t);window._themeApply();};
+  })();
+  </script>
+  <title>{% block title %}{% endblock %}</title>
+  {% if LANGUAGE_BIDI %}<link rel="stylesheet" type="text/css" href="{% block stylesheet_rtl %}{% static "admin/css/rtl.css" %}{% endblock %}">{% endif %}
+  {% block stylesheet %}{% endblock %}
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="{% static 'admin/css/base.css' %}">
+  <link rel="stylesheet" href="{% static 'admin_custom/css/design_system.css' %}">
+  <link rel="stylesheet" href="{% static 'admin_custom/css/themes_modern.css' %}">
+  <link rel="stylesheet" href="{% static 'admin_custom/css/modern_layout.css' %}">
+  <link rel="stylesheet" href="{% static 'admin_custom/css/modern_components.css' %}">
+  <link rel="stylesheet" href="{% static 'admin_custom/css/professional_admin.css' %}">
+  <link rel="stylesheet" href="{% static 'admin_custom/css/ux_enhancements.css' %}">
+  <link rel="stylesheet" href="{% static 'admin_custom/css/admin_custom.css' %}">
+  <link rel="stylesheet" href="{% static 'admin_custom/css/modern_admin_unified.css' %}">
+  <link rel="stylesheet" href="{% static 'admin_custom/css/theme_override.css' %}">
+  {% block extrastyle %}{% endblock %}
+  <style id="theme-style"></style>
+  <style>
+  /* Masquer le backdrop modal quand non utilisé */
+  .admin-layout .modal-backdrop:not(.show) { display: none !important; }
+  /* Zone contenu : utilise les variables du thème actif */
+  .admin-layout .main-wrapper,
+  .admin-layout .main-content,
+  .admin-layout #content,
+  .admin-layout .admin-modern-content,
+  .admin-layout .admin-frontend-changelist,
+  .admin-layout #content-main {
+    background: var(--color-background) !important;
+    color: var(--color-text) !important;
+  }
+  .admin-layout .main-content { padding: 1.5rem; min-height: 400px; }
+  </style>
+  {% block extrahead %}{% endblock %}
+  {% block blockbots %}<meta name="robots" content="NONE,NOARCHIVE">{% endblock %}
+</head>
+<body class="{% if is_popup %}popup {% endif %}{% block bodyclass %}{% endblock %}" data-admin-utc-offset="{% now "Z" %}">
+
+{% if is_popup %}
+{# Mode popup : layout minimal #}
+<div id="container">
+  {% block breadcrumbs %}{% endblock %}
+  {% if messages %}
+  <ul class="messagelist">{% for message in messages %}
+    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message|capfirst }}</li>
+  {% endfor %}</ul>
+  {% endif %}
+  <div id="content" class="colM">
+{% else %}
+{# Mode normal : layout moderne avec sidebar #}
+<div class="admin-layout">
+  <div class="modal-backdrop" id="global-modal-backdrop" aria-hidden="true"></div>
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <a href="{% url 'admin:modern_dashboard' %}" class="sidebar-logo">
+        <i class="fa-solid fa-shield-halved"></i>
+        <span>Admin Panel</span>
+      </a>
+    </div>
+    <nav class="sidebar-nav">
+      <div class="nav-section">
+        <div class="nav-section-title">Principal</div>
+        <a href="{% url 'admin:modern_dashboard' %}" class="nav-link">
+          <i class="fa-solid fa-gauge-high"></i>
+          <span>Tableau de bord</span>
+        </a>
+        <a href="{% url 'admin:modern_charts' %}" class="nav-link">
+          <i class="fa-solid fa-chart-line"></i>
+          <span>Graphiques</span>
+        </a>
+        <a href="{% url 'admin:modern_grids' %}" class="nav-link">
+          <i class="fa-solid fa-table"></i>
+          <span>Grilles</span>
+        </a>
+      </div>
+      <div class="nav-section">
+        <div class="nav-section-title">Contenu</div>
+        {% for app in app_list %}
+        {% for model in app.models %}
+        <a href="{{ model.admin_url }}" class="nav-link">
+          <i class="fa-solid {{ model.icon|default:'fa-circle' }}"></i>
+          <span>{{ model.name }}</span>
+        </a>
+        {% endfor %}
+        {% endfor %}
+      </div>
+      <div class="nav-section">
+        <div class="nav-section-title">Système</div>
+        <a href="{% url 'admin:modern_settings' %}" class="nav-link">
+          <i class="fa-solid fa-gear"></i>
+          <span>Paramètres</span>
+        </a>
+      </div>
+    </nav>
+    <div class="sidebar-footer">
+      <div class="sidebar-user">
+        <div class="sidebar-user-avatar">{{ user_initial }}</div>
+        <div class="sidebar-user-info">
+          <div class="sidebar-user-name">{{ user_display }}</div>
+          <div class="sidebar-user-role">Administrateur</div>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <div class="main-wrapper" id="main-wrapper">
+    <header class="header">
+      <div class="header-left">
+        <button type="button" class="header-toggle-sidebar" aria-label="Menu">
+          <i class="fa-solid fa-bars"></i>
+        </button>
+        <nav class="breadcrumb">
+          <a href="{% url 'admin:modern_dashboard' %}">Accueil</a>
+          <span class="breadcrumb-separator">/</span>
+          <span class="breadcrumb-current">{% block breadcrumb %}{{ title }}{% endblock %}</span>
+        </nav>
+      </div>
+      <div class="header-search" style="flex:1; max-width:320px; margin:0 1rem;">
+        <i class="fa-solid fa-search header-search-icon"></i>
+        <input type="search" placeholder="Rechercher… (Ctrl+K)" aria-label="Recherche" id="header-global-search">
+        <kbd style="font-size:0.7rem; padding:0.15rem 0.35rem; border-radius:0.25rem; background:var(--color-background); color:var(--color-text-muted);">Ctrl+K</kbd>
+      </div>
+      <div class="header-right">
+        <div class="dropdown" id="dropdown-user-menu">
+          <button type="button" class="user-menu-trigger">
+            <div class="user-menu-avatar">{{ user_initial }}</div>
+            <div class="user-menu-info">
+              <span class="user-menu-name">{{ user_display }}</span>
+              <span class="user-menu-role">Administrateur</span>
+            </div>
+            <i class="fa-solid fa-chevron-down" style="font-size:0.75rem;"></i>
+          </button>
+          <div class="dropdown-menu">
+            <a href="{% url 'admin:password_change' %}" class="dropdown-item"><i class="fa-solid fa-key"></i> Changer le mot de passe</a>
+            <div class="dropdown-divider"></div>
+            <a href="{% url 'admin:logout' %}" class="dropdown-item"><i class="fa-solid fa-right-from-bracket"></i> Déconnexion</a>
+          </div>
+        </div>
+      </div>
+    </header>
+    <main class="main-content">
+      {% if messages %}
+      <div class="alert-container mb-3">
+        {% for message in messages %}
+        <div class="alert alert-{{ message.tags|default:'info' }} alert-dismissible fade show" role="alert">
+          {{ message|capfirst }}
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        {% endfor %}
+      </div>
+      {% endif %}
+      <div id="content" class="admin-modern-content {% block coltype %}colM{% endblock %}">
+{% endif %}
+    {% block pretitle %}{% endblock %}
+    {% block content_title %}{% if title %}<h2 class="content-title mb-3">{{ title }}</h2>{% endif %}{% endblock %}
+    {% block content %}{% endblock %}
+  </div>
+{% if is_popup %}
+</div>
+{% else %}
+    </main>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  var sidebar = document.getElementById('sidebar');
+  var mainWrapper = document.getElementById('main-wrapper');
+  var toggle = document.querySelector('.header-toggle-sidebar');
+  if (toggle && sidebar) {
+    toggle.addEventListener('click', function() {
+      sidebar.classList.toggle('collapsed');
+      if (mainWrapper) mainWrapper.classList.toggle('sidebar-collapsed');
+    });
+  }
+  document.querySelectorAll('.dropdown').forEach(function(d) {
+    var trigger = d.querySelector('.user-menu-trigger') || d.querySelector('[data-dropdown-trigger]');
+    if (trigger) {
+      trigger.addEventListener('click', function(e) {
+        e.stopPropagation();
+        d.classList.toggle('open');
+      });
+    }
+  });
+  document.addEventListener('click', function() {
+    document.querySelectorAll('.dropdown.open').forEach(function(d) { d.classList.remove('open'); });
+  });
+});
+</script>
+<script src="{% static 'admin_custom/js/admin_custom.js' %}"></script>
+<script>if(window._themeApply)window._themeApply();</script>
+{% endif %}
+
+{% block footer %}{% endblock %}
+<script>if(window._themeApply)window._themeApply();</script>
+</body>
+</html>
