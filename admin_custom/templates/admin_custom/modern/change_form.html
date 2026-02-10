@@ -29,43 +29,37 @@
 {% endblock %}
 
 {% block field_sets %}
-<div class="row g-4" style="display:flex; flex-wrap:wrap; gap:var(--space-6);">
-  <div class="col-main" style="flex:1; min-width:0;">
-    {# Fieldsets principaux dans des cartes modernes #}
-    {% for fieldset in adminform %}
-    <div class="card mb-4">
-      {% if fieldset.name %}
-      <div class="card-header">{{ fieldset.name }}</div>
-      {% endif %}
-      <div class="card-body">
-        {% include "admin/includes/fieldset.html" with heading_level=3 prefix="fieldset" id_prefix=0 id_suffix=forloop.counter0 hide_heading=True %}
-      </div>
-    </div>
-    {% endfor %}
-
-    {% block after_field_sets %}{% endblock %}
-  </div>
-</div>
-{% endblock %}
-
-{# Inlines affichés sous forme d'onglets (comme Jazzmin), en respectant les thèmes modernes #}
-{% block inline_field_sets %}
+{# Parent + enfants AU MÊME NIVEAU via onglets (style Jazzmin), version modern (Bootstrap 5) #}
 {% if inline_admin_formsets %}
-<div class="card mb-4 admin-inline-card">
+<div class="card mb-4 admin-inline-card admin-parent-children-tabs">
   <div class="card-header" style="border-bottom: 1px solid var(--color-border);">
     <ul class="nav nav-tabs admin-inline-tabs" role="tablist" style="border-bottom: none;">
+      <li class="nav-item" role="presentation">
+        <button
+          class="nav-link active"
+          id="tab-parent-tab"
+          data-bs-toggle="tab"
+          data-bs-target="#tab-parent"
+          type="button"
+          role="tab"
+          aria-controls="tab-parent"
+          aria-selected="true"
+        >
+          {{ opts.verbose_name|capfirst }}
+        </button>
+      </li>
       {% for inline_admin_formset in inline_admin_formsets %}
       {% with inline_id=inline_admin_formset.formset.prefix %}
       <li class="nav-item" role="presentation">
         <button
-          class="nav-link {% if forloop.first %}active{% endif %}"
+          class="nav-link"
           id="inline-tab-{{ inline_id }}-tab"
           data-bs-toggle="tab"
           data-bs-target="#inline-tab-{{ inline_id }}"
           type="button"
           role="tab"
           aria-controls="inline-tab-{{ inline_id }}"
-          aria-selected="{% if forloop.first %}true{% else %}false{% endif %}"
+          aria-selected="false"
         >
           {{ inline_admin_formset.opts.verbose_name_plural|capfirst }}
         </button>
@@ -76,10 +70,53 @@
   </div>
   <div class="card-body">
     <div class="tab-content admin-inline-tab-content">
+      <div
+        class="tab-pane fade show active"
+        id="tab-parent"
+        role="tabpanel"
+        aria-labelledby="tab-parent-tab"
+      >
+        {# Fieldsets du parent dans des cartes modernes #}
+        {% for fieldset in adminform %}
+        <div class="card mb-4">
+          {% if fieldset.name %}
+          <div class="card-header">{{ fieldset.name }}</div>
+          {% endif %}
+          <div class="card-body">
+            {% include "admin/includes/fieldset.html" with heading_level=3 prefix="fieldset" id_prefix=0 id_suffix=forloop.counter0 hide_heading=True %}
+          </div>
+        </div>
+        {% endfor %}
+{# NOTE: on ne ferme pas le tab-pane ici pour inclure after_field_sets dans le même onglet. #}
+{% else %}
+  {# Sans inlines : fallback normal #}
+  <div class="row g-4" style="display:flex; flex-wrap:wrap; gap:var(--space-6);">
+    <div class="col-main" style="flex:1; min-width:0;">
+      {% for fieldset in adminform %}
+      <div class="card mb-4">
+        {% if fieldset.name %}
+        <div class="card-header">{{ fieldset.name }}</div>
+        {% endif %}
+        <div class="card-body">
+          {% include "admin/includes/fieldset.html" with heading_level=3 prefix="fieldset" id_prefix=0 id_suffix=forloop.counter0 hide_heading=True %}
+        </div>
+      </div>
+      {% endfor %}
+
+      {% block after_field_sets %}{% endblock %}
+    </div>
+  </div>
+{% endif %}
+{% endblock %}
+
+{% block inline_field_sets %}
+{% if inline_admin_formsets %}
+      </div>{# /#tab-parent #}
+
       {% for inline_admin_formset in inline_admin_formsets %}
       {% with inline_id=inline_admin_formset.formset.prefix %}
       <div
-        class="tab-pane fade {% if forloop.first %}show active{% endif %}"
+        class="tab-pane fade"
         id="inline-tab-{{ inline_id }}"
         role="tabpanel"
         aria-labelledby="inline-tab-{{ inline_id }}-tab"

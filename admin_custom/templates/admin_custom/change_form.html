@@ -11,34 +11,47 @@ document.addEventListener('DOMContentLoaded', function () {
     var tabContent = card.querySelector('.admin-inline-tab-content');
     if (!tabContent) return;
 
+    function activateTab(link) {
+      var targetSelector = link.getAttribute('href');
+      if (!targetSelector || !targetSelector.startsWith('#')) return;
+
+      // Désactiver tous les onglets de cette barre
+      tabsNav.querySelectorAll('.nav-link').forEach(function (l) {
+        l.classList.remove('active');
+        l.setAttribute('aria-selected', 'false');
+      });
+
+      // Masquer tous les panneaux associés
+      tabContent.querySelectorAll('.tab-pane').forEach(function (pane) {
+        pane.classList.remove('show', 'active');
+      });
+
+      // Activer l'onglet
+      link.classList.add('active');
+      link.setAttribute('aria-selected', 'true');
+
+      // Afficher le panneau ciblé
+      var targetPane = card.querySelector(targetSelector) || document.querySelector(targetSelector);
+      if (targetPane) targetPane.classList.add('show', 'active');
+
+      // Mettre à jour le hash (sans scroll brutal)
+      try {
+        if (history && history.replaceState) history.replaceState(null, '', targetSelector);
+      } catch (err) {}
+    }
+
     tabsNav.querySelectorAll('a[data-toggle="tab"]').forEach(function (link) {
       link.addEventListener('click', function (e) {
         e.preventDefault();
-        var targetSelector = this.getAttribute('href');
-        if (!targetSelector || !targetSelector.startsWith('#')) return;
-
-        // Désactiver tous les onglets de cette barre
-        tabsNav.querySelectorAll('.nav-link').forEach(function (l) {
-          l.classList.remove('active');
-          l.setAttribute('aria-selected', 'false');
-        });
-
-        // Masquer tous les panneaux associés
-        tabContent.querySelectorAll('.tab-pane').forEach(function (pane) {
-          pane.classList.remove('show', 'active');
-        });
-
-        // Activer l'onglet cliqué
-        this.classList.add('active');
-        this.setAttribute('aria-selected', 'true');
-
-        // Afficher le panneau ciblé
-        var targetPane = document.querySelector(targetSelector);
-        if (targetPane) {
-          targetPane.classList.add('show', 'active');
-        }
+        activateTab(this);
       });
     });
+
+    // Si on arrive avec un hash (#inline-tab-xxx), activer l’onglet correspondant
+    if (window.location && window.location.hash) {
+      var initial = tabsNav.querySelector('a[href="' + window.location.hash + '"]');
+      if (initial) activateTab(initial);
+    }
   });
 });
 </script>
@@ -93,23 +106,36 @@ document.addEventListener('DOMContentLoaded', function () {
 </div>
 {% endblock %}
 
-{# Inlines affichés sous forme d'onglets (style Jazzmin) dans l'admin classique #}
-{% block inline_field_sets %}
+{# Parent + enfants AU MÊME NIVEAU via onglets (style Jazzmin) #}
+{% block field_sets %}
 {% if inline_admin_formsets %}
-<div class="card card-primary card-outline mt-4">
+<div class="card card-primary card-outline mt-3 admin-parent-children-tabs">
     <div class="card-header p-0 border-bottom-0">
         <ul class="nav nav-tabs admin-inline-tabs" role="tablist">
+            <li class="nav-item">
+                <a
+                    class="nav-link active"
+                    id="tab-parent-tab"
+                    data-toggle="tab"
+                    href="#tab-parent"
+                    role="tab"
+                    aria-controls="tab-parent"
+                    aria-selected="true"
+                >
+                    {{ opts.verbose_name|capfirst }}
+                </a>
+            </li>
             {% for inline_admin_formset in inline_admin_formsets %}
             {% with inline_id=inline_admin_formset.formset.prefix %}
             <li class="nav-item">
                 <a
-                    class="nav-link {% if forloop.first %}active{% endif %}"
+                    class="nav-link"
                     id="inline-tab-{{ inline_id }}-tab"
                     data-toggle="tab"
                     href="#inline-tab-{{ inline_id }}"
                     role="tab"
                     aria-controls="inline-tab-{{ inline_id }}"
-                    aria-selected="{% if forloop.first %}true{% else %}false{% endif %}"
+                    aria-selected="false"
                 >
                     {{ inline_admin_formset.opts.verbose_name_plural|capfirst }}
                 </a>
@@ -120,10 +146,31 @@ document.addEventListener('DOMContentLoaded', function () {
     </div>
     <div class="card-body">
         <div class="tab-content admin-inline-tab-content">
+            <div
+                class="tab-pane fade show active"
+                id="tab-parent"
+                role="tabpanel"
+                aria-labelledby="tab-parent-tab"
+            >
+                {% for fieldset in adminform %}
+                    {% include "admin/includes/fieldset.html" with heading_level=2 prefix="fieldset" id_prefix=0 id_suffix=forloop.counter0 %}
+                {% endfor %}
+{# NOTE: on ne ferme pas le tab-pane ici pour inclure after_field_sets dans le même onglet. #}
+{% else %}
+    {% for fieldset in adminform %}
+        {% include "admin/includes/fieldset.html" with heading_level=2 prefix="fieldset" id_prefix=0 id_suffix=forloop.counter0 %}
+    {% endfor %}
+{% endif %}
+{% endblock %}
+
+{% block inline_field_sets %}
+{% if inline_admin_formsets %}
+            </div>{# /#tab-parent: fermé ici pour que after_field_sets reste dedans #}
+
             {% for inline_admin_formset in inline_admin_formsets %}
             {% with inline_id=inline_admin_formset.formset.prefix %}
             <div
-                class="tab-pane fade {% if forloop.first %}show active{% endif %}"
+                class="tab-pane fade"
                 id="inline-tab-{{ inline_id }}"
                 role="tabpanel"
                 aria-labelledby="inline-tab-{{ inline_id }}-tab"
@@ -132,9 +179,13 @@ document.addEventListener('DOMContentLoaded', function () {
             </div>
             {% endwith %}
             {% endfor %}
-        </div>
-    </div>
-</div>
+        </div>{# /.tab-content #}
+    </div>{# /.card-body #}
+</div>{# /.card #}
+{% else %}
+    {% for inline_admin_formset in inline_admin_formsets %}
+        {% include inline_admin_formset.opts.template %}
+    {% endfor %}
 {% endif %}
 {% endblock %}
 
