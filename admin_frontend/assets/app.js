@@ -638,6 +638,47 @@
       return;
     }
 
+    if (action === 'switch-interface') {
+      // Dans le futur, ceci redirigera vers l'URL Django : /admin/switch-interface/?next=/admin/
+      // Pour l'instant, on simule l'action
+      toast('Redirection vers l\'interface Classique...');
+      setTimeout(() => {
+        alert('Simulation : Vous seriez redirigé vers l\'interface classique Django Admin.');
+      }, 1000);
+      return;
+    }
+
+    if (action === 'switch-interface-classic') {
+      toast('Redirection vers l\'interface Classique...');
+      setTimeout(() => {
+        alert('Simulation : Vous seriez redirigé vers l\'interface classique Django Admin.');
+      }, 1000);
+      return;
+    }
+
+    if (action === 'switch-interface-modern') {
+      toast('Vous êtes déjà sur l\'interface Moderne.');
+      return;
+    }
+
+    if (action === 'create-customer') {
+      const form = document.getElementById('customerFormSection');
+      if (form) {
+        form.hidden = false;
+        form.scrollIntoView({ behavior: 'smooth' });
+      }
+      return;
+    }
+
+    if (action === 'create-user') {
+      const form = document.getElementById('userFormSection');
+      if (form) {
+        form.hidden = false;
+        form.scrollIntoView({ behavior: 'smooth' });
+      }
+      return;
+    }
+
     const btn = t.closest('button, a');
     if (btn instanceof HTMLElement) {
       const label = (btn.textContent || '').trim();

@@ -17,7 +17,7 @@
       <div class="sidebar__brand">
         <div class="brandmark" aria-hidden="true"></div>
         <div class="brand">
-          <div class="brand__title">Admin Console</div>
+          <div class="brand__title">Modern Admin</div>
           <div class="brand__subtitle">Backoffice</div>
         </div>
       </div>
@@ -237,6 +237,11 @@
                   <div class="quick__label">Export</div>
                   <div class="quick__hint">Rapports</div>
                 </button>
+                <button class="quick__item" type="button" data-action="switch-interface">
+                  <div class="quick__icon" aria-hidden="true">⇄</div>
+                  <div class="quick__label">Interface</div>
+                  <div class="quick__hint">Classique</div>
+                </button>
               </div>
             </section>
           </div>
@@ -425,6 +430,37 @@
               </table>
             </div>
           </section>
+
+          <section class="card" id="userFormSection" hidden style="margin-top: 20px;">
+            <h2 class="h2" style="margin-bottom: 14px;">Nouvel Utilisateur</h2>
+            <form class="form" action="#" method="post">
+              <div class="form__grid">
+                <div class="field">
+                  <label class="label">Nom d'utilisateur</label>
+                  <input class="input" placeholder="jdoe" />
+                </div>
+                <div class="field">
+                  <label class="label">Email</label>
+                  <input class="input" type="email" placeholder="email@exemple.com" />
+                </div>
+                <div class="field">
+                  <label class="label">Mot de passe</label>
+                  <input class="input" type="password" placeholder="••••••••" />
+                </div>
+                <div class="field">
+                  <label class="label">Rôle</label>
+                  <select class="input">
+                    <option>Staff</option>
+                    <option>Superuser</option>
+                  </select>
+                </div>
+              </div>
+              <div class="form__actions">
+                <button class="button" type="button" onclick="this.closest('#userFormSection').hidden=true">Enregistrer</button>
+                <button class="button button--ghost" type="button" onclick="this.closest('#userFormSection').hidden=true">Annuler</button>
+              </div>
+            </form>
+          </section>
         </section>
 
         <section class="view" data-view="orders" aria-label="Commandes">
@@ -574,17 +610,145 @@
         </section>
 
         <section class="view" data-view="customers" aria-label="Clients">
-          <div class="empty">
-            <h1 class="h1">Clients</h1>
-            <p class="muted">Cette vue est un placeholder pour la future intégration.</p>
+          <div class="page-head">
+            <div>
+              <h1 class="h1">Clients</h1>
+              <p class="muted">Gestion de la base client.</p>
+            </div>
+            <div class="page-head__actions">
+              <button class="button" type="button" data-action="create-customer">Ajouter un client</button>
+            </div>
           </div>
+
+          <section class="card">
+            <div class="table-wrap" role="region" aria-label="Table clients" tabindex="0">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th scope="col">Nom</th>
+                    <th scope="col">Email</th>
+                    <th scope="col">Téléphone</th>
+                    <th scope="col">Statut</th>
+                    <th scope="col" class="ta-right">Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><span class="mono">Konan A.</span></td>
+                    <td>konan.a@example.com</td>
+                    <td>+225 07 07 00 00 01</td>
+                    <td><span class="status status--ok">Actif</span></td>
+                    <td class="ta-right">
+                      <div class="row-actions">
+                        <button class="button button--ghost" type="button">Modifier</button>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td><span class="mono">Sery D.</span></td>
+                    <td>sery.d@example.com</td>
+                    <td>+225 05 05 00 00 02</td>
+                    <td><span class="status status--ok">Actif</span></td>
+                    <td class="ta-right">
+                      <div class="row-actions">
+                        <button class="button button--ghost" type="button">Modifier</button>
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          <section class="card" id="customerFormSection" hidden style="margin-top: 20px;">
+            <h2 class="h2" style="margin-bottom: 14px;">Nouveau Client</h2>
+            <form class="form" action="#" method="post">
+              <div class="form__grid">
+                <div class="field">
+                  <label class="label">Nom complet</label>
+                  <input class="input" placeholder="Ex: Jean Dupont" />
+                </div>
+                <div class="field">
+                  <label class="label">Email</label>
+                  <input class="input" type="email" placeholder="email@exemple.com" />
+                </div>
+                <div class="field">
+                  <label class="label">Téléphone</label>
+                  <input class="input" placeholder="+225 ..." />
+                </div>
+                <div class="field">
+                  <label class="label">Adresse</label>
+                  <input class="input" placeholder="Abidjan, Cocody..." />
+                </div>
+              </div>
+              <div class="form__actions">
+                <button class="button" type="button" onclick="this.closest('#customerFormSection').hidden=true">Enregistrer</button>
+                <button class="button button--ghost" type="button" onclick="this.closest('#customerFormSection').hidden=true">Annuler</button>
+              </div>
+            </form>
+          </section>
         </section>
 
         <section class="view" data-view="users" aria-label="Utilisateurs">
-          <div class="empty">
-            <h1 class="h1">Utilisateurs</h1>
-            <p class="muted">Placeholder.</p>
+          <div class="page-head">
+            <div>
+              <h1 class="h1">Utilisateurs</h1>
+              <p class="muted">Gestion des accès et des rôles.</p>
+            </div>
+            <div class="page-head__actions">
+              <button class="button" type="button" data-action="create-user">Ajouter un utilisateur</button>
+            </div>
           </div>
+
+          <section class="card">
+            <div class="table-wrap" role="region" aria-label="Table utilisateurs" tabindex="0">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th scope="col">Utilisateur</th>
+                    <th scope="col">Email</th>
+                    <th scope="col">Rôle</th>
+                    <th scope="col">Dernière connexion</th>
+                    <th scope="col" class="ta-right">Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>
+                      <div class="user">
+                        <div class="avatar" style="width:28px;height:28px;font-size:12px;">A</div>
+                        <div class="user__name">admin</div>
+                      </div>
+                    </td>
+                    <td>admin@example.com</td>
+                    <td><span class="pill pill--good">Superuser</span></td>
+                    <td>Aujourd'hui</td>
+                    <td class="ta-right">
+                      <div class="row-actions">
+                        <button class="button button--ghost" type="button">Modifier</button>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <div class="user">
+                        <div class="avatar" style="width:28px;height:28px;font-size:12px;">J</div>
+                        <div class="user__name">jean</div>
+                      </div>
+                    </td>
+                    <td>jean@example.com</td>
+                    <td><span class="pill">Staff</span></td>
+                    <td>Hier</td>
+                    <td class="ta-right">
+                      <div class="row-actions">
+                        <button class="button button--ghost" type="button">Modifier</button>
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
         </section>
 
         <section class="view" data-view="settings" aria-label="Paramètres">
@@ -598,6 +762,37 @@
           <section class="card">
             <div class="settings">
               <div class="settings__row">
+                <div>
+                  <div class="settings__title">Interface d'administration</div>
+                  <div class="settings__desc">Choisissez l'interface d'administration que vous souhaitez utiliser.</div>
+                </div>
+              </div>
+              
+              <div class="interface-switch">
+                <div class="interface-card" data-action="switch-interface-classic">
+                  <div class="interface-card__icon">
+                    <span aria-hidden="true">≣</span>
+                  </div>
+                  <div class="interface-card__title">INTERFACE CLASSIQUE</div>
+                  <div class="interface-card__desc">AdminLTE, tableau de bord traditionnel</div>
+                  <div class="interface-card__action">
+                    <span>→ PASSER À CETTE INTERFACE</span>
+                  </div>
+                </div>
+
+                <div class="interface-card is-active" data-action="switch-interface-modern">
+                  <div class="interface-card__icon">
+                    <span aria-hidden="true">❖</span>
+                  </div>
+                  <div class="interface-card__title">INTERFACE MODERNE</div>
+                  <div class="interface-card__desc">Design épuré, sidebar, thèmes</div>
+                  <div class="interface-card__action">
+                    <span>✓ ACTUELLE</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="settings__row" style="margin-top: 32px; padding-top: 32px; border-top: 1px solid var(--border);">
                 <div>
                   <div class="settings__title">Apparence</div>
                   <div class="settings__desc">Choisis le mode et la couleur principale du backoffice.</div>
