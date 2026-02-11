@@ -81,22 +81,14 @@ document.addEventListener('DOMContentLoaded', function () {
     </section>
     <section class="content">
         <div class="container-fluid">
-<div class="card card-primary card-outline">
-    <div class="card-header border-0">
-        <h3 class="card-title">
-            <i class="fas fa-{% if add %}plus-circle{% else %}edit{% endif %}"></i>
-            {% if add %}
-                Ajouter {{ opts.verbose_name }}
-            {% else %}
-                Modifier {{ original|truncatewords:"18" }}
-            {% endif %}
-        </h3>
-        <div class="card-tools">
-            <button type="button" class="btn btn-tool" data-card-widget="collapse">
-                <i class="fas fa-minus"></i>
-            </button>
-        </div>
+<div class="card card-primary card-outline">    <div class="card-header border-0">
+    
+    <div class="card-tools">
+        <button type="button" class="btn btn-tool" data-card-widget="collapse">
+            <i class="fas fa-minus"></i>
+        </button>
     </div>
+</div>
     <div class="card-body" style="padding: var(--space-6, 24px);">
         {{ block.super }}
     </div>
