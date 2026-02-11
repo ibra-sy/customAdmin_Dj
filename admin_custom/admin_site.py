@@ -122,7 +122,7 @@ class CustomAdminSite(admin.AdminSite):
                 continue
             app_copy = dict(app)
             app_copy['models'] = [
-                dict(m, icon=model_icons.get(m.get('object_name', '').lower(), 'fa-circle'))
+                dict(m, icon=model_icons.get(m.get('object_name', '').lower(), 'fa-cube'))
                 for m in app_copy.get('models', [])
             ]
             filtered_app_list.append(app_copy)

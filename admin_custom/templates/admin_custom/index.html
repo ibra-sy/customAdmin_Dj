@@ -1,6 +1,12 @@
 {% extends "admin_custom/base_site.html" %}
 {% load static %}
 
+{% block extrastyle %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'admin_custom/css/admin_tools_cards.css' %}">
+<link rel="stylesheet" href="{% static 'admin_custom/css/business_apps_hover.css' %}">
+{% endblock %}
+
 {% block content %}
 <div class="content-wrapper">
     <section class="content-header">
@@ -84,7 +90,7 @@
             </div>
 
             <!-- Outils d'administration - Section séparée -->
-            <div class="row mb-4">
+            <div class="row mb-4" style="margin-top: 3rem;">
                 <div class="col-12">
                     <div class="card card-outline card-info">
                         <div class="card-header">
@@ -100,21 +106,21 @@
                         <div class="card-body">
                             <div class="row">
                                 <div class="col-md-4">
-                                    <a href="{% url 'admin:admin_dashboard' %}" class="btn btn-info btn-lg btn-block mb-3" style="text-align: left; padding: 20px;">
+                                    <a href="{% url 'admin:admin_dashboard' %}" class="admin-tool-card admin-tool-blue">
                                         <i class="fas fa-chart-line fa-2x mb-2"></i><br>
                                         <strong>Dashboard</strong><br>
                                         <small>Vue d'ensemble complète</small>
                                     </a>
                                 </div>
                                 <div class="col-md-4">
-                                    <a href="{% url 'admin:admin_charts' %}" class="btn btn-success btn-lg btn-block mb-3" style="text-align: left; padding: 20px;">
+                                    <a href="{% url 'admin:admin_charts' %}" class="admin-tool-card admin-tool-green">
                                         <i class="fas fa-chart-pie fa-2x mb-2"></i><br>
                                         <strong>Graphiques</strong><br>
                                         <small>Créer des graphiques dynamiques</small>
                                     </a>
                                 </div>
                                 <div class="col-md-4">
-                                    <a href="{% url 'admin:admin_grids' %}" class="btn btn-warning btn-lg btn-block mb-3" style="text-align: left; padding: 20px;">
+                                    <a href="{% url 'admin:admin_grids' %}" class="admin-tool-card admin-tool-purple">
                                         <i class="fas fa-table fa-2x mb-2"></i><br>
                                         <strong>Grilles de données</strong><br>
                                         <small>Visualiser et analyser les données</small>
@@ -142,8 +148,8 @@
                                 <i class="fas fa-folder-open"></i> {{ app.name }}
                             </h3>
                             <div class="card-tools">
-                                <button type="button" class="btn btn-tool" data-card-widget="collapse">
-                                    <i class="fas fa-minus"></i>
+                                <button type="button" class="btn btn-tool collapse-toggle" data-card-widget="collapse">
+                                    <i class="fas fa-chevron-down"></i>
                                 </button>
                             </div>
                         </div>

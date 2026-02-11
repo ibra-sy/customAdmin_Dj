@@ -3,6 +3,23 @@
  * Variables --color-* pour sidebar, layout, etc.
  * Appliqués sur html via data-theme
  */
+
+/* FORCER l'affichage des icônes du sidebar pour tous les thèmes modernes */
+[data-theme] .sidebar .nav-link i,
+[data-theme] .sidebar-nav .nav-link i,
+[data-theme] .nav-section .nav-link i {
+  opacity: 1 !important;
+  visibility: visible !important;
+  display: inline-block !important;
+}
+
+[data-theme] .sidebar .nav-link:not(.active) i,
+[data-theme] .sidebar-nav .nav-link:not(.active) i,
+[data-theme] .nav-section .nav-link:not(.active) i {
+  opacity: 1 !important;
+  visibility: visible !important;
+  display: inline-block !important;
+}
 html,
 body {
   background-color: var(--color-background);

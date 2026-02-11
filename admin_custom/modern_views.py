@@ -90,6 +90,7 @@ def modern_charts(request):
         'title': 'Graphiques',
         'page': 'charts',
         'models': models,
+        'app_list': get_custom_admin_site().get_app_list(request),
     })
     return render(request, 'admin_custom/modern/charts.html', context)
 
@@ -106,6 +107,7 @@ def modern_grids(request):
         'title': 'Grilles de données',
         'page': 'grids',
         'models': models,
+        'app_list': get_custom_admin_site().get_app_list(request),
     })
     return render(request, 'admin_custom/modern/grids.html', context)
 

@@ -159,9 +159,7 @@
 
 /* Boutons dans le tableau */
 .admin-layout #result_list .btn,
-.admin-layout .results .btn,
-.admin-layout .actions a,
-.admin-layout .actions button {
+.admin-layout .results .btn {
   font-family: inherit !important;
   font-size: 0.875rem !important;
   padding: 0.375rem 0.5rem !important;
@@ -171,11 +169,17 @@
   gap: 0.25rem !important;
 }
 
+.admin-layout .actions a {
+  font-family: inherit !important;
+  font-size: 0.875rem !important;
+}
+
 /* Actions Voir / Modifier par ligne */
 .admin-layout .modern-row-actions {
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
+  padding: 0.25rem 0;
 }
 
 .admin-layout .modern-row-actions .action-icon {
@@ -184,10 +188,18 @@
   justify-content: center;
   width: 2rem;
   height: 2rem;
+  min-width: 2rem;
+  flex-shrink: 0;
   border-radius: 0.375rem;
   color: var(--color-text-muted);
   text-decoration: none;
   transition: color 0.15s, background 0.15s;
+  overflow: hidden;
+}
+
+.admin-layout .modern-row-actions .action-icon i {
+  font-size: 0.875rem;
+  line-height: 1;
 }
 
 .admin-layout .modern-row-actions .action-icon:hover {
@@ -201,6 +213,17 @@
 
 .admin-layout .modern-row-actions .edit-icon:hover {
   color: var(--color-primary);
+}
+
+.admin-layout .modern-row-actions .delete-icon:hover {
+  color: var(--color-danger) !important;
+  background: rgba(239, 68, 68, 0.1);
+}
+
+/* Icône notifications header */
+.admin-layout .header-notification-btn:hover {
+  color: var(--color-primary) !important;
+  background: var(--color-primary-light);
 }
 
 /* Badges statut */
@@ -407,14 +430,78 @@
   color: var(--color-text) !important;
 }
 
-.admin-layout #changelist-filter h2,
-.admin-layout #changelist-filter h3 {
+.admin-layout #changelist-filter h2 {
   font-size: 0.875rem !important;
   font-weight: 600 !important;
   color: var(--color-text) !important;
   background: var(--color-background) !important;
   border-color: var(--color-border) !important;
 }
+
+.admin-layout #changelist-filter-extra-actions {
+  margin-bottom: 1rem !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 0.5rem !important;
+}
+
+.admin-layout #changelist-filter-extra-actions .filter-action-item {
+  display: block !important;
+}
+
+.admin-layout #changelist-filter-extra-actions .filter-action-link {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 0.5rem !important;
+  color: var(--color-primary) !important;
+  text-decoration: none !important;
+  font-size: 0.875rem !important;
+  line-height: 1.5 !important;
+  padding: 0.25rem 0 !important;
+}
+
+.admin-layout #changelist-filter-extra-actions .filter-action-link:hover {
+  color: var(--color-primary-hover) !important;
+}
+
+.admin-layout #changelist-filter-extra-actions .filter-action-link i {
+  flex-shrink: 0 !important;
+  width: 1rem !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+.admin-layout #changelist-filter-extra-actions .filter-action-link span {
+  line-height: 1.5 !important;
+}
+
+/* Masquer complètement les anciennes icônes Django (viewlink/hidelink) */
+.admin-layout #changelist-filter-extra-actions .viewlink::before,
+.admin-layout #changelist-filter-extra-actions .hidelink::before,
+.admin-layout #changelist-filter-extra-actions .viewlink::after,
+.admin-layout #changelist-filter-extra-actions .hidelink::after {
+  display: none !important;
+  content: none !important;
+}
+
+.admin-layout #changelist-filter-extra-actions .viewlink img,
+.admin-layout #changelist-filter-extra-actions .hidelink img,
+.admin-layout #changelist-filter-extra-actions .viewlink svg,
+.admin-layout #changelist-filter-extra-actions .hidelink svg {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  width: 0 !important;
+  height: 0 !important;
+}
+
+/* Masquer aussi les icônes dans les classes viewlink/hidelink elles-mêmes */
+.admin-layout .viewlink img,
+.admin-layout .hidelink img {
+  display: none !important;
+}
+
 
 .admin-layout #changelist-filter li,
 .admin-layout #changelist-filter ul {
@@ -457,46 +544,129 @@
   min-width: 0;
 }
 
-/* Recherche Django - intégration header-search */
-.admin-layout #changelist-search {
-  margin: 0;
+/* Recherche Django - barre longue + petit bouton Search */
+.admin-layout .changelist-search-wrap {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
 }
 
-.admin-layout #changelist-search input[type="text"] {
-  padding-left: 2.5rem !important;
+.admin-layout .changelist-search-wrap #toolbar {
+  margin: 0;
+  flex: 1;
+  min-width: 0;
+}
+
+.admin-layout .changelist-search-wrap .changelist-search-form-long {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.admin-layout .changelist-search-wrap .changelist-search-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  width: 100%;
+}
+
+.admin-layout .changelist-search-wrap .changelist-search-row label {
+  flex-shrink: 0;
+  margin: 0 !important;
+}
+
+.admin-layout .changelist-search-wrap #searchbar,
+.admin-layout .changelist-search-wrap .changelist-search-row input[type="text"] {
+  flex: 1 !important;
+  min-width: 0 !important;
+  padding: 0.5rem 1rem !important;
+}
+
+.admin-layout .changelist-search-wrap .btn-search-small {
+  flex-shrink: 0;
+  padding: 0.5rem 1rem !important;
+  font-size: 0.875rem !important;
+  white-space: nowrap;
+  background: var(--color-primary) !important;
+  color: white !important;
+  border: 1px solid var(--color-primary) !important;
+  border-radius: 0.5rem;
+  cursor: pointer;
 }
 
 /* Hide duplicate title from content_title when we have page-title */
 .admin-frontend-changelist .content-title { display: none; }
 
-/* Actions dropdown dans changelist */
-.admin-layout .actions label,
+/* Actions dropdown dans changelist - alignement parfait */
+.admin-layout .actions {
+  display: inline-flex !important;
+  align-items: stretch !important;
+  gap: 0.5rem !important;
+  flex-wrap: nowrap !important;
+}
+
+.admin-layout .actions > * {
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.admin-layout .actions label {
+  font-family: inherit !important;
+  font-size: 0.875rem !important;
+  color: var(--color-text) !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  padding: 0 0.5rem 0 0 !important;
+}
+
 .admin-layout .actions select {
   font-family: inherit !important;
   font-size: 0.875rem !important;
   color: var(--color-text) !important;
-}
-
-.admin-layout .actions select {
   background: var(--color-surface) !important;
-  border-color: var(--color-border) !important;
+  border: 1px solid var(--color-border) !important;
+  padding: 0.5rem 0.75rem !important;
+  border-radius: 0.5rem !important;
+  min-height: 38px !important;
+  height: 38px !important;
+  box-sizing: border-box !important;
+  display: inline-block !important;
 }
 
+.admin-layout .actions button[type="submit"],
 .admin-layout .actions button {
   font-family: inherit !important;
   background: var(--color-primary) !important;
   color: white !important;
-  border-color: var(--color-primary) !important;
+  border: 1px solid var(--color-primary) !important;
+  padding: 0 1rem !important;
+  border-radius: 0.5rem !important;
+  min-height: 38px !important;
+  height: 38px !important;
+  box-sizing: border-box !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  cursor: pointer !important;
+  white-space: nowrap !important;
 }
 
-/* Liens viewlink / hidelink dans filtres */
-.admin-layout #changelist-filter .viewlink,
-.admin-layout #changelist-filter .hidelink {
+.admin-layout .actions span,
+.admin-layout .actions .action-counter {
+  font-size: 0.875rem !important;
+  color: var(--color-text-muted) !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  padding: 0 0 0 0.5rem !important;
+}
+
+/* Liens dans les filtres */
+.admin-layout #changelist-filter a {
   color: var(--color-primary) !important;
+  text-decoration: none !important;
 }
 
-.admin-layout #changelist-filter .viewlink:hover,
-.admin-layout #changelist-filter .hidelink:hover {
+.admin-layout #changelist-filter a:hover {
   color: var(--color-primary-hover) !important;
 }
 

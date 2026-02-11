@@ -14,7 +14,7 @@
     var c=themes[sel];
     if(document.documentElement)document.documentElement.setAttribute('data-theme',t);
     window._themeColors=c;
-    window._themeApply=function(){if(!window._themeColors)return;var c=window._themeColors;var el=document.getElementById('theme-force-style');if(!el){el=document.createElement('style');el.id='theme-force-style';document.head.appendChild(el);}el.textContent='html,body{background:'+c[0]+'!important;color:'+c[1]+'!important}#content,#content-main,.main-content,.main-wrapper,.admin-modern-content,.admin-frontend-changelist,.admin-frontend-changeform,.admin-frontend-delete,.admin-frontend-history,.changelist-form-container,#changelist,.module{background:'+c[0]+'!important;color:'+c[1]+'!important}.card,.card-body{background:'+c[2]+'!important;color:'+c[1]+'!important;border-color:'+c[3]+'!important}.card-header{background:'+(c[4]||c[2])+'!important;color:#fff!important;border-color:'+(c[4]||c[2])+'!important}.table,.table td,.table th,.results,#result_list,.results td,.results th,.table-wrapper{background:'+c[2]+'!important;color:'+c[1]+'!important;border-color:'+c[3]+'!important}.form-control,.form-select,input,select,textarea,#changelist-filter{background:'+c[2]+'!important;color:'+c[1]+'!important;border-color:'+c[3]+'!important}.admin-layout .main-content .page-title,.admin-layout label,.admin-layout td,.admin-layout th,.admin-layout p,.admin-layout span,.admin-layout h1,.admin-layout h2,.admin-layout h3,.admin-layout h4{color:'+c[1]+'!important}.btn-primary,.btn-success,.btn-danger,.btn-warning,.btn-info,input[type=submit].btn-primary{color:#fff!important}.btn-secondary{color:'+c[1]+'!important;background:'+c[2]+'!important}';};
+    window._themeApply=function(){if(!window._themeColors)return;var c=window._themeColors;var el=document.getElementById('theme-force-style');if(!el){el=document.createElement('style');el.id='theme-force-style';document.head.appendChild(el);}el.textContent='html,body{background:'+c[0]+'!important;color:'+c[1]+'!important}#content,#content-main,.main-content,.main-wrapper,.admin-modern-content,.admin-frontend-changelist,.admin-frontend-changeform,.admin-frontend-delete,.admin-frontend-history,.changelist-form-container,#changelist,.module{background:'+c[0]+'!important;color:'+c[1]+'!important}.card,.card-body{background:'+c[2]+'!important;color:'+c[1]+'!important;border-color:'+c[3]+'!important}.card-header{background:'+(c[4]||c[2])+'!important;color:#fff!important;border-color:'+(c[4]||c[2])+'!important}.table,.table td,.table th,.results,#result_list,.results td,.results th,.table-wrapper{background:'+c[2]+'!important;color:'+c[1]+'!important;border-color:'+c[3]+'!important}.form-control,.form-select,input,select,textarea,#changelist-filter{background:'+c[2]+'!important;color:'+c[1]+'!important;border-color:'+c[3]+'!important}.admin-layout .main-content .page-title,.admin-layout label,.admin-layout td,.admin-layout th,.admin-layout p,.admin-layout span,.admin-layout h1,.admin-layout h2,.admin-layout h3,.admin-layout h4{color:'+c[1]+'!important}.admin-layout .main-content .btn-primary,.admin-layout .main-content .btn-success,.admin-layout .main-content .btn-danger,.admin-layout .main-content .btn-warning,.admin-layout .main-content .btn-info,.admin-layout .main-content .btn-primary *,.admin-layout .main-content .btn-success *,.admin-layout .main-content .btn-danger *,.admin-layout .main-content .btn-warning *,.admin-layout .main-content .btn-info *{color:#fff!important}.btn-primary,.btn-success,.btn-danger,.btn-warning,.btn-info,input[type=submit],input[type=submit].btn-primary{color:#fff!important}.btn-primary *,.btn-success *,.btn-danger *,.btn-warning *,.btn-info *,.btn-primary i,.btn-success i,.btn-danger i,.btn-warning i,.btn-info i{color:#fff!important}.btn-secondary{color:'+c[1]+'!important;background:'+c[2]+'!important}';};
     window.setModernTheme=function(x){if(valid.indexOf(x)===-1)return;t=x;localStorage.setItem(k,x);sel=x==='emeraude'?'emeraude':x==='coucher-soleil'?'soleil':x==='sombre'?'sombre':'bleu';window._themeColors=themes[sel];c=window._themeColors;document.documentElement.setAttribute('data-theme',t);window._themeApply();};
   })();
   </script>
@@ -36,6 +36,10 @@
   <!-- CORRECTION CRITIQUE : TabularInline - DOIT être chargé en dernier -->
   <link rel="stylesheet" href="{% static 'admin_custom/css/tabular_inline_fix.css' %}">
   {% block extrastyle %}{% endblock %}
+  <link rel="stylesheet" href="{% static 'admin_custom/css/button_text_white.css' %}">
+  <!-- FIX : Forcer l'affichage des icônes du sidebar -->
+  <link rel="stylesheet" href="{% static 'admin_custom/css/sidebar_icons_fix.css' %}">
+  <link rel="stylesheet" href="{% static 'admin_custom/css/nav_fluid.css' %}">
   <style id="theme-style"></style>
   <style>
   /* Masquer le backdrop modal quand non utilisé */
@@ -49,6 +53,15 @@
   .admin-layout #content-main {
     background: var(--color-background) !important;
     color: var(--color-text) !important;
+  }
+  /* Texte blanc sur boutons à fond coloré - doit venir après les règles .main-content */
+  .btn-primary, .btn-success, .btn-danger, .btn-warning, .btn-info,
+  a.btn-primary, a.btn-success, a.btn-danger, a.btn-warning, a.btn-info,
+  button.btn-primary, button.btn-success, button.btn-danger, button.btn-warning, button.btn-info,
+  input[type="submit"], input[type="submit"].btn-primary,
+  .btn-primary *, .btn-success *, .btn-danger *, .btn-warning *, .btn-info *,
+  .btn-primary i, .btn-success i, .btn-danger i, .btn-warning i, .btn-info i {
+    color: #fff !important;
   }
   .admin-layout .main-content { padding: 1.5rem; min-height: 400px; }
   </style>
@@ -136,12 +149,22 @@
           <span class="breadcrumb-current">{% block breadcrumb %}{{ title }}{% endblock %}</span>
         </nav>
       </div>
-      <div class="header-search" style="flex:1; max-width:320px; margin:0 1rem;">
-        <i class="fa-solid fa-search header-search-icon"></i>
-        <input type="search" placeholder="Rechercher… (Ctrl+K)" aria-label="Recherche" id="header-global-search">
-        <kbd style="font-size:0.7rem; padding:0.15rem 0.35rem; border-radius:0.25rem; background:var(--color-background); color:var(--color-text-muted);">Ctrl+K</kbd>
-      </div>
+      {% if cl and cl.search_fields %}
+      <form method="get" action="" class="header-search header-search-long" style="flex:1; min-width:280px; max-width:480px; margin:0 1rem; display:flex; gap:0.5rem;">
+        <div class="header-search-input-wrap" style="flex:1; position:relative;">
+          <i class="fa-solid fa-search header-search-icon"></i>
+          <input type="search" name="q" placeholder="Rechercher…" aria-label="Recherche" id="header-global-search" style="width:100%;" value="{{ cl.query|default:'' }}">
+        </div>
+        <button type="submit" class="btn btn-primary header-search-btn" style="padding:0.5rem 1rem; font-size:0.875rem; color:#fff!important;" title="Rechercher"><i class="fa-solid fa-search"></i></button>
+        {% for pair in cl.params.items %}
+          {% if pair.0 != 'q' %}<input type="hidden" name="{{ pair.0 }}" value="{{ pair.1 }}">{% endif %}
+        {% endfor %}
+      </form>
+      {% endif %}
       <div class="header-right">
+        <a href="#" class="header-notification-btn" aria-label="Notifications" title="Notifications" style="display:inline-flex; align-items:center; justify-content:center; width:40px; height:40px; border-radius:0.5rem; color:var(--color-text-muted); margin-right:0.5rem; text-decoration:none;">
+          <i class="fa-solid fa-bell"></i>
+        </a>
         <div class="dropdown" id="dropdown-user-menu">
           <button type="button" class="user-menu-trigger">
             <div class="user-menu-avatar">{{ user_initial }}</div>
@@ -211,6 +234,7 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 </script>
 <script src="{% static 'admin_custom/js/admin_custom.js' %}"></script>
+<script src="{% static 'admin_custom/js/button_text_white.js' %}"></script>
 <script>if(window._themeApply)window._themeApply();</script>
 {% endif %}
 

@@ -116,41 +116,45 @@ body {
   z-index: 2;
 }
 
-/* Boutons - texte blanc sur fond coloré, texte thème sur secondaire */
+/* Boutons - texte blanc sur tous les boutons à fond coloré */
 .admin-layout .btn-primary,
 .admin-layout .btn-success,
 .admin-layout .btn-danger,
 .admin-layout .btn-warning,
 .admin-layout .btn-info,
 .admin-layout input[type="submit"].btn-primary,
-.admin-layout input[type="submit"][name="_save"] {
+.admin-layout input[type="submit"][name="_save"],
+.admin-layout input[type="submit"] {
   color: white !important;
 }
 
-.admin-layout .btn-primary i,
-.admin-layout .btn-success i,
-.admin-layout .btn-danger i,
-.admin-layout .btn-warning i,
-.admin-layout .btn-info i {
+.admin-layout .btn-primary *,
+.admin-layout .btn-success *,
+.admin-layout .btn-danger *,
+.admin-layout .btn-warning *,
+.admin-layout .btn-info *,
+.admin-layout input[type="submit"] * {
   color: white !important;
 }
 
 .admin-layout .btn-secondary,
-.admin-layout .btn-secondary i {
+.admin-layout .btn-secondary * {
   color: var(--color-text) !important;
 }
 
-/* Boutons hors admin-layout (header, sidebar, etc.) */
-.btn-primary, .btn-success, .btn-danger, .btn-warning, .btn-info {
+/* Boutons hors admin-layout */
+.btn-primary, .btn-success, .btn-danger, .btn-warning, .btn-info,
+input[type="submit"].btn-primary,
+input[type="submit"][name="_save"] {
   color: white !important;
 }
 
-.btn-primary i, .btn-success i, .btn-danger i, .btn-warning i, .btn-info i {
+.btn-primary *, .btn-success *, .btn-danger *, .btn-warning *, .btn-info * {
   color: white !important;
 }
 
 .btn-secondary,
-.btn-secondary i {
+.btn-secondary * {
   color: var(--color-text) !important;
 }
 

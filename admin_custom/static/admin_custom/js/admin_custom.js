@@ -14,18 +14,31 @@
     const validThemes = ['default', 'nostalgie', 'ocean', 'sunset', 'forest', 'dark', 'liquid-glass'];
     document.documentElement.setAttribute('data-theme', validThemes.includes(savedTheme) ? savedTheme : 'default');
     
-    // Marquer le lien de navigation actif
+    // Marquer le lien de navigation actif (un seul lien actif à la fois)
     function setActiveNavLink() {
         const nav = document.querySelector('.custom-admin-nav');
         if (!nav) return;
         const currentPath = window.location.pathname.replace(/\/$/, '') || '/admin';
         const navLinks = nav.querySelectorAll('.nav-link');
+        let activeFound = false;
         
         navLinks.forEach(link => {
             const href = link.getAttribute('href') || '';
             const linkPath = href.split('?')[0].replace(/\/$/, '');
-            const isMatch = linkPath && (currentPath === linkPath || currentPath.startsWith(linkPath + '/'));
-            link.classList.toggle('active', !!isMatch);
+            let isMatch = false;
+            
+            if (linkPath) {
+                // Accueil (index) : correspondance exacte uniquement
+                if (linkPath === '/admin' || linkPath.endsWith('/admin')) {
+                    isMatch = (currentPath === '/admin');
+                } else {
+                    // Autres liens : chemin commence par le lien (ex: /admin/charts)
+                    isMatch = currentPath === linkPath || currentPath.startsWith(linkPath + '/');
+                }
+            }
+            
+            if (isMatch) activeFound = true;
+            link.classList.toggle('active', isMatch);
         });
     }
     

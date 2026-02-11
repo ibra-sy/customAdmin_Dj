@@ -14,7 +14,7 @@
     var c=themes[sel];
     if(document.documentElement)document.documentElement.setAttribute('data-theme',t);
     window._themeColors=c;
-    window._themeApply=function(){if(!window._themeColors)return;var c=window._themeColors;var el=document.getElementById('theme-force-style');if(!el){el=document.createElement('style');el.id='theme-force-style';document.head.appendChild(el);}el.textContent='html,body{background:'+c[0]+'!important;color:'+c[1]+'!important}.main-content,.admin-layout #content,.card,.card-body{background:'+c[2]+'!important;color:'+c[1]+'!important;border-color:'+c[3]+'!important}.card-header{background:'+(c[4]||c[2])+'!important;color:#fff!important}.admin-layout .main-content .page-title,.admin-layout label,.admin-layout td,.admin-layout th,.admin-layout p,.admin-layout span{color:'+c[1]+'!important}.btn-primary,.btn-success,.btn-danger,.btn-warning,.btn-info{color:#fff!important}.btn-secondary{color:'+c[1]+'!important;background:'+c[2]+'!important}';};
+    window._themeApply=function(){if(!window._themeColors)return;var c=window._themeColors;var el=document.getElementById('theme-force-style');if(!el){el=document.createElement('style');el.id='theme-force-style';document.head.appendChild(el);}el.textContent='html,body{background:'+c[0]+'!important;color:'+c[1]+'!important}.main-content,.admin-layout #content,.card,.card-body{background:'+c[2]+'!important;color:'+c[1]+'!important;border-color:'+c[3]+'!important}.card-header{background:'+(c[4]||c[2])+'!important;color:#fff!important}.admin-layout .main-content .page-title,.admin-layout label,.admin-layout td,.admin-layout th,.admin-layout p,.admin-layout span{color:'+c[1]+'!important}.btn-primary,.btn-success,.btn-danger,.btn-warning,.btn-info,input[type=submit]{color:#fff!important}.btn-primary *,.btn-success *,.btn-danger *,.btn-warning *,.btn-info *,.btn-primary i,.btn-success i,.btn-danger i,.btn-warning i,.btn-info i{color:#fff!important}.btn-secondary{color:'+c[1]+'!important;background:'+c[2]+'!important}';};
     window.setModernTheme=function(x){if(valid.indexOf(x)===-1)return;t=x;localStorage.setItem(k,x);sel=x==='emeraude'?'emeraude':x==='coucher-soleil'?'soleil':x==='sombre'?'sombre':'bleu';window._themeColors=themes[sel];document.documentElement.setAttribute('data-theme',t);window._themeApply();};
   })();
   </script>
@@ -26,7 +26,19 @@
   <link rel="stylesheet" href="{% static 'admin_custom/css/modern_layout.css' %}">
   <link rel="stylesheet" href="{% static 'admin_custom/css/modern_components.css' %}">
   <link rel="stylesheet" href="{% static 'admin_custom/css/theme_override.css' %}">
+  <link rel="stylesheet" href="{% static 'admin_custom/css/button_text_white.css' %}">
+  <!-- FIX : Forcer l'affichage des icônes du sidebar -->
+  <link rel="stylesheet" href="{% static 'admin_custom/css/sidebar_icons_fix.css' %}">
+  <link rel="stylesheet" href="{% static 'admin_custom/css/nav_fluid.css' %}">
   <style id="theme-style"></style>
+  <style>
+  /* Texte blanc sur boutons à fond coloré */
+  .btn-primary, .btn-success, .btn-danger, .btn-warning, .btn-info,
+  a.btn-primary, a.btn-success, a.btn-danger, a.btn-warning, a.btn-info,
+  button.btn-primary, button.btn-success, button.btn-danger, button.btn-warning, button.btn-info,
+  input[type="submit"], .btn-primary *, .btn-success *, .btn-danger *, .btn-warning *, .btn-info *,
+  .btn-primary i, .btn-success i, .btn-danger i, .btn-warning i, .btn-info i { color: #fff !important; }
+  </style>
   {% block extrahead %}{% endblock %}
 </head>
 <body>
@@ -59,7 +71,7 @@
         {% for app in app_list %}
         {% for model in app.models %}
         <a href="{{ model.admin_url }}" class="nav-link">
-          <i class="fa-solid fa-circle"></i>
+          <i class="fa-solid {{ model.icon|default:'fa-cube' }}"></i>
           <span>{{ model.name }}</span>
         </a>
         {% endfor %}
@@ -97,6 +109,9 @@
         </nav>
       </div>
       <div class="header-right">
+        <a href="#" class="header-notification-btn" aria-label="Notifications" title="Notifications" style="display:inline-flex; align-items:center; justify-content:center; width:40px; height:40px; border-radius:0.5rem; color:var(--color-text-muted); margin-right:0.5rem; text-decoration:none;">
+          <i class="fa-solid fa-bell"></i>
+        </a>
         <div class="dropdown" id="dropdown-user-menu">
           <button type="button" class="user-menu-trigger">
             <div class="user-menu-avatar">{{ user_initial }}</div>
@@ -146,6 +161,7 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 });
 </script>
+<script src="{% static 'admin_custom/js/button_text_white.js' %}"></script>
 {% block extrajs %}{% endblock %}
 <script>if(window._themeApply)window._themeApply();</script>
 </body>

@@ -1,197 +1,207 @@
-/* Thème Crystal Glass (liquid-glass) - Palette sobre, verre dépoli premium */
+/* Thème Crystal Glass (liquid-glass) - Turquoise moderne et élégant */
 [data-theme="liquid-glass"] {
-    --primary-color: #6FAEB6;
-    --secondary-color: #DDEEEF;
-    --accent-color: #BFD9DC;
-    --bg-color: #F6FAFB;
-    --bg-secondary: #E5F1F3;
-    --text-color: #0F172A;
-    --text-secondary: #475569;
-    --border-color: rgba(111, 174, 182, 0.35);
-    --hover-bg: rgba(191, 217, 220, 0.35);
-    --dashboard-bg: #F6FAFB;
+    --primary-color: #06B6D4;
+    --secondary-color: #22D3EE;
+    --accent-color: #67E8F9;
+    --bg-color: #F0FDFA;
+    --bg-secondary: #CCFBF1;
+    --text-color: #134E4A;
+    --text-secondary: #115E59;
+    --border-color: #99F6E4;
+    --hover-bg: #A5F3FC;
+    --dashboard-bg: #F0FDFA;
     --card-bg: #FFFFFF;
-    --info-color: #A5C9CE;
-    --success-color: #7BC6A4;
-    --warning-color: #E6D8A3;
-    --error-color: #E2B6B6;
-    --shadow: rgba(15, 23, 42, 0.06);
-    --shadow-hover: rgba(15, 23, 42, 0.12);
-    --gradient-primary: linear-gradient(135deg, #EDF6F7, #CFE7EA);
-    --gradient-secondary: linear-gradient(135deg, #CFE7EA, #6FAEB6);
-    --gradient-box: linear-gradient(135deg, #EDF6F7, #CFE7EA);
-    --glass-effect: rgba(255, 255, 255, 0.6);
-    --glass-border: rgba(111, 174, 182, 0.35);
-    --glass-shadow: 0 8px 32px 0 rgba(111, 174, 182, 0.18);
-    --glass-inner-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.4);
-    --border-radius: 16px;
-    --font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-    --btn-primary-bg: rgba(137, 210, 220, 0.5);
-    --btn-primary-hover: rgba(137, 210, 220, 0.7);
-    --btn-secondary-bg: rgba(227, 253, 253, 0.6);
-    --btn-secondary-hover: rgba(203, 231, 232, 0.8);
-    --table-bg: rgba(255, 255, 255, 0.6);
-    --table-header-bg: rgba(137, 210, 220, 0.4);
-    --table-border: rgba(137, 210, 220, 0.3);
-    --table-row-hover: rgba(203, 231, 232, 0.3);
-    --table-stripe: rgba(227, 253, 253, 0.2);
-    --header-content: #0F172A;
-}
-
-/* Thème Nostalgic (nostalgie) - Vintage élégant, brun/ocre désaturé */
-[data-theme="nostalgie"] {
-    --primary-color: #B45309;
-    --secondary-color: #D6A24A;
-    --accent-color: #C89B3C;
-    --bg-color: #F7EFE6;
-    --bg-secondary: #FBF7F2;
-    --text-color: #3B3A36;
-    --text-secondary: #6B6258;
-    --border-color: #E2D2BE;
-    --hover-bg: #EFE1C8;
-    --dashboard-bg: #F7EFE6;
-    --card-bg: #FBF7F2;
-    --info-color: #8FAFC7;
-    --success-color: #8FAE7A;
-    --warning-color: #E1C77A;
-    --error-color: #C97A7A;
-    --shadow: rgba(180, 83, 9, 0.10);
-    --shadow-hover: rgba(180, 83, 9, 0.18);
-    --gradient-primary: linear-gradient(135deg, #EFE1C8, #D6A24A);
-    --gradient-secondary: linear-gradient(135deg, #D6A24A, #B45309);
-    --gradient-box: linear-gradient(135deg, #EFE1C8, #D6A24A);
-    --paper-texture: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23D97706' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
-    --font-family: 'Playfair Display', serif;
-    --header-content: #FFFFFF;
-}
-
-/* Thème Océan - Bleu-gris marin, calme et professionnel */
-[data-theme="ocean"] {
-    --primary-color: #3A8FB7;
-    --secondary-color: #6BB6C9;
-    --accent-color: #89BFCF;
-    --bg-color: #F1F6F8;
-    --bg-secondary: #DFECF1;
-    --text-color: #102A3A;
-    --text-secondary: #4B6575;
-    --border-color: #B5CEDA;
-    --hover-bg: rgba(58, 143, 183, 0.12);
-    --dashboard-bg: #F1F6F8;
-    --card-bg: #FFFFFF;
-    --info-color: #8BBAD1;
-    --success-color: #6FAF9C;
-    --warning-color: #D6C27A;
-    --error-color: #C96F6F;
-    --shadow: rgba(16, 42, 58, 0.10);
-    --shadow-hover: rgba(16, 42, 58, 0.18);
-    --gradient-primary: linear-gradient(135deg, #DCECF2, #3A8FB7);
-    --gradient-secondary: linear-gradient(135deg, #6BB6C9, #3A8FB7);
-    --gradient-box: linear-gradient(135deg, #DCECF2, #3A8FB7);
-    --wave-pattern: repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(139, 186, 209, 0.06) 10px, rgba(139, 186, 209, 0.06) 20px);
-    --font-family: 'Inter', sans-serif;
-    --header-content: #FFFFFF;
-}
-
-/* Thème Sunset - Terracotta / pêche, chaleureux mais pro */
-[data-theme="sunset"] {
-    --primary-color: #C65D2E;
-    --secondary-color: #D98A5F;
-    --accent-color: #E6B17E;
-    --bg-color: #FAF4EE;
-    --bg-secondary: #F3E3D3;
-    --text-color: #2A2A2A;
-    --text-secondary: #5C5C5C;
-    --border-color: #E2C8B0;
-    --hover-bg: rgba(198, 93, 46, 0.10);
-    --dashboard-bg: #FAF4EE;
-    --card-bg: #FFFFFF;
-    --info-color: #9CBAD6;
-    --success-color: #8DBFA4;
-    --warning-color: #D9B26A;
-    --error-color: #C97A7A;
-    --shadow: rgba(198, 93, 46, 0.10);
-    --shadow-hover: rgba(198, 93, 46, 0.20);
-    --gradient-primary: linear-gradient(135deg, #F1D3B8, #C65D2E);
-    --gradient-secondary: linear-gradient(135deg, #D98A5F, #C65D2E);
-    --gradient-box: linear-gradient(135deg, #F1D3B8, #C65D2E);
-    --font-family: 'Inter', sans-serif;
-    --header-content: #FFFFFF;
-}
-
-/* Thème Forêts - Verts mousse / olive, naturel et apaisant */
-[data-theme="forest"] {
-    --primary-color: #3F7D5A;
-    --secondary-color: #7FAE8A;
-    --accent-color: #A3B18A;
-    --bg-color: #F2F6F2;
-    --bg-secondary: #E1E9E2;
-    --text-color: #1F2D23;
-    --text-secondary: #556B5E;
-    --border-color: #B6C8B7;
-    --hover-bg: rgba(63, 125, 90, 0.10);
-    --dashboard-bg: #F2F6F2;
-    --card-bg: #FFFFFF;
-    --info-color: #7DA2B8;
-    --success-color: #6F9E7A;
-    --warning-color: #CBBE78;
-    --error-color: #B87070;
-    --shadow: rgba(31, 45, 35, 0.08);
-    --shadow-hover: rgba(31, 45, 35, 0.16);
-    --gradient-primary: linear-gradient(135deg, #DCE8DD, #3F7D5A);
-    --gradient-secondary: linear-gradient(135deg, #7FAE8A, #3F7D5A);
-    --gradient-box: linear-gradient(135deg, #DCE8DD, #3F7D5A);
-    --font-family: 'Inter', sans-serif;
-    --header-content: #FFFFFF;
-}
-
-/* Thème Sombre (Dark) - Bleu-gris froid, sérieux et confortable */
-[data-theme="dark"] {
-    --primary-color: #4F7CAC;
-    --secondary-color: #9AA5B1;
-    --accent-color: #C9B458;
-    --bg-color: #1E2933;
-    --bg-secondary: #111827;
-    --text-color: #E5E7EB;
-    --text-secondary: #9CA3AF;
-    --border-color: #2F3A46;
-    --hover-bg: rgba(79, 124, 172, 0.18);
-    --dashboard-bg: #1E2933;
-    --card-bg: #111827;
-    --info-color: #5A8DBE;
-    --success-color: #6FAE8C;
-    --warning-color: #C9A24D;
-    --error-color: #C96F6F;
-    --shadow: rgba(0, 0, 0, 0.55);
-    --shadow-hover: rgba(90, 141, 190, 0.35);
-    --gradient-primary: linear-gradient(135deg, #111827, #2C4A66);
-    --gradient-secondary: linear-gradient(135deg, #4F7CAC, #2C4A66);
-    --gradient-box: linear-gradient(135deg, #111827, #2C4A66);
-    --font-family: 'Inter', sans-serif;
-    --header-content: #FFFFFF;
-}
-
-/* Thème Black - Ultra sombre, même palette que Dark avec fond #000 */
-[data-theme="black"] {
-    --primary-color: #60A5FA;
-    --secondary-color: #9CA3AF;
-    --accent-color: #FBBF24;
-    --bg-color: #000000;
-    --bg-secondary: #111827;
-    --text-color: #F3F4F6;
-    --text-secondary: #9CA3AF;
-    --border-color: #374151;
-    --hover-bg: rgba(96, 165, 250, 0.2);
-    --dashboard-bg: #000000;
-    --card-bg: #111827;
-    --info-color: #3B82F6;
-    --success-color: #22C55E;
+    --info-color: #06B6D4;
+    --success-color: #10B981;
     --warning-color: #F59E0B;
     --error-color: #EF4444;
-    --shadow: rgba(0, 0, 0, 0.7);
-    --shadow-hover: rgba(96, 165, 250, 0.35);
-    --gradient-primary: linear-gradient(135deg, #0D1B2A, #3B82F6);
-    --gradient-secondary: linear-gradient(135deg, #3B82F6, #60A5FA);
-    --gradient-box: linear-gradient(135deg, #0D1B2A, #3B82F6);
+    --shadow: rgba(6, 182, 212, 0.1);
+    --shadow-hover: rgba(6, 182, 212, 0.2);
+    --gradient-primary: linear-gradient(135deg, #ECFEFF, #06B6D4);
+    --gradient-secondary: linear-gradient(135deg, #22D3EE, #06B6D4);
+    --gradient-box: linear-gradient(135deg, #ECFEFF, #67E8F9);
+    --glass-effect: rgba(255, 255, 255, 0.7);
+    --glass-border: rgba(6, 182, 212, 0.3);
+    --glass-shadow: 0 8px 32px 0 rgba(6, 182, 212, 0.15);
+    --glass-inner-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.5);
+    --border-radius: 16px;
+    --font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    --btn-primary-bg: #06B6D4;
+    --btn-primary-hover: #0891B2;
+    --btn-secondary-bg: #CFFAFE;
+    --btn-secondary-hover: #A5F3FC;
+    --table-bg: #FFFFFF;
+    --table-header-bg: #CFFAFE;
+    --table-border: #99F6E4;
+    --table-row-hover: #ECFEFF;
+    --table-stripe: #F0FDFA;
+    --header-content: #FFFFFF;
+}
+
+/* Thème Nostalgic (nostalgie) - Ambre doré chaleureux et élégant */
+[data-theme="nostalgie"] {
+    --primary-color: #F59E0B;
+    --secondary-color: #FBBF24;
+    --accent-color: #FCD34D;
+    --bg-color: #FFFBEB;
+    --bg-secondary: #FEF3C7;
+    --text-color: #78350F;
+    --text-secondary: #92400E;
+    --border-color: #FDE68A;
+    --hover-bg: #FEF3C7;
+    --dashboard-bg: #FFFBEB;
+    --card-bg: #FFFFFF;
+    --info-color: #3B82F6;
+    --success-color: #10B981;
+    --warning-color: #F59E0B;
+    --error-color: #EF4444;
+    --shadow: rgba(245, 158, 11, 0.15);
+    --shadow-hover: rgba(245, 158, 11, 0.25);
+    --gradient-primary: linear-gradient(135deg, #FEF3C7, #F59E0B);
+    --gradient-secondary: linear-gradient(135deg, #FBBF24, #D97706);
+    --gradient-box: linear-gradient(135deg, #FEF3C7, #FBBF24);
+    --paper-texture: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23D97706' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    --font-family: 'Inter', sans-serif;
+    --header-content: #FFFFFF;
+}
+
+/* Thème Océan - Bleu océan profond et apaisant */
+[data-theme="ocean"] {
+    --primary-color: #0EA5E9;
+    --secondary-color: #38BDF8;
+    --accent-color: #7DD3FC;
+    --bg-color: #F0F9FF;
+    --bg-secondary: #E0F2FE;
+    --text-color: #0C4A6E;
+    --text-secondary: #075985;
+    --border-color: #BAE6FD;
+    --hover-bg: #E0F2FE;
+    --dashboard-bg: #F0F9FF;
+    --card-bg: #FFFFFF;
+    --info-color: #0EA5E9;
+    --success-color: #10B981;
+    --warning-color: #F59E0B;
+    --error-color: #EF4444;
+    --shadow: rgba(14, 165, 233, 0.1);
+    --shadow-hover: rgba(14, 165, 233, 0.2);
+    --gradient-primary: linear-gradient(135deg, #E0F2FE, #0EA5E9);
+    --gradient-secondary: linear-gradient(135deg, #38BDF8, #0284C7);
+    --gradient-box: linear-gradient(135deg, #E0F2FE, #38BDF8);
+    --wave-pattern: repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(14, 165, 233, 0.05) 10px, rgba(14, 165, 233, 0.05) 20px);
+    --font-family: 'Inter', sans-serif;
+    --header-content: #FFFFFF;
+}
+
+/* Thème Sunset - Rose corail chaleureux et moderne */
+[data-theme="sunset"] {
+    --primary-color: #F43F5E;
+    --secondary-color: #FB7185;
+    --accent-color: #FDA4AF;
+    --bg-color: #FFF1F2;
+    --bg-secondary: #FFE4E6;
+    --text-color: #881337;
+    --text-secondary: #9F1239;
+    --border-color: #FECDD3;
+    --hover-bg: #FFE4E6;
+    --dashboard-bg: #FFF1F2;
+    --card-bg: #FFFFFF;
+    --info-color: #3B82F6;
+    --success-color: #10B981;
+    --warning-color: #F59E0B;
+    --error-color: #EF4444;
+    --shadow: rgba(244, 63, 94, 0.15);
+    --shadow-hover: rgba(244, 63, 94, 0.25);
+    --gradient-primary: linear-gradient(135deg, #FFE4E6, #F43F5E);
+    --gradient-secondary: linear-gradient(135deg, #FB7185, #E11D48);
+    --gradient-box: linear-gradient(135deg, #FFE4E6, #FB7185);
+    --font-family: 'Inter', sans-serif;
+    --header-content: #FFFFFF;
+}
+
+/* Thème Forêt - Vert émeraude frais et naturel */
+[data-theme="forest"] {
+    --primary-color: #10B981;
+    --secondary-color: #34D399;
+    --accent-color: #6EE7B7;
+    --bg-color: #ECFDF5;
+    --bg-secondary: #D1FAE5;
+    --text-color: #064E3B;
+    --text-secondary: #065F46;
+    --border-color: #A7F3D0;
+    --hover-bg: #D1FAE5;
+    --dashboard-bg: #ECFDF5;
+    --card-bg: #FFFFFF;
+    --info-color: #3B82F6;
+    --success-color: #10B981;
+    --warning-color: #F59E0B;
+    --error-color: #EF4444;
+    --shadow: rgba(16, 185, 129, 0.1);
+    --shadow-hover: rgba(16, 185, 129, 0.2);
+    --gradient-primary: linear-gradient(135deg, #D1FAE5, #10B981);
+    --gradient-secondary: linear-gradient(135deg, #34D399, #059669);
+    --gradient-box: linear-gradient(135deg, #D1FAE5, #34D399);
+    --font-family: 'Inter', sans-serif;
+    --header-content: #FFFFFF;
+}
+
+/* Thème Sombre (Dark) - Néon vibrant sur fond sombre */
+[data-theme="dark"] {
+    --primary-color: #A78BFA;
+    --secondary-color: #C4B5FD;
+    --accent-color: #DDD6FE;
+    --bg-color: #0A0A0F;
+    --bg-secondary: #18181B;
+    --text-color: #FAFAFA;
+    --text-secondary: #D4D4D8;
+    --border-color: #27272A;
+    --hover-bg: #18181B;
+    --dashboard-bg: #0A0A0F;
+    --card-bg: #18181B;
+    --info-color: #60A5FA;
+    --success-color: #34D399;
+    --warning-color: #FBBF24;
+    --error-color: #F87171;
+    --shadow: rgba(0, 0, 0, 0.6);
+    --shadow-hover: rgba(167, 139, 250, 0.4);
+    --gradient-primary: linear-gradient(135deg, #7C3AED, #A78BFA);
+    --gradient-secondary: linear-gradient(135deg, #8B5CF6, #6366F1);
+    --gradient-box: linear-gradient(135deg, #18181B, #27272A);
+    --font-family: 'Inter', sans-serif;
+    --header-content: #FFFFFF;
+    
+    /* Couleurs néon pour cartes multicolores */
+    --card-color-1: #A78BFA;
+    --card-color-2: #60A5FA;
+    --card-color-3: #34D399;
+    --card-color-4: #FBBF24;
+    --card-bg-1: linear-gradient(135deg, #7C3AED, #A78BFA);
+    --card-bg-2: linear-gradient(135deg, #2563EB, #60A5FA);
+    --card-bg-3: linear-gradient(135deg, #059669, #34D399);
+    --card-bg-4: linear-gradient(135deg, #D97706, #FBBF24);
+}
+
+/* Thème Black - Noir profond avec accents cyan électriques */
+[data-theme="black"] {
+    --primary-color: #06B6D4;
+    --secondary-color: #22D3EE;
+    --accent-color: #67E8F9;
+    --bg-color: #000000;
+    --bg-secondary: #0A0A0A;
+    --text-color: #F0F9FF;
+    --text-secondary: #BAE6FD;
+    --border-color: #164E63;
+    --hover-bg: #0A0A0A;
+    --dashboard-bg: #000000;
+    --card-bg: #0A0A0A;
+    --info-color: #06B6D4;
+    --success-color: #10B981;
+    --warning-color: #F59E0B;
+    --error-color: #EF4444;
+    --shadow: rgba(0, 0, 0, 0.8);
+    --shadow-hover: rgba(6, 182, 212, 0.4);
+    --gradient-primary: linear-gradient(135deg, #000000, #06B6D4);
+    --gradient-secondary: linear-gradient(135deg, #22D3EE, #0891B2);
+    --gradient-box: linear-gradient(135deg, #0A0A0A, #164E63);
     --font-family: 'Inter', sans-serif;
     --header-content: #FFFFFF;
 }
@@ -252,28 +262,39 @@
 
 /* Thème Par Défaut - Neutre, corporate, passe-partout */
 [data-theme="default"] {
-    --primary-color: #3563A9;
-    --secondary-color: #5B6FBF;
-    --accent-color: #4C9A8A;
-    --bg-color: #F8FAFC;
-    --bg-secondary: #FFFFFF;
-    --text-color: #111827;
-    --text-secondary: #6B7280;
-    --border-color: #E5E7EB;
-    --hover-bg: rgba(53, 99, 169, 0.10);
-    --dashboard-bg: #F3F4F6;
+    --primary-color: #6366F1;
+    --secondary-color: #818CF8;
+    --accent-color: #A5B4FC;
+    /* Fonds neutres et doux - confortables pour les yeux */
+    --bg-color: #F1F3F4;
+    --bg-secondary: #E8EAED;
+    --text-color: #202124;
+    --text-secondary: #5F6368;
+    --border-color: #DADCE0;
+    --hover-bg: #E8EAED;
+    --dashboard-bg: #F1F3F4;
     --card-bg: #FFFFFF;
-    --info-color: #7AAED6;
-    --success-color: #6FAE8C;
-    --warning-color: #D1B25E;
-    --error-color: #C97A7A;
-    --shadow: rgba(15, 23, 42, 0.08);
-    --shadow-hover: rgba(53, 99, 169, 0.18);
-    --gradient-primary: linear-gradient(135deg, #DCE5F2, #3563A9);
-    --gradient-secondary: linear-gradient(135deg, #5B6FBF, #3563A9);
-    --gradient-box: linear-gradient(135deg, #DCE5F2, #3563A9);
+    --info-color: #3B82F6;
+    --success-color: #10B981;
+    --warning-color: #F59E0B;
+    --error-color: #EF4444;
+    --shadow: rgba(0, 0, 0, 0.06);
+    --shadow-hover: rgba(0, 0, 0, 0.1);
+    --gradient-primary: linear-gradient(135deg, #6366F1, #8B5CF6);
+    --gradient-secondary: linear-gradient(135deg, #818CF8, #4F46E5);
+    --gradient-box: linear-gradient(135deg, #EEF2FF, #818CF8);
     --font-family: 'Inter', sans-serif;
     --header-content: #FFFFFF;
+    
+    /* Couleurs pour cartes multicolores */
+    --card-color-1: #6366F1;
+    --card-color-2: #8B5CF6;
+    --card-color-3: #EC4899;
+    --card-color-4: #F59E0B;
+    --card-bg-1: linear-gradient(135deg, #6366F1, #8B5CF6);
+    --card-bg-2: linear-gradient(135deg, #8B5CF6, #EC4899);
+    --card-bg-3: linear-gradient(135deg, #EC4899, #F43F5E);
+    --card-bg-4: linear-gradient(135deg, #F59E0B, #EF4444);
 }
 
 [data-theme="default"] #header {
@@ -989,10 +1010,6 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 /* Thème Default - Fond clair (palette Par Défaut) */
-[data-theme="default"] body {
-    background: var(--bg-color);
-}
-
 /* Thème Black - Fond ultra sombre */
 [data-theme="black"] body {
     background: var(--bg-color);
@@ -1774,9 +1791,15 @@ table tbody td a:hover {
 }
 
 [data-theme] .theme-toggle-btn {
-    background: var(--card-bg) !important;
+    background: transparent !important;
     color: var(--text-color) !important;
     border: 1px solid var(--border-color) !important;
+    border-radius: 12px !important;
+    box-shadow: none !important;
+}
+
+[data-theme] .theme-toggle-btn:hover {
+    border-color: var(--primary-color) !important;
 }
 
 [data-theme] .theme-menu {
@@ -1981,11 +2004,14 @@ a:hover {
 [data-theme="sunset"] body,
 [data-theme="forest"] body,
 [data-theme="dark"] body,
-[data-theme="default"] body,
 [data-theme="black"] body {
     background: var(--bg-color) !important;
     color: var(--text-color) !important;
     min-height: 100vh;
+}
+
+[data-theme="default"] body {
+    background: #F1F3F4 !important;
 }
 
 [data-theme="nostalgie"] #container,
@@ -2031,15 +2057,31 @@ a:hover {
 [data-theme="dark"] #header #user-tools,
 [data-theme="dark"] #header #branding,
 [data-theme="dark"] #header .admin-title,
-[data-theme="default"] #header a,
 [data-theme="default"] #header #user-tools,
-[data-theme="default"] #header #branding,
-[data-theme="default"] #header .admin-title,
+[data-theme="default"] #header #user-tools a,
 [data-theme="black"] #header a,
 [data-theme="black"] #header #user-tools,
 [data-theme="black"] #header #branding,
 [data-theme="black"] #header .admin-title {
     color: var(--header-content) !important;
+}
+
+/* Thème default : titre, icône et user-tools du header en noir */
+[data-theme="default"] #header #branding,
+[data-theme="default"] #header #branding *,
+[data-theme="default"] #header .brand-link,
+[data-theme="default"] #header .admin-title,
+[data-theme="default"] #header .brand-link i,
+[data-theme="default"] #header .admin-logo-fallback,
+[data-theme="default"] #header .admin-logo-fallback i,
+[data-theme="default"] #header #user-tools,
+[data-theme="default"] #header #user-tools *,
+[data-theme="default"] #header #user-tools a {
+    color: #000000 !important;
+}
+
+[data-theme="default"] #header .admin-logo {
+    filter: brightness(0) !important;
 }
 
 [data-theme="nostalgie"] .content-wrapper,
@@ -2378,19 +2420,16 @@ a:hover {
     color: var(--header-content) !important;
 }
 
-[data-theme="nostalgie"] .theme-switcher,
+[data-theme] .theme-switcher {
+    background: transparent !important;
+}
+
 [data-theme="nostalgie"] .theme-menu,
-[data-theme="ocean"] .theme-switcher,
 [data-theme="ocean"] .theme-menu,
-[data-theme="sunset"] .theme-switcher,
 [data-theme="sunset"] .theme-menu,
-[data-theme="forest"] .theme-switcher,
 [data-theme="forest"] .theme-menu,
-[data-theme="dark"] .theme-switcher,
 [data-theme="dark"] .theme-menu,
-[data-theme="default"] .theme-switcher,
 [data-theme="default"] .theme-menu,
-[data-theme="black"] .theme-switcher,
 [data-theme="black"] .theme-menu {
     background: var(--card-bg) !important;
     color: var(--text-color) !important;

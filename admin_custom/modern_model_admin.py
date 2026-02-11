@@ -27,12 +27,17 @@ class ModernTemplateMixin:
         return list_display
 
     def modern_actions(self, obj):
-        """Colonne Actions : icône œil (voir) et crayon (modifier) pour chaque enregistrement."""
+        """Colonne Actions : icône œil (voir), crayon (modifier) et corbeille (supprimer) pour chaque enregistrement."""
         if obj is None:
             return ''
         opts = self.model._meta
         change_url = reverse(
             'admin:%s_%s_change' % (opts.app_label, opts.model_name),
+            args=[obj.pk],
+            current_app=self.admin_site.name
+        )
+        delete_url = reverse(
+            'admin:%s_%s_delete' % (opts.app_label, opts.model_name),
             args=[obj.pk],
             current_app=self.admin_site.name
         )
@@ -46,9 +51,14 @@ class ModernTemplateMixin:
             '<i class="fa-solid fa-pen"></i></a>',
             change_url
         )
+        delete_link = format_html(
+            '<a href="{}" title="Supprimer" class="action-icon delete-icon" style="color:var(--color-danger);">'
+            '<i class="fa-solid fa-trash"></i></a>',
+            delete_url
+        )
         return format_html(
-            '<span class="modern-row-actions">{} {}</span>',
-            view_link, edit_link
+            '<span class="modern-row-actions">{} {} {}</span>',
+            view_link, edit_link, delete_link
         )
 
     modern_actions.short_description = 'Actions'

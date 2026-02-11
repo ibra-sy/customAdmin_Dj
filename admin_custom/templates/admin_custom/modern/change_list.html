@@ -15,7 +15,7 @@
     <div class="page-actions" style="display:flex; gap:0.5rem; flex-wrap:wrap;">
       {% if has_add_permission %}
       {% url cl.opts|admin_urlname:'add' as add_url %}
-      <a href="{% add_preserved_filters add_url is_popup to_field %}" class="btn btn-primary"><i class="fa-solid fa-plus"></i> Ajouter</a>
+      <a href="{% add_preserved_filters add_url is_popup to_field %}" class="btn btn-primary" style="color:#fff!important"><i class="fa-solid fa-plus" style="color:#fff!important"></i> Ajouter</a>
       {% endif %}
       <div class="dropdown">
         <button type="button" class="btn btn-secondary" data-dropdown-trigger style="display:inline-flex; align-items:center; gap:0.5rem;">
@@ -41,9 +41,6 @@
   <div class="changelist-form-container">
   <div class="card mb-4">
     <div class="card-body" style="display:flex; flex-wrap:wrap; gap:var(--space-4); align-items:center;">
-      <div class="header-search" style="width:280px; margin:0;">
-        {% block search %}{% search_form cl %}{% endblock %}
-      </div>
       {% block date_hierarchy %}{% if cl.date_hierarchy %}{% date_hierarchy cl %}{% endif %}{% endblock %}
       {% if action_form and cl.show_admin_actions %}
       <div style="margin-left:auto; display:flex; align-items:center; gap:0.5rem;">{% admin_actions %}</div>
@@ -65,7 +62,7 @@
   <nav class="pagination" aria-label="Pagination" style="margin-top:var(--space-6);">
     {% pagination cl %}
   </nav>
-  {% if cl.formset and cl.result_count %}<input type="submit" name="_save" class="btn btn-primary" value="{% translate 'Save' %}">{% endif %}
+  {% if cl.formset and cl.result_count %}<input type="submit" name="_save" class="btn btn-primary" value="{% translate 'Save' %}" style="color:#fff!important">{% endif %}
   {% endblock %}
   </form>
   </div>
@@ -74,8 +71,29 @@
     <h2 id="changelist-filter-header">{% translate 'Filter' %}</h2>
     {% if cl.is_facets_optional or cl.has_active_filters %}
     <div id="changelist-filter-extra-actions">
-      {% if cl.is_facets_optional %}<h3>{% if cl.add_facets %}<a href="{{ cl.remove_facet_link }}" class="hidelink">{% translate "Hide counts" %}</a>{% else %}<a href="{{ cl.add_facet_link }}" class="viewlink">{% translate "Show counts" %}</a>{% endif %}</h3>{% endif %}
-      {% if cl.has_active_filters %}<h3><a href="{{ cl.clear_all_filters_qs }}">&#10006; {% translate "Clear all filters" %}</a></h3>{% endif %}
+      {% if cl.is_facets_optional %}
+      <div class="filter-action-item">
+        {% if cl.add_facets %}
+        <a href="{{ cl.remove_facet_link }}" class="filter-action-link filter-hide-counts">
+          <i class="fa-solid fa-eye-slash" style="font-size:0.875rem;"></i>
+          <span>{% translate "Hide counts" %}</span>
+        </a>
+        {% else %}
+        <a href="{{ cl.add_facet_link }}" class="filter-action-link filter-show-counts">
+          <i class="fa-solid fa-eye" style="font-size:0.875rem;"></i>
+          <span>{% translate "Show counts" %}</span>
+        </a>
+        {% endif %}
+      </div>
+      {% endif %}
+      {% if cl.has_active_filters %}
+      <div class="filter-action-item">
+        <a href="{{ cl.clear_all_filters_qs }}" class="filter-action-link">
+          <i class="fa-solid fa-xmark" style="font-size:0.875rem;"></i>
+          <span>{% translate "Clear all filters" %}</span>
+        </a>
+      </div>
+      {% endif %}
     </div>
     {% endif %}
     {% for spec in cl.filter_specs %}{% admin_list_filter cl spec %}{% endfor %}

@@ -1,6 +1,11 @@
 {% extends "admin_custom/base_site.html" %}
 {% load static %}
 
+{% block extrastyle %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'admin_custom/css/dashboard_stats_animation.css' %}">
+{% endblock %}
+
 {% block content %}
 <div class="content-wrapper">
     <section class="content-header">
@@ -74,6 +79,9 @@
                     </div>
                 </div>
             </div>
+
+            <!-- Espace supplémentaire après les cartes -->
+            <div style="margin-top: 2.5rem;"></div>
 
             <!-- Charts -->
             <div class="row">

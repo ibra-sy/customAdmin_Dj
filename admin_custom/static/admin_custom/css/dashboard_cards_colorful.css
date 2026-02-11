@@ -1,0 +1,206 @@
+/**
+ * Cartes colorées pour le dashboard
+ * Chaque carte a sa propre couleur harmonieuse
+ */
+
+/* === THÈME DEFAULT - Cartes multicolores vibrantes === */
+[data-theme="default"] .stats-card:nth-child(1),
+[data-theme="default"] .stat-card:nth-child(1),
+[data-theme="default"] .quick-action-card:nth-child(1) {
+  background: linear-gradient(135deg, #6366F1 0%, #8B5CF6 100%) !important;
+  border: none !important;
+  color: #FFFFFF !important;
+}
+
+[data-theme="default"] .stats-card:nth-child(1) *,
+[data-theme="default"] .stat-card:nth-child(1) *,
+[data-theme="default"] .quick-action-card:nth-child(1) * {
+  color: #FFFFFF !important;
+}
+
+[data-theme="default"] .stats-card:nth-child(2),
+[data-theme="default"] .stat-card:nth-child(2),
+[data-theme="default"] .quick-action-card:nth-child(2) {
+  background: linear-gradient(135deg, #8B5CF6 0%, #EC4899 100%) !important;
+  border: none !important;
+  color: #FFFFFF !important;
+}
+
+[data-theme="default"] .stats-card:nth-child(2) *,
+[data-theme="default"] .stat-card:nth-child(2) *,
+[data-theme="default"] .quick-action-card:nth-child(2) * {
+  color: #FFFFFF !important;
+}
+
+[data-theme="default"] .stats-card:nth-child(3),
+[data-theme="default"] .stat-card:nth-child(3),
+[data-theme="default"] .quick-action-card:nth-child(3) {
+  background: linear-gradient(135deg, #EC4899 0%, #F43F5E 100%) !important;
+  border: none !important;
+  color: #FFFFFF !important;
+}
+
+[data-theme="default"] .stats-card:nth-child(3) *,
+[data-theme="default"] .stat-card:nth-child(3) *,
+[data-theme="default"] .quick-action-card:nth-child(3) * {
+  color: #FFFFFF !important;
+}
+
+[data-theme="default"] .stats-card:nth-child(4),
+[data-theme="default"] .stat-card:nth-child(4),
+[data-theme="default"] .quick-action-card:nth-child(4) {
+  background: linear-gradient(135deg, #F59E0B 0%, #EF4444 100%) !important;
+  border: none !important;
+  color: #FFFFFF !important;
+}
+
+[data-theme="default"] .stats-card:nth-child(4) *,
+[data-theme="default"] .stat-card:nth-child(4) *,
+[data-theme="default"] .quick-action-card:nth-child(4) * {
+  color: #FFFFFF !important;
+}
+
+/* Cartes supplémentaires avec d'autres couleurs */
+[data-theme="default"] .stats-card:nth-child(5),
+[data-theme="default"] .stat-card:nth-child(5) {
+  background: linear-gradient(135deg, #10B981 0%, #14B8A6 100%) !important;
+  border: none !important;
+  color: #FFFFFF !important;
+}
+
+[data-theme="default"] .stats-card:nth-child(5) *,
+[data-theme="default"] .stat-card:nth-child(5) * {
+  color: #FFFFFF !important;
+}
+
+[data-theme="default"] .stats-card:nth-child(6),
+[data-theme="default"] .stat-card:nth-child(6) {
+  background: linear-gradient(135deg, #06B6D4 0%, #3B82F6 100%) !important;
+  border: none !important;
+  color: #FFFFFF !important;
+}
+
+[data-theme="default"] .stats-card:nth-child(6) *,
+[data-theme="default"] .stat-card:nth-child(6) * {
+  color: #FFFFFF !important;
+}
+
+/* === THÈME DARK - Cartes néon élégantes sur fond sombre === */
+
+/* Carte 1 - Violet électrique néon */
+[data-theme="dark"] .stats-card:nth-child(1),
+[data-theme="dark"] .stat-card:nth-child(1),
+[data-theme="dark"] .quick-action-card:nth-child(1) {
+  background: linear-gradient(135deg, #9333EA 0%, #C084FC 100%) !important;
+  border: 1px solid rgba(147, 51, 234, 0.5) !important;
+  color: #FFFFFF !important;
+  box-shadow: 0 10px 30px rgba(147, 51, 234, 0.5), 0 0 20px rgba(192, 132, 252, 0.3) !important;
+}
+
+[data-theme="dark"] .stats-card:nth-child(1) *,
+[data-theme="dark"] .stat-card:nth-child(1) *,
+[data-theme="dark"] .quick-action-card:nth-child(1) * {
+  color: #FFFFFF !important;
+}
+
+/* Carte 2 - Rose néon vibrant */
+[data-theme="dark"] .stats-card:nth-child(2),
+[data-theme="dark"] .stat-card:nth-child(2),
+[data-theme="dark"] .quick-action-card:nth-child(2) {
+  background: linear-gradient(135deg, #EC4899 0%, #F472B6 100%) !important;
+  border: 1px solid rgba(236, 72, 153, 0.5) !important;
+  color: #FFFFFF !important;
+  box-shadow: 0 10px 30px rgba(236, 72, 153, 0.5), 0 0 20px rgba(244, 114, 182, 0.3) !important;
+}
+
+[data-theme="dark"] .stats-card:nth-child(2) *,
+[data-theme="dark"] .stat-card:nth-child(2) *,
+[data-theme="dark"] .quick-action-card:nth-child(2) * {
+  color: #FFFFFF !important;
+}
+
+/* Carte 3 - Bleu cyan électrique */
+[data-theme="dark"] .stats-card:nth-child(3),
+[data-theme="dark"] .stat-card:nth-child(3),
+[data-theme="dark"] .quick-action-card:nth-child(3) {
+  background: linear-gradient(135deg, #0EA5E9 0%, #38BDF8 100%) !important;
+  border: 1px solid rgba(14, 165, 233, 0.5) !important;
+  color: #FFFFFF !important;
+  box-shadow: 0 10px 30px rgba(14, 165, 233, 0.5), 0 0 20px rgba(56, 189, 248, 0.3) !important;
+}
+
+[data-theme="dark"] .stats-card:nth-child(3) *,
+[data-theme="dark"] .stat-card:nth-child(3) *,
+[data-theme="dark"] .quick-action-card:nth-child(3) * {
+  color: #FFFFFF !important;
+}
+
+/* Carte 4 - Orange/Ambre lumineux */
+[data-theme="dark"] .stats-card:nth-child(4),
+[data-theme="dark"] .stat-card:nth-child(4),
+[data-theme="dark"] .quick-action-card:nth-child(4) {
+  background: linear-gradient(135deg, #F59E0B 0%, #FBBF24 100%) !important;
+  border: 1px solid rgba(245, 158, 11, 0.5) !important;
+  color: #FFFFFF !important;
+  box-shadow: 0 10px 30px rgba(245, 158, 11, 0.5), 0 0 20px rgba(251, 191, 36, 0.3) !important;
+}
+
+[data-theme="dark"] .stats-card:nth-child(4) *,
+[data-theme="dark"] .stat-card:nth-child(4) *,
+[data-theme="dark"] .quick-action-card:nth-child(4) * {
+  color: #FFFFFF !important;
+}
+
+/* Carte 5 - Vert émeraude néon */
+[data-theme="dark"] .stats-card:nth-child(5),
+[data-theme="dark"] .stat-card:nth-child(5) {
+  background: linear-gradient(135deg, #10B981 0%, #34D399 100%) !important;
+  border: 1px solid rgba(16, 185, 129, 0.5) !important;
+  color: #FFFFFF !important;
+  box-shadow: 0 10px 30px rgba(16, 185, 129, 0.5), 0 0 20px rgba(52, 211, 153, 0.3) !important;
+}
+
+[data-theme="dark"] .stats-card:nth-child(5) *,
+[data-theme="dark"] .stat-card:nth-child(5) * {
+  color: #FFFFFF !important;
+}
+
+/* Carte 6 - Rouge corail électrique */
+[data-theme="dark"] .stats-card:nth-child(6),
+[data-theme="dark"] .stat-card:nth-child(6) {
+  background: linear-gradient(135deg, #EF4444 0%, #F87171 100%) !important;
+  border: 1px solid rgba(239, 68, 68, 0.5) !important;
+  color: #FFFFFF !important;
+  box-shadow: 0 10px 30px rgba(239, 68, 68, 0.5), 0 0 20px rgba(248, 113, 113, 0.3) !important;
+}
+
+[data-theme="dark"] .stats-card:nth-child(6) *,
+[data-theme="dark"] .stat-card:nth-child(6) * {
+  color: #FFFFFF !important;
+}
+
+/* Effet hover sur les cartes */
+[data-theme="default"] .stats-card:hover,
+[data-theme="default"] .stat-card:hover,
+[data-theme="default"] .quick-action-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.15) !important;
+  transition: all 0.3s ease;
+}
+
+[data-theme="dark"] .stats-card:hover,
+[data-theme="dark"] .stat-card:hover,
+[data-theme="dark"] .quick-action-card:hover {
+  transform: translateY(-6px) scale(1.02);
+  filter: brightness(1.1);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Icônes dans les cartes dark - couleur blanche pure */
+[data-theme="dark"] .quick-action-card i,
+[data-theme="dark"] .stats-card i,
+[data-theme="dark"] .stat-card i {
+  color: #FFFFFF !important;
+  opacity: 0.95;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+}

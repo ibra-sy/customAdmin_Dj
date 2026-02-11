@@ -98,6 +98,47 @@
   width: 20px;
   text-align: center;
   flex-shrink: 0;
+  opacity: 1 !important;
+  visibility: visible !important;
+  display: inline-block !important;
+  color: inherit !important;
+  font-size: 1rem !important;
+}
+
+/* S'assurer que les icônes de la section CONTENU sont toujours visibles */
+.nav-section .nav-link i {
+  opacity: 1 !important;
+  visibility: visible !important;
+  background: transparent !important;
+  border-radius: 0 !important;
+}
+
+/* Masquer les cercles blancs (fa-circle) s'ils apparaissent encore */
+.nav-link i.fa-circle {
+  display: none !important;
+}
+
+.nav-link i.fa-circle::before {
+  content: "\f1b2" !important; /* fa-cube comme icône de remplacement */
+}
+
+/* FORCER l'affichage de TOUTES les icônes, peu importe l'état du lien */
+.sidebar .nav-link i,
+.sidebar-nav .nav-link i,
+.nav-section .nav-link i {
+  opacity: 1 !important;
+  visibility: visible !important;
+  display: inline-block !important;
+  color: inherit !important;
+}
+
+/* Même pour les liens non actifs */
+.sidebar .nav-link:not(.active) i,
+.sidebar-nav .nav-link:not(.active) i,
+.nav-section .nav-link:not(.active) i {
+  opacity: 1 !important;
+  visibility: visible !important;
+  display: inline-block !important;
 }
 
 .sidebar.collapsed .nav-link span { display: none; }
@@ -245,6 +286,27 @@
   transform: translateY(-50%);
   color: var(--color-text-muted);
   pointer-events: none;
+}
+
+/* Barre de recherche longue avec bouton à côté */
+.header-search-long {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.header-search-long .header-search-input-wrap {
+  position: relative;
+  flex: 1;
+}
+
+.header-search-long .header-search-input-wrap input {
+  padding-left: 2.5rem;
+}
+
+.header-search-long .header-search-btn {
+  flex-shrink: 0;
+  white-space: nowrap;
 }
 
 .header-right { display: flex; align-items: center; gap: 0.5rem; }
