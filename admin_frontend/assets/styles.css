@@ -574,3 +574,31 @@ textarea.input{resize:vertical}
 .interface-card.is-active .interface-card__action {
   color: var(--success);
 }
+
+/* Aurora UI */
+html[data-ui="aurora"] body{
+  background:
+    radial-gradient(1200px 700px at 20% -10%, color-mix(in srgb, var(--primary) 18%, transparent), transparent 60%),
+    radial-gradient(800px 480px at 80% 120%, color-mix(in srgb, var(--primary) 14%, transparent), transparent 62%),
+    var(--bg);
+}
+html[data-ui="aurora"] .interface-card::before{
+  content:"";
+  position:absolute;
+  inset:-30% -30% -30% -30%;
+  background:
+    radial-gradient(420px 220px at 25% 25%, color-mix(in srgb, var(--primary) 30%, transparent), transparent 65%),
+    radial-gradient(360px 180px at 75% 65%, color-mix(in srgb, var(--primary) 24%, transparent), transparent 66%);
+  filter:blur(30px);
+  opacity:.35;
+  pointer-events:none;
+}
+html[data-ui="aurora"] .interface-card.is-active{
+  box-shadow:
+    0 0 0 2px var(--primary),
+    0 16px 46px color-mix(in srgb, var(--primary) 28%, transparent),
+    0 0 90px color-mix(in srgb, var(--primary) 22%, transparent);
+}
+html[data-ui="aurora"] .brandmark{
+  background:conic-gradient(from 180deg, color-mix(in srgb, var(--primary) 85%, #000), color-mix(in srgb, var(--primary) 25%, #000));
+}

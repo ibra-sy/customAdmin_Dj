@@ -240,7 +240,7 @@
                 <button class="quick__item" type="button" data-action="switch-interface">
                   <div class="quick__icon" aria-hidden="true">⇄</div>
                   <div class="quick__label">Interface</div>
-                  <div class="quick__hint">Classique</div>
+                  <div class="quick__hint">Aurora</div>
                 </button>
               </div>
             </section>
@@ -393,7 +393,7 @@
                     <th scope="col" class="ta-right">Action</th>
                   </tr>
                 </thead>
-                <tbody>
+                <tbody id="ordersTbody" data-orders-body>
                   <tr>
                     <td><span class="mono">A-1042</span></td>
                     <td>K. A.</td>
@@ -767,6 +767,11 @@
                   <div class="settings__desc">Choisissez l'interface d'administration que vous souhaitez utiliser.</div>
                 </div>
               </div>
+              <div class="settings__row" style="margin-top: 12px;">
+                <div class="settings__controls">
+                  <button class="button" type="button" data-action="open-django-admin">Ouvrir Django Admin</button>
+                </div>
+              </div>
               
               <div class="interface-switch">
                 <div class="interface-card" data-action="switch-interface-classic">
@@ -780,15 +785,35 @@
                   </div>
                 </div>
 
-                <div class="interface-card is-active" data-action="switch-interface-modern">
+                <div class="interface-card" data-action="switch-interface-modern">
                   <div class="interface-card__icon">
                     <span aria-hidden="true">❖</span>
                   </div>
                   <div class="interface-card__title">INTERFACE MODERNE</div>
                   <div class="interface-card__desc">Design épuré, sidebar, thèmes</div>
                   <div class="interface-card__action">
+                    <span>→ PASSER À CETTE INTERFACE</span>
+                  </div>
+                </div>
+
+                <div class="interface-card is-active" data-action="switch-interface-aurora">
+                  <div class="interface-card__icon">
+                    <span aria-hidden="true">✦</span>
+                  </div>
+                  <div class="interface-card__title">INTERFACE AURORA</div>
+                  <div class="interface-card__desc">Ultra-minimal, halos de couleur et fluidité</div>
+                  <div class="interface-card__action">
                     <span>✓ ACTUELLE</span>
                   </div>
+                </div>
+              </div>
+              <div class="settings__row" style="margin-top: 16px;">
+                <div class="settings__controls">
+                  <label class="toggle" for="adminUiToggle">
+                    <span class="toggle__label">Moderne</span>
+                    <input id="adminUiToggle" type="checkbox" role="switch" aria-label="Basculer interface" />
+                    <span class="toggle__ui" aria-hidden="true"></span>
+                  </label>
                 </div>
               </div>
 

@@ -2,6 +2,9 @@
   const STORAGE_KEY = 'admin_console_theme_v1';
   const KNOWN_VIEWS = new Set(['dashboard', 'orders', 'products', 'customers', 'users', 'settings']);
   const KNOWN_CHARTS = new Set(['sales', 'funnel', 'traffic']);
+  function backendBase() {
+    return (localStorage.getItem('backend_base_url') || '').trim();
+  }
 
   // Store Chart.js instances
   const chartInstances = {};
@@ -17,6 +20,27 @@
     return '#4f46e5';
   }
 
+  function getCookie(name) {
+    const match = document.cookie.match(new RegExp('(^|;\\s*)' + name + '=([^;]*)'));
+    return match ? decodeURIComponent(match[2]) : null;
+  }
+
+  async function apiFetch(path, options = {}) {
+    const base = backendBase();
+    const url = (base ? base.replace(/\/+$/, '') : '') + path;
+    const opts = { credentials: 'include', ...options };
+    const headers = new Headers(opts.headers || {});
+    const method = (opts.method || 'GET').toUpperCase();
+    if (method !== 'GET') {
+      const token = getCookie('csrftoken');
+      if (token && !headers.has('X-CSRFToken')) headers.set('X-CSRFToken', token);
+      if (!headers.has('Content-Type')) headers.set('Content-Type', 'application/json');
+    }
+    opts.headers = headers;
+    const res = await fetch(url, opts);
+    return res;
+  }
+
   function loadPrefs() {
     const fromStorage = safeParse(localStorage.getItem(STORAGE_KEY) || '');
     const lastView = (typeof fromStorage?.lastView === 'string' && KNOWN_VIEWS.has(fromStorage.lastView))
@@ -27,12 +51,17 @@
     const order = rawOrder.filter((x) => typeof x === 'string' && KNOWN_CHARTS.has(x));
     const normalizedOrder = order.length ? order : ['sales', 'funnel', 'traffic'];
 
+    const uiMode = (function() {
+      const candidate = typeof fromStorage?.ui === 'string' ? fromStorage.ui : 'aurora';
+      return ['classic','modern','aurora'].includes(candidate) ? candidate : 'modern';
+    })();
     return {
       theme: fromStorage?.theme === 'dark' ? 'dark' : 'light',
       primary: clampHex(fromStorage?.primary || '#4f46e5'),
       sidebarCollapsed: !!fromStorage?.sidebarCollapsed,
       lastView,
       terminology: typeof fromStorage?.terminology === 'string' ? fromStorage.terminology : 'standard',
+      ui: uiMode,
       charts: {
         order: normalizedOrder,
         enabled: {
@@ -188,6 +217,66 @@
     return map[metric] || 'Métrique';
   }
 
+  function formatNumber(n) {
+    const x = Number(n);
+    if (!isFinite(x)) return String(n || '');
+    return x.toLocaleString('fr-FR');
+  }
+
+  async function fetchStatsAndRender() {
+    try {
+      const res = await apiFetch('/admin_custom/api/stats/', { method: 'GET' });
+      if (!res.ok) return;
+      const j = await res.json();
+      const cards = document.querySelectorAll('.grid--kpi .card.kpi');
+      const values = [
+        j.revenue ?? j.chiffre_affaires ?? null,
+        j.orders ?? j.commandes ?? null,
+        j.aov ?? j.panier_moyen ?? null,
+        j.error_rate ?? j.taux_erreur ?? null,
+      ];
+      cards.forEach((card, i) => {
+        const v = values[i];
+        if (v == null) return;
+        const el = card.querySelector('.kpi__value');
+        if (el) el.textContent = formatNumber(v);
+      });
+    } catch {}
+  }
+
+  async function fetchGridOrdersAndRender() {
+    try {
+      const res = await apiFetch('/admin_custom/api/grid-data/', { method: 'GET' });
+      if (!res.ok) return;
+      const j = await res.json();
+      const rows = Array.isArray(j?.rows) ? j.rows : (Array.isArray(j) ? j : []);
+      const body = document.querySelector('[data-orders-body]');
+      if (!(body instanceof HTMLElement)) return;
+      const take = rows.slice(0, 8);
+      const html = take.map((r) => {
+        const ref = r.reference || r.ref || r.id || '';
+        const client = r.client || r.customer || r.customer_name || '';
+        const status = r.status || r.statut || '—';
+        const total = formatNumber(r.total ?? r.amount ?? '');
+        const date = r.date || r.created || r.created_at || '';
+        const pay = r.payment || r.paiement || '';
+        const statusClass = /ok|pay/i.test(String(status)) ? 'status status--ok'
+          : (/attente|pending/i.test(String(status)) ? 'status status--warn' : 'status');
+        return (
+          '<tr>'
+          + `<td><span class="mono">${ref}</span></td>`
+          + `<td>${client}</td>`
+          + `<td><span class="${statusClass}">${status}</span></td>`
+          + `<td>${total}</td>`
+          + `<td>${date}</td>`
+          + `<td class="ta-right"><button class="button button--ghost" type="button" data-action="view-details" data-id="${ref}">Détails</button></td>`
+          + '</tr>'
+        );
+      }).join('');
+      if (html) body.innerHTML = html;
+    } catch {}
+  }
+
   // Helper to generate dummy chart data
   function getChartData(metric, period) {
     const p = parseInt(period, 10) || 30;
@@ -219,6 +308,22 @@
     return { labels, data, label: chartLabel(metric) };
   }
 
+  async function fetchChartData(id, metric, period) {
+    try {
+      const params = new URLSearchParams({ id, metric, period: String(period || '30') });
+      const res = await apiFetch('/admin_custom/api/chart-data/?' + params.toString(), { method: 'GET' });
+      if (!res.ok) return null;
+      const json = await res.json();
+      const labels = Array.isArray(json.labels) ? json.labels : null;
+      const data = Array.isArray(json.data) ? json.data : null;
+      const label = typeof json.label === 'string' ? json.label : chartLabel(metric);
+      if (!labels || !data) return null;
+      return { labels, data, label };
+    } catch {
+      return null;
+    }
+  }
+
   function hexToRgba(hex, alpha) {
     const r = parseInt(hex.slice(1, 3), 16);
     const g = parseInt(hex.slice(3, 5), 16);
@@ -226,7 +331,7 @@
     return `rgba(${r}, ${g}, ${b}, ${alpha})`;
   }
 
-  function createOrUpdateChart(id, metric, period) {
+  function createOrUpdateChart(id, metric, period, payload) {
     const container = document.querySelector(`[data-chart-canvas="${id}"]`);
     if (!container) return;
 
@@ -239,7 +344,10 @@
     }
 
     const ctx = canvas.getContext('2d');
-    const { labels, data, label } = getChartData(metric, period);
+    const datum = payload || getChartData(metric, period);
+    const labels = datum.labels;
+    const data = datum.data;
+    const label = datum.label;
     const color = prefs.primary;
     const isDark = prefs.theme === 'dark';
     const gridColor = isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.05)';
@@ -341,7 +449,9 @@
       if (enabledCheck instanceof HTMLInputElement) enabledCheck.checked = enabled;
 
       if (enabled) {
-        createOrUpdateChart(id, m, period);
+        Promise.resolve()
+          .then(() => fetchChartData(id, m, period))
+          .then((payload) => createOrUpdateChart(id, m, period, payload || undefined));
       }
     });
   }
@@ -367,6 +477,7 @@
       sidebarCollapsed: false,
       lastView: 'dashboard',
       terminology: 'standard',
+      ui: 'aurora',
       charts: {
         order: ['sales', 'funnel', 'traffic'],
         enabled: { sales: true, funnel: true, traffic: true },
@@ -383,9 +494,28 @@
   applyTerminology(prefs.terminology);
   showView(prefs.lastView);
   setHash(prefs.lastView);
+  document.documentElement.setAttribute('data-ui', prefs.ui);
   
   // Initial render (delayed slightly to ensure Chart.js is loaded if script order varies, though we put it before)
   setTimeout(renderCharts, 50);
+  setTimeout(fetchStatsAndRender, 80);
+  setTimeout(fetchGridOrdersAndRender, 120);
+
+  function updateInterfaceCards() {
+    const classicCard = document.querySelector('[data-action="switch-interface-classic"]');
+    const modernCard = document.querySelector('[data-action="switch-interface-modern"]');
+    const auroraCard = document.querySelector('[data-action="switch-interface-aurora"]');
+    if (classicCard) classicCard.classList.toggle('is-active', prefs.ui === 'classic');
+    if (modernCard) modernCard.classList.toggle('is-active', prefs.ui === 'modern');
+    if (auroraCard) auroraCard.classList.toggle('is-active', prefs.ui === 'aurora');
+    const quickBtn = document.querySelector('.quick__item[data-action="switch-interface"] .quick__hint');
+    if (quickBtn) quickBtn.textContent = prefs.ui === 'classic' ? 'Classique' : (prefs.ui === 'aurora' ? 'Aurora' : 'Moderne');
+    const toggle = document.getElementById('adminUiToggle');
+    if (toggle) toggle.checked = prefs.ui === 'modern';
+    document.documentElement.setAttribute('data-ui', prefs.ui);
+  }
+
+  updateInterfaceCards();
 
   window.addEventListener('hashchange', () => {
     const v = getViewFromHash();
@@ -554,6 +684,16 @@
       return;
     }
 
+    if (action === 'open-django-admin') {
+      const base = backendBase();
+      if (!base) {
+        toast('Définir backend_base_url dans localStorage (ex: http://localhost:8000)');
+        return;
+      }
+      window.location.href = base.replace(/\/+$/, '') + '/admin/';
+      return;
+    }
+
     if (action === 'export-data') {
       toast('Exportation des données en cours...');
       setTimeout(() => toast('Export terminé (simulé)'), 1500);
@@ -638,26 +778,51 @@
       return;
     }
 
+    function switchInterface(target) {
+      const next = ['classic','modern','aurora'].includes(target) ? target : 'modern';
+      prefs.ui = next;
+      savePrefs(prefs);
+      updateInterfaceCards();
+      const toggle = document.getElementById('adminUiToggle');
+      if (toggle) toggle.checked = next === 'modern';
+      const base = backendBase();
+      if (base) {
+        const root = base.replace(/\/+$/, '');
+        if (next === 'aurora') {
+          window.location.href = root + '/admin/aurora/';
+        } else {
+          const backendMode = next === 'classic' ? 'classic' : 'modern';
+          const urlPreferred = root + '/admin/switch-interface/?interface=' + encodeURIComponent(backendMode) + '&next=' + encodeURIComponent('/admin/');
+          const urlFallback = root + '/admin/?interface=' + encodeURIComponent(backendMode);
+          window.location.href = urlPreferred || urlFallback;
+        }
+      } else {
+        const msg = next === 'classic'
+          ? 'Interface Classique sélectionnée (définissez backend_base_url pour rediriger vers /admin)'
+          : (next === 'aurora'
+            ? 'Interface Aurora sélectionnée (frontend). Définissez backend_base_url pour ouvrir /admin en Modern.'
+            : 'Interface Moderne sélectionnée (définissez backend_base_url pour rediriger vers /admin)');
+        toast(msg);
+      }
+    }
+
     if (action === 'switch-interface') {
-      // Dans le futur, ceci redirigera vers l'URL Django : /admin/switch-interface/?next=/admin/
-      // Pour l'instant, on simule l'action
-      toast('Redirection vers l\'interface Classique...');
-      setTimeout(() => {
-        alert('Simulation : Vous seriez redirigé vers l\'interface classique Django Admin.');
-      }, 1000);
+      const cycle = { classic: 'modern', modern: 'aurora', aurora: 'classic' };
+      switchInterface(cycle[prefs.ui] || 'modern');
       return;
     }
 
     if (action === 'switch-interface-classic') {
-      toast('Redirection vers l\'interface Classique...');
-      setTimeout(() => {
-        alert('Simulation : Vous seriez redirigé vers l\'interface classique Django Admin.');
-      }, 1000);
+      switchInterface('classic');
       return;
     }
 
     if (action === 'switch-interface-modern') {
-      toast('Vous êtes déjà sur l\'interface Moderne.');
+      switchInterface('modern');
+      return;
+    }
+    if (action === 'switch-interface-aurora') {
+      switchInterface('aurora');
       return;
     }
 
@@ -729,6 +894,23 @@
       savePrefs(prefs);
       setThemeMode(prefs.theme);
       toast(prefs.theme === 'dark' ? 'Mode Dark' : 'Mode Light');
+    });
+  }
+
+  const uiToggle = document.getElementById('adminUiToggle');
+  if (uiToggle) {
+    uiToggle.addEventListener('change', () => {
+      const next = uiToggle.checked ? 'modern' : 'classic';
+      prefs.ui = next;
+      savePrefs(prefs);
+      updateInterfaceCards();
+      const base = backendBase();
+      if (base) {
+        const url = base.replace(/\/+$/, '') + '/admin/switch-interface/?interface=' + encodeURIComponent(next) + '&next=' + encodeURIComponent('/admin/');
+        window.location.href = url;
+      } else {
+        toast(next === 'classic' ? 'Interface Classique sélectionnée' : 'Interface Moderne sélectionnée');
+      }
     });
   }
 

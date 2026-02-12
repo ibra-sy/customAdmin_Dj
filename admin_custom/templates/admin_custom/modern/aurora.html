@@ -1,0 +1,24 @@
+{% extends admin_base_template %}
+{% load static %}
+
+{% block title %}Aurora · Admin{% endblock %}
+
+{% block content %}
+<div class="card">
+  <div class="card__head">
+    <h2 class="h2">Aurora</h2>
+    <div class="card__head-actions">
+      <a class="button button--secondary" href="{% url 'admin:modern_settings' %}">Paramètres</a>
+      <a class="button" href="{% url 'admin:modern_dashboard' %}">Dashboard Moderne</a>
+    </div>
+  </div>
+  <div style="border:1px solid var(--border); border-radius:16px; overflow:hidden; background:var(--panel);">
+    <iframe
+      src="{{ frontend_url }}"
+      style="width:100%; min-height: calc(100vh - 220px); border:0;"
+      title="Aurora Frontend"
+      allow="clipboard-write; fullscreen"
+    ></iframe>
+  </div>
+</div>
+{% endblock %}
