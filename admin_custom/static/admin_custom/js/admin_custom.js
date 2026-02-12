@@ -11,7 +11,7 @@
     
     // Interface CLASSIQUE : charger le thème sauvegardé
     const savedTheme = localStorage.getItem('admin-theme') || 'default';
-    const validThemes = ['default', 'nostalgie', 'ocean', 'sunset', 'forest', 'dark', 'liquid-glass'];
+    const validThemes = ['default', 'nostalgie', 'ocean', 'forest', 'dark', 'black'];
     document.documentElement.setAttribute('data-theme', validThemes.includes(savedTheme) ? savedTheme : 'default');
     
     // Marquer le lien de navigation actif (un seul lien actif à la fois)
