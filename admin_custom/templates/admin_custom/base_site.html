@@ -16,7 +16,15 @@
 {% endblock %}
 
 {% block nav-global %}
-<nav class="custom-admin-nav">
+<!-- Bouton hamburger pour mobile -->
+<button id="mobile-menu-toggle" class="mobile-menu-toggle" aria-label="Menu" aria-expanded="false">
+    <span class="hamburger-icon">
+        <span></span>
+        <span></span>
+        <span></span>
+    </span>
+</button>
+<nav class="custom-admin-nav" id="main-nav">
     <a href="{% url 'admin:index' %}" class="nav-link">
         <i class="fas fa-home"></i> <span>Accueil</span>
     </a>

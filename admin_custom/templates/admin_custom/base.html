@@ -2,6 +2,7 @@
 <!DOCTYPE html>
 <html lang="{{ LANGUAGE_CODE|default:"en-us" }}" {% if LANGUAGE_BIDI %}dir="rtl"{% endif %} data-theme="default">
 <head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>{% block title %}{% endblock %}</title>
 <link rel="stylesheet" type="text/css" href="{% block stylesheet %}{% static "admin/css/base.css" %}{% endblock %}">
 {% if LANGUAGE_BIDI %}<link rel="stylesheet" type="text/css" href="{% block stylesheet_rtl %}{% static "admin/css/rtl.css" %}{% endblock %}">{% endif %}
@@ -24,12 +25,14 @@
 <link rel="stylesheet" href="{% static 'admin_custom/css/admin_forms.css' %}">
 <link rel="stylesheet" href="{% static 'admin_custom/css/admin_custom.css' %}">
 <link rel="stylesheet" href="{% static 'admin_custom/css/modern_admin.css' %}">
-<!-- CORRECTION CRITIQUE : TabularInline - DOIT être chargé en dernier -->
-<link rel="stylesheet" href="{% static 'admin_custom/css/tabular_inline_fix.css' %}">
 <!-- Dashboard cartes colorées -->
 <link rel="stylesheet" href="{% static 'admin_custom/css/dashboard_cards_colorful.css' %}">
 <link rel="stylesheet" href="{% static 'admin_custom/css/nav_fluid.css' %}">
 <link rel="stylesheet" href="{% static 'admin_custom/css/theme_icons.css' %}">
+<!-- CORRECTION CRITIQUE : TabularInline -->
+<link rel="stylesheet" href="{% static 'admin_custom/css/tabular_inline_fix.css' %}">
+<!-- RESPONSIVE : DOIT être chargé en TOUT DERNIER pour overrider -->
+<link rel="stylesheet" href="{% static 'admin_custom/css/responsive_admin.css' %}">
 <style id="theme-style"></style>
 {% endblock %}
 {% block extrahead %}
@@ -142,6 +145,90 @@
         </div>
     </div>
     <script src="{% static 'admin_custom/js/admin_custom.js' %}"></script>
+    <!-- Script pour menu hamburger responsive -->
+    <script>
+    (function() {
+      'use strict';
+
+      function initHamburger() {
+        var btn = document.getElementById('mobile-menu-toggle');
+        var nav = document.getElementById('main-nav');
+        if (!btn || !nav) return;
+
+        // Creer l'overlay une seule fois
+        var overlay = document.querySelector('.mobile-nav-overlay');
+        if (!overlay) {
+          overlay = document.createElement('div');
+          overlay.className = 'mobile-nav-overlay';
+          document.body.appendChild(overlay);
+        }
+
+        var isOpen = false;
+
+        function open() {
+          isOpen = true;
+          nav.classList.add('mobile-open');
+          overlay.classList.add('show');
+          btn.setAttribute('aria-expanded', 'true');
+          document.body.style.overflow = 'hidden';
+        }
+
+        function close() {
+          isOpen = false;
+          nav.classList.remove('mobile-open');
+          overlay.classList.remove('show');
+          btn.setAttribute('aria-expanded', 'false');
+          document.body.style.overflow = '';
+        }
+
+        function toggle(e) {
+          e.preventDefault();
+          e.stopPropagation();
+          if (isOpen) { close(); } else { open(); }
+        }
+
+        // Toggle button
+        btn.addEventListener('click', toggle);
+        btn.addEventListener('touchend', function(e) {
+          e.preventDefault();
+          toggle(e);
+        }, { passive: false });
+
+        // Fermer via overlay
+        overlay.addEventListener('click', close);
+
+        // Fermer quand on clique sur un lien
+        nav.addEventListener('click', function(e) {
+          if (e.target.closest('.nav-link') || e.target.closest('a')) {
+            setTimeout(close, 200);
+          }
+        });
+
+        // Fermer si on passe en desktop
+        var resizeTimer;
+        window.addEventListener('resize', function() {
+          clearTimeout(resizeTimer);
+          resizeTimer = setTimeout(function() {
+            if (window.innerWidth > 768 && isOpen) {
+              close();
+            }
+          }, 100);
+        });
+
+        // Fermer avec Escape
+        document.addEventListener('keydown', function(e) {
+          if (e.key === 'Escape' && isOpen) close();
+        });
+      }
+
+      // Init quand le DOM est pret
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initHamburger);
+      } else {
+        initHamburger();
+      }
+    })();
+    </script>
     {% endblock %}
 </div>
 <!-- END Container -->
