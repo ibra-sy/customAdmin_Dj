@@ -8,11 +8,18 @@ from django.apps import apps
 
 from .auth_views import SESSION_INTERFACE_KEY, INTERFACE_MODERN, INTERFACE_CLASSIC
 from .autodiscover import get_all_models_for_charts, get_all_models_for_grids
+from .models import UserPreference
 
 
 def get_custom_admin_site():
     from .admin_site import custom_admin_site
     return custom_admin_site
+
+
+def get_user_preference(user):
+    """Obtient ou crée la préférence utilisateur."""
+    preference, created = UserPreference.objects.get_or_create(user=user)
+    return preference
 
 
 def _ensure_modern_interface(request):
@@ -29,6 +36,13 @@ def _get_modern_context(request, extra=None):
     context['switch_to_classic_url'] = '/admin/switch-interface/?to=classic'
     context['switch_to_modern_url'] = '/admin/switch-interface/?to=modern'
     context['current_interface'] = request.session.get(SESSION_INTERFACE_KEY, INTERFACE_CLASSIC)
+    
+    # Ajouter les préférences utilisateur
+    if request.user.is_authenticated:
+        user_pref = get_user_preference(request.user)
+        context['user_theme'] = user_pref.theme_modern
+        context['sidebar_collapsed'] = user_pref.sidebar_collapsed
+    
     if extra:
         context.update(extra)
     return context

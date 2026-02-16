@@ -270,43 +270,64 @@
     if (typeof Chart === 'undefined') return;
 
     document.querySelectorAll('[data-chart]').forEach((canvas) => {
+      // Validate that element is actually a canvas or has a canvas child
+      if (canvas.tagName !== 'CANVAS') {
+        console.warn('Element with [data-chart] is not a canvas element:', canvas);
+        return;
+      }
+
+      // Test if canvas can get a 2D context
+      try {
+        if (!canvas.getContext('2d')) {
+          console.warn('Canvas element cannot get 2D context:', canvas);
+          return;
+        }
+      } catch (e) {
+        console.warn('Error getting canvas context:', e);
+        return;
+      }
+
       const type = canvas.getAttribute('data-chart');
       const primary = getComputedStyle(document.documentElement).getPropertyValue('--color-primary').trim() || '#3B82F6';
       const secondary = getComputedStyle(document.documentElement).getPropertyValue('--color-secondary').trim() || '#8B5CF6';
       const accent = getComputedStyle(document.documentElement).getPropertyValue('--color-accent').trim() || '#06B6D4';
 
-      if (type === 'line') {
-        new Chart(canvas, {
-          type: 'line',
-          data: {
-            labels: ['Jan', 'Fév', 'Mar', 'Avr', 'Mai', 'Juin', 'Juil', 'Août', 'Sep', 'Oct', 'Nov', 'Déc'],
-            datasets: [
-              { label: 'Utilisateurs', data: [12, 19, 15, 25, 22, 30, 28, 35, 42, 38, 45, 52], borderColor: primary, backgroundColor: primary + '20', fill: true, tension: 0.4 },
-              { label: 'Commandes', data: [8, 14, 12, 18, 20, 24, 22, 28, 32, 30, 36, 40], borderColor: secondary, backgroundColor: secondary + '20', fill: true, tension: 0.4 }
-            ]
-          },
-          options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom' } }, scales: { y: { beginAtZero: true } } }
-        });
-      }
-      if (type === 'bar') {
-        new Chart(canvas, {
-          type: 'bar',
-          data: {
-            labels: ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim'],
-            datasets: [{ label: 'Vues', data: [65, 78, 90, 81, 96, 105, 92], backgroundColor: primary }, { label: 'Conversions', data: [12, 19, 15, 22, 18, 24, 20], backgroundColor: accent }]
-          },
-          options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom' } }, scales: { y: { beginAtZero: true } } }
-        });
-      }
-      if (type === 'doughnut') {
-        new Chart(canvas, {
-          type: 'doughnut',
-          data: {
-            labels: ['Actifs', 'En attente', 'Archivés', 'Brouillons'],
-            datasets: [{ data: [45, 25, 20, 10], backgroundColor: [primary, secondary, accent, '#94A3B8'] }]
-          },
-          options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom' } } }
-        });
+      try {
+        if (type === 'line') {
+          new Chart(canvas, {
+            type: 'line',
+            data: {
+              labels: ['Jan', 'Fév', 'Mar', 'Avr', 'Mai', 'Juin', 'Juil', 'Août', 'Sep', 'Oct', 'Nov', 'Déc'],
+              datasets: [
+                { label: 'Utilisateurs', data: [12, 19, 15, 25, 22, 30, 28, 35, 42, 38, 45, 52], borderColor: primary, backgroundColor: primary + '20', fill: true, tension: 0.4 },
+                { label: 'Commandes', data: [8, 14, 12, 18, 20, 24, 22, 28, 32, 30, 36, 40], borderColor: secondary, backgroundColor: secondary + '20', fill: true, tension: 0.4 }
+              ]
+            },
+            options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom' } }, scales: { y: { beginAtZero: true } } }
+          });
+        }
+        if (type === 'bar') {
+          new Chart(canvas, {
+            type: 'bar',
+            data: {
+              labels: ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim'],
+              datasets: [{ label: 'Vues', data: [65, 78, 90, 81, 96, 105, 92], backgroundColor: primary }, { label: 'Conversions', data: [12, 19, 15, 22, 18, 24, 20], backgroundColor: accent }]
+            },
+            options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom' } }, scales: { y: { beginAtZero: true } } }
+          });
+        }
+        if (type === 'doughnut') {
+          new Chart(canvas, {
+            type: 'doughnut',
+            data: {
+              labels: ['Actifs', 'En attente', 'Archivés', 'Brouillons'],
+              datasets: [{ data: [45, 25, 20, 10], backgroundColor: [primary, secondary, accent, '#94A3B8'] }]
+            },
+            options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom' } } }
+          });
+        }
+      } catch (e) {
+        console.error('Error initializing chart:', e);
       }
     });
   }

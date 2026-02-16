@@ -118,12 +118,20 @@ document.addEventListener('click', function() { document.querySelectorAll('#head
       col.innerHTML = '<div class="card"><div class="card-header" style="display:flex; align-items:center; justify-content:space-between;"><span>' + (item.title || 'Sans titre') + '</span><button type="button" class="btn btn-sm btn-danger btn-remove-saved-chart" data-id="' + item.id + '" title="Supprimer"><i class="fa-solid fa-trash"></i></button></div><div class="card-body" style="height:280px; position:relative;"><canvas id="saved-chart-' + item.id + '"></canvas></div></div>';
       grid.appendChild(col);
       var canvas = document.getElementById('saved-chart-' + item.id);
-      if (canvas) {
-        var datasets = (item.datasets || []).map(function(d, i) {
-          var c = colors[i % colors.length];
-          return { label: d.label, data: d.data || [], backgroundColor: (item.type === 'doughnut' || item.type === 'pie') ? c : c + '99', borderColor: c, borderWidth: 2, fill: item.type === 'line', tension: 0.4 };
-        });
-        new Chart(canvas, { type: item.type || 'line', data: { labels: item.labels || [], datasets: datasets }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom' } }, scales: (item.type === 'doughnut' || item.type === 'pie') ? {} : { y: { beginAtZero: true } } } });
+      if (canvas && typeof Chart !== 'undefined') {
+        try {
+          if (!canvas.getContext('2d')) {
+            console.warn('Cannot get 2D context for chart', item.id);
+            return;
+          }
+          var datasets = (item.datasets || []).map(function(d, i) {
+            var c = colors[i % colors.length];
+            return { label: d.label, data: d.data || [], backgroundColor: (item.type === 'doughnut' || item.type === 'pie') ? c : c + '99', borderColor: c, borderWidth: 2, fill: item.type === 'line', tension: 0.4 };
+          });
+          new Chart(canvas, { type: item.type || 'line', data: { labels: item.labels || [], datasets: datasets }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom' } }, scales: (item.type === 'doughnut' || item.type === 'pie') ? {} : { y: { beginAtZero: true } } } });
+        } catch (e) {
+          console.error('Error creating chart:', e);
+        }
       }
     });
     grid.addEventListener('click', function(e) {

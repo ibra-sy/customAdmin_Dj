@@ -81,5 +81,12 @@
 
 {% block extrajs %}
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<script>
+if (typeof Chart === 'undefined') {
+  var s = document.createElement('script');
+  s.src = "{% static 'admin_custom/js/chart.umd.min.js' %}";
+  document.head.appendChild(s);
+}
+</script>
 <script src="{% static 'admin_custom/js/admin_custom.js' %}"></script>
 {% endblock %}

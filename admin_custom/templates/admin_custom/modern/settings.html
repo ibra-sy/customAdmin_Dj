@@ -107,6 +107,37 @@
               <p style="margin:var(--space-2) 0 0 0; font-size:var(--text-xs); color:var(--color-primary);"><i class="fa-solid fa-arrow-right"></i> Passer à cette interface</p>
             </div>
           </a>
+          <a href="/admin-console/" style="text-decoration:none; color:inherit;">
+            <div style="padding:var(--space-4); border:2px solid var(--color-border); border-radius:var(--radius-lg); background:var(--color-surface); cursor:pointer; transition:all 0.2s;">
+              <div style="font-size:2rem; margin-bottom:var(--space-2);"><i class="fa-solid fa-chart-line" style="color:var(--color-text-muted);"></i></div>
+              <strong>Interface Classique 2.0</strong>
+              <p style="margin:var(--space-1) 0 0 0; font-size:var(--text-sm); color:var(--color-text-muted);">Admin Console, dashboard</p>
+              <p style="margin:var(--space-2) 0 0 0; font-size:var(--text-xs); color:var(--color-primary);"><i class="fa-solid fa-arrow-right"></i> Passer à cette interface</p>
+            </div>
+          </a>
+          {% elif current_interface == 'classic2' %}
+          <a href="{{ switch_to_modern_url }}" style="text-decoration:none; color:inherit;">
+            <div style="padding:var(--space-4); border:2px solid var(--color-border); border-radius:var(--radius-lg); background:var(--color-surface); cursor:pointer; transition:all 0.2s;">
+              <div style="font-size:2rem; margin-bottom:var(--space-2);"><i class="fa-solid fa-gauge-high" style="color:var(--color-text-muted);"></i></div>
+              <strong>Interface Moderne</strong>
+              <p style="margin:var(--space-1) 0 0 0; font-size:var(--text-sm); color:var(--color-text-muted);">Design épuré, sidebar</p>
+              <p style="margin:var(--space-2) 0 0 0; font-size:var(--text-xs); color:var(--color-primary);"><i class="fa-solid fa-arrow-right"></i> Passer à cette interface</p>
+            </div>
+          </a>
+          <a href="{{ switch_to_classic_url }}" style="text-decoration:none; color:inherit;">
+            <div style="padding:var(--space-4); border:2px solid var(--color-border); border-radius:var(--radius-lg); background:var(--color-surface); cursor:pointer; transition:all 0.2s;">
+              <div style="font-size:2rem; margin-bottom:var(--space-2);"><i class="fa-solid fa-layer-group" style="color:var(--color-text-muted);"></i></div>
+              <strong>Interface Classique</strong>
+              <p style="margin:var(--space-1) 0 0 0; font-size:var(--text-sm); color:var(--color-text-muted);">AdminLTE, tableau de bord</p>
+              <p style="margin:var(--space-2) 0 0 0; font-size:var(--text-xs); color:var(--color-primary);"><i class="fa-solid fa-arrow-right"></i> Passer à cette interface</p>
+            </div>
+          </a>
+          <div style="padding:var(--space-4); border:2px solid var(--color-primary); border-radius:var(--radius-lg); background:var(--color-primary-light);">
+            <div style="font-size:2rem; margin-bottom:var(--space-2);"><i class="fa-solid fa-chart-line" style="color:var(--color-primary);"></i></div>
+            <strong>Interface Classique 2.0</strong>
+            <p style="margin:var(--space-1) 0 0 0; font-size:var(--text-sm); color:var(--color-text-muted);">Admin Console, dashboard</p>
+            <p style="margin:var(--space-2) 0 0 0; font-size:var(--text-xs); color:var(--color-success);"><i class="fa-solid fa-check"></i> Actuelle</p>
+          </div>
           {% else %}
           <a href="{{ switch_to_modern_url }}" style="text-decoration:none; color:inherit;">
             <div style="padding:var(--space-4); border:2px solid var(--color-border); border-radius:var(--radius-lg); background:var(--color-surface); cursor:pointer; transition:all 0.2s;">
@@ -122,6 +153,14 @@
             <p style="margin:var(--space-1) 0 0 0; font-size:var(--text-sm); color:var(--color-text-muted);">AdminLTE, tableau de bord</p>
             <p style="margin:var(--space-2) 0 0 0; font-size:var(--text-xs); color:var(--color-success);"><i class="fa-solid fa-check"></i> Actuelle</p>
           </div>
+          <a href="/admin-console/" style="text-decoration:none; color:inherit;">
+            <div style="padding:var(--space-4); border:2px solid var(--color-border); border-radius:var(--radius-lg); background:var(--color-surface); cursor:pointer; transition:all 0.2s;">
+              <div style="font-size:2rem; margin-bottom:var(--space-2);"><i class="fa-solid fa-chart-line" style="color:var(--color-text-muted);"></i></div>
+              <strong>Interface Classique 2.0</strong>
+              <p style="margin:var(--space-1) 0 0 0; font-size:var(--text-sm); color:var(--color-text-muted);">Admin Console, dashboard</p>
+              <p style="margin:var(--space-2) 0 0 0; font-size:var(--text-xs); color:var(--color-primary);"><i class="fa-solid fa-arrow-right"></i> Passer à cette interface</p>
+            </div>
+          </a>
           {% endif %}
         </div>
       </div>
@@ -200,6 +239,23 @@
       });
       link.style.borderLeftColor = 'var(--color-primary)';
       link.classList.add('active');
+    });
+  });
+  // Ensure switch-interface links update session before navigation (handles Tracking Prevention/session issues)
+  document.querySelectorAll('a[href*="switch-interface"]').forEach(function(a){
+    a.addEventListener('click', function(e){
+      e.preventDefault();
+      var href = a.getAttribute('href');
+      // perform GET to update session, then navigate
+      fetch(href, {credentials: 'same-origin', method: 'GET'})
+        .then(function(resp){
+          // redirect to response url if provided, else to admin index
+          if (resp.redirected) {
+            window.location.href = resp.url;
+          } else {
+            window.location.href = '/admin/';
+          }
+        }).catch(function(){ window.location.href = href; });
     });
   });
 })();

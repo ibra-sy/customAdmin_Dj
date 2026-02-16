@@ -3,9 +3,13 @@ from django.contrib.admin.views.decorators import staff_member_required
 from django.shortcuts import render
 from django.db.models import Sum
 from django.apps import apps
+from django.http import JsonResponse
+from django.views.decorators.http import require_http_methods
+from django.views.decorators.csrf import csrf_exempt
 
 from .auth_views import SESSION_INTERFACE_KEY, INTERFACE_CLASSIC, INTERFACE_MODERN
 from .autodiscover import get_all_models_for_charts, get_all_models_for_grids
+from .models import UserPreference
 
 
 def get_custom_admin_site():
@@ -16,14 +20,64 @@ def get_custom_admin_site():
     return custom_admin_site
 
 
+@require_http_methods(["POST"])
+@staff_member_required
+def save_user_preference(request):
+    """API pour sauvegarder les préférences utilisateur"""
+    try:
+        import json
+        data = json.loads(request.body)
+        
+        preference, _ = UserPreference.objects.get_or_create(user=request.user)
+        
+        # Mise à jour du thème moderne
+        if 'theme_modern' in data:
+            theme = data['theme_modern']
+            if theme in [choice[0] for choice in UserPreference.THEME_CHOICES_MODERN]:
+                preference.theme_modern = theme
+        
+        # Mise à jour du thème classique
+        if 'theme_classic' in data:
+            theme = data['theme_classic']
+            if theme in [choice[0] for choice in UserPreference.THEME_CHOICES_CLASSIC]:
+                preference.theme_classic = theme
+        
+        # Mise à jour du collapse de la sidebar
+        if 'sidebar_collapsed' in data:
+            preference.sidebar_collapsed = data['sidebar_collapsed']
+        
+        # Mise à jour des items per page
+        if 'items_per_page' in data:
+            try:
+                items = int(data['items_per_page'])
+                if 1 <= items <= 500:
+                    preference.items_per_page = items
+            except (ValueError, TypeError):
+                pass
+        
+        preference.save()
+        
+        return JsonResponse({
+            'success': True,
+            'message': 'Préférences sauvegardées avec succès'
+        })
+    except Exception as e:
+        return JsonResponse({
+            'success': False,
+            'error': str(e)
+        }, status=400)
+    # finish API response for save_user_preference
+
+
+@staff_member_required
 def charts_view(request):
-    """Vue pour les graphiques - utilise l'auto-découverte"""
+    """Vue pour les graphiques dynamiques - utilise l'auto-découverte"""
     custom_admin_site = get_custom_admin_site()
     context = custom_admin_site.each_context(request)
-    
+
     # Utiliser l'auto-découverte pour obtenir les modèles disponibles
     models = get_all_models_for_charts()
-    
+
     context.update({
         'title': 'Graphiques Dynamiques',
         'models': models,

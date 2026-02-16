@@ -82,6 +82,10 @@ class CustomAdminSite(admin.AdminSite):
         custom_urls = [
             path('login/', auth_views.select_interface_login, name='login'),
             path('switch-interface/', auth_views.switch_interface, name='switch_interface'),
+            path('api/save-preference/', self.admin_view(custom_views.save_user_preference), name='save_preference'),
+            path('force-classic/', auth_views.force_classic, name='force_classic'),
+            path('debug-interface/', auth_views.debug_interface, name='debug_interface'),
+            path('clear-interface/', auth_views.clear_interface, name='clear_interface'),
             path('modern/', include([
                 path('', self.admin_view(modern_views.modern_dashboard), name='modern_dashboard'),
                 path('charts/', self.admin_view(modern_views.modern_charts), name='modern_charts'),

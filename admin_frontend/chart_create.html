@@ -150,16 +150,38 @@
     var titleInput = document.getElementById('chart-title');
     var title = (titleInput && titleInput.value) || 'Mon graphique';
     if (titleEl) titleEl.textContent = 'Aperçu — ' + title;
+    
+    // Validate canvas element exists and can get context
+    if (!canvas || typeof Chart === 'undefined') {
+      console.warn('Canvas element not found or Chart.js not loaded');
+      return;
+    }
+    
+    try {
+      if (!canvas.getContext('2d')) {
+        console.warn('Cannot get 2D context from canvas');
+        return;
+      }
+    } catch (e) {
+      console.warn('Error getting canvas context:', e);
+      return;
+    }
+    
     var type = document.getElementById('chart-type').value;
     var data = getChartData();
     if (data.labels.length === 0) data.labels = ['A', 'B', 'C'];
     if (data.datasets.length === 0) data.datasets = [{ label: 'Série 1', data: [10, 20, 30], backgroundColor: colors[0] + '99', borderColor: colors[0], borderWidth: 2, fill: true, tension: 0.4 }];
     if (chartInstance) chartInstance.destroy();
-    chartInstance = new Chart(canvas, {
-      type: type === 'doughnut' ? 'doughnut' : type === 'pie' ? 'pie' : type === 'radar' ? 'radar' : type,
-      data: data,
-      options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom' }, title: { display: true, text: title } }, scales: type !== 'doughnut' && type !== 'pie' ? { x: { display: type !== 'radar' }, y: { beginAtZero: true } } : {} }
-    });
+    
+    try {
+      chartInstance = new Chart(canvas, {
+        type: type === 'doughnut' ? 'doughnut' : type === 'pie' ? 'pie' : type === 'radar' ? 'radar' : type,
+        data: data,
+        options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom' }, title: { display: true, text: title } }, scales: type !== 'doughnut' && type !== 'pie' ? { x: { display: type !== 'radar' }, y: { beginAtZero: true } } : {} }
+      });
+    } catch (e) {
+      console.error('Error creating chart:', e);
+    }
   }
 
   document.getElementById('chart-type').addEventListener('change', updatePreview);

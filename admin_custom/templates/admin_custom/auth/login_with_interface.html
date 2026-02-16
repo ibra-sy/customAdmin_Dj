@@ -54,6 +54,12 @@
           <strong>Interface Moderne</strong>
           <div style="font-size:0.75rem; color:var(--color-text-muted); margin-top:0.25rem;">Design épuré, sidebar moderne</div>
         </label>
+        <label class="interface-card {% if selected_interface == 'classic2' %}selected{% endif %}" id="card-classic2">
+          <input type="radio" name="admin_interface" value="classic2" {% if selected_interface == 'classic2' %}checked{% endif %}>
+          <i class="fa-solid fa-chart-line" style="font-size:1.5rem; display:block; margin-bottom:0.5rem; color:var(--color-primary);"></i>
+          <strong>Interface Classique 2.0</strong>
+          <div style="font-size:0.75rem; color:var(--color-text-muted); margin-top:0.25rem;">Admin Console, dashboard et graphiques</div>
+        </label>
       </div>
 
       {% if error_message %}

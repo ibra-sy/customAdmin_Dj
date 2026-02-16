@@ -29,8 +29,18 @@
 <style id="theme-style"></style>
 {% endblock %}
 {% block extrahead %}
-<!-- Chart.js -->
+<!-- Chart.js: CDN with local fallback to avoid Tracking Prevention blocks -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script>
+if (typeof Chart === 'undefined') {
+    (function(){
+        var s=document.createElement('script');
+        s.src = "{% static 'admin_custom/js/chart.umd.min.js' %}";
+        s.async = false;
+        document.head.appendChild(s);
+    })();
+}
+</script>
 <!-- DataTables -->
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
@@ -38,6 +48,9 @@
 <!-- AdminLTE 3 JS -->
 <script src="https://cdn.jsdelivr.net/npm/admin-lte@3.2/dist/js/adminlte.min.js"></script>
 {% endblock %}
+<style>
+    .switch-interface-link { position: fixed; right: 1rem; bottom: 1rem; z-index: 9999; }
+</style>
 {% block blockbots %}<meta name="robots" content="NONE,NOARCHIVE">{% endblock %}
 </head>
 {% load i18n %}
@@ -81,6 +94,11 @@
         {% block nav-global %}{% endblock %}
     </div>
     <!-- END Header -->
+        {% if request.user.is_authenticated and request.user.is_staff %}
+        <div class="switch-interface-link">
+            <a href="{% url 'admin:force_classic' %}" class="btn btn-sm btn-light">Voir interface classique</a>
+        </div>
+        {% endif %}
     {% block breadcrumbs %}
     <div class="breadcrumbs">
     <a href="{% url 'admin:index' %}">{% translate 'Home' %}</a>

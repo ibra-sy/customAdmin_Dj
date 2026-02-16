@@ -9,17 +9,22 @@ from django.urls import reverse
 from django.views.decorators.http import require_http_methods
 from django.views.decorators.csrf import csrf_protect
 from django.utils.decorators import method_decorator
+from django.contrib.admin.views.decorators import staff_member_required
+from django.http import JsonResponse
 
 
 SESSION_INTERFACE_KEY = 'admin_interface'
 INTERFACE_CLASSIC = 'classic'
 INTERFACE_MODERN = 'modern'
+INTERFACE_CLASSIC2 = 'classic2'  # Admin Console SPA → /admin-console/
 
 
 def get_interface_redirect_url(request, interface):
     """Retourne l'URL de redirection selon l'interface choisie."""
     if interface == INTERFACE_MODERN:
         return reverse('admin:modern_dashboard')
+    if interface == INTERFACE_CLASSIC2:
+        return '/admin-console/'
     return reverse('admin:index')
 
 
@@ -83,8 +88,41 @@ def switch_interface(request):
         return redirect('admin:login')
 
     to_interface = request.GET.get('to', INTERFACE_CLASSIC)
-    if to_interface not in (INTERFACE_CLASSIC, INTERFACE_MODERN):
+    if to_interface not in (INTERFACE_CLASSIC, INTERFACE_MODERN, INTERFACE_CLASSIC2):
         to_interface = INTERFACE_CLASSIC
 
     request.session[SESSION_INTERFACE_KEY] = to_interface
     return redirect(get_interface_redirect_url(request, to_interface))
+
+
+@staff_member_required
+def force_classic(request):
+    """Utility view to force the classic interface for the current session.
+
+    Useful when session value is stale or tracking prevention blocks switching.
+    """
+    request.session[SESSION_INTERFACE_KEY] = INTERFACE_CLASSIC
+    return redirect(reverse('admin:index'))
+
+
+@staff_member_required
+def debug_interface(request):
+    """Retourne l'état de la session et infos utiles pour debug de l'interface."""
+    data = {
+        'is_authenticated': request.user.is_authenticated,
+        'is_staff': getattr(request.user, 'is_staff', False),
+        'session_admin_interface': request.session.get(SESSION_INTERFACE_KEY),
+        'cookies': {k: request.COOKIES.get(k) for k in ('sessionid',)},
+    }
+    return JsonResponse(data)
+
+
+@staff_member_required
+def clear_interface(request):
+    """Supprime la clé `admin_interface` de la session et redirige vers l'index."""
+    if SESSION_INTERFACE_KEY in request.session:
+        try:
+            del request.session[SESSION_INTERFACE_KEY]
+        except KeyError:
+            pass
+    return redirect(reverse('admin:index'))

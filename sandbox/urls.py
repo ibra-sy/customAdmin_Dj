@@ -16,6 +16,8 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+
+from sandbox.views import admin_console, admin_console_assets, admin_console_logout, admin_login_maquette
 from admin_custom.admin_site import custom_admin_site
 from admin_custom.autodiscover import autodiscover_models
 
@@ -71,4 +73,10 @@ custom_admin_site.index_title = "Tableau de bord"
 urlpatterns = [
     path('admin/', custom_admin_site.urls),  # Utiliser le CustomAdminSite
     path('admin_custom/', include('admin_custom.urls')),  # APIs REST
+    # Option A : page de connexion maquette + Admin Console SPA (intégration backend)
+    # Order matters: more specific patterns first
+    path('admin-login/', admin_login_maquette),
+    path('admin-console/logout/', admin_console_logout),  # Specific route for logout
+    path('admin-console/', admin_console),  # Main console page
+    path('admin-console/<path:path>', admin_console_assets),  # Serve any file from admin_frontend/
 ]
