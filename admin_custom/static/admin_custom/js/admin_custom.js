@@ -370,14 +370,18 @@ function getThemeColors(type, border = false) {
 let gridCounter = 0;
 
 function generateGrid() {
-    const model = document.getElementById('grid-model').value;
-    const columnsInput = document.getElementById('grid-columns').value;
+    const modelSelect = document.getElementById('grid-model');
+    const model = modelSelect ? modelSelect.value : '';
     const description = document.getElementById('grid-description').value || `Grille ${model}`;
     
-    if (!columnsInput.trim()) {
-        alert('Veuillez spécifier au moins une colonne');
-        return;
-    }
+    // Toujours utiliser les champs du modèle sélectionné (data-fields) pour afficher nom, slug, description, prix, stock, etc.
+    const dataFields = modelSelect && modelSelect.selectedIndex >= 0
+        ? (modelSelect.options[modelSelect.selectedIndex].getAttribute('data-fields') || '')
+        : '';
+    const columns = dataFields ? dataFields.split(',').map(function(c) { return c.trim(); }).filter(Boolean) : [];
+    const url = columns.length
+        ? `/admin_custom/api/grid-data/?model=${encodeURIComponent(model)}&${columns.map(function(c) { return 'columns=' + encodeURIComponent(c); }).join('&')}`
+        : `/admin_custom/api/grid-data/?model=${encodeURIComponent(model)}`;
     
     // Afficher le loader
     const loadingAlert = document.getElementById('grid-loading');
@@ -391,14 +395,20 @@ function generateGrid() {
         generateBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Création...';
     }
     
-    const columns = columnsInput.split(',').map(c => c.trim());
-    const url = `/admin_custom/api/grid-data/?model=${model}&${columns.map(c => `columns=${c}`).join('&')}`;
-    
     fetch(url)
-        .then(response => response.json())
-        .then(data => {
+        .then(function(response) { return response.json(); })
+        .then(function(data) {
+            if (data.error) {
+                throw new Error(data.error);
+            }
+            if (!data.columns || !Array.isArray(data.columns)) {
+                data.columns = [];
+            }
+            if (!data.data || !Array.isArray(data.data)) {
+                data.data = [];
+            }
             gridCounter++;
-            const gridId = `grid-${gridCounter}`;
+            const gridId = 'grid-' + gridCounter;
             const gridsContainer = document.getElementById('grids-container');
             
             // Créer l'élément de grille avec style AdminLTE
@@ -421,7 +431,7 @@ function generateGrid() {
                 <div class="card-body">
                     <div class="alert alert-info">
                         <i class="icon fas fa-info"></i>
-                        Modèle: <strong>${model}</strong> | Colonnes: <strong>${columns.join(', ')}</strong>
+                        Modèle: <strong>${model}</strong> | Colonnes: <strong>${(data.columns && data.columns.length) ? data.columns.join(', ') : 'Tous les champs'}</strong>
                     </div>
                     <div class="table-responsive">
                         <table id="${gridId}-table" class="table table-bordered table-striped table-hover" style="width:100%">
@@ -480,9 +490,9 @@ function generateGrid() {
                 });
             }, 100);
             
-            // Réinitialiser les champs
-            document.getElementById('grid-columns').value = '';
-            document.getElementById('grid-description').value = '';
+            // Ne pas vider les colonnes pour garder la liste visible ; vider seulement la description
+            var descEl = document.getElementById('grid-description');
+            if (descEl) descEl.value = '';
         })
         .catch(error => {
             console.error('Erreur lors de la génération de la grille:', error);
@@ -583,11 +593,27 @@ function updateChartFields() {
         });
 }
 
+// Remplir les colonnes avec tous les champs quand on change de modèle (grilles)
+function updateGridColumnsFromModel() {
+    const modelSelect = document.getElementById('grid-model');
+    const columnsInput = document.getElementById('grid-columns');
+    if (!modelSelect || !columnsInput) return;
+    const opt = modelSelect.options[modelSelect.selectedIndex];
+    const fieldsStr = opt && opt.getAttribute('data-fields');
+    if (fieldsStr) {
+        const fields = fieldsStr.split(',').filter(Boolean);
+        columnsInput.placeholder = fields.length + ' champs disponibles';
+        // Pré-remplir avec tous les champs pour afficher nom, état, montants, dates, etc.
+        columnsInput.value = fields.join(', ');
+    }
+}
+
 // Event Listeners
 document.addEventListener('DOMContentLoaded', function() {
     const generateChartBtn = document.getElementById('generate-chart');
     const generateGridBtn = document.getElementById('generate-grid');
     const chartModelSelect = document.getElementById('chart-model');
+    const gridModelSelect = document.getElementById('grid-model');
     
     if (generateChartBtn) {
         generateChartBtn.addEventListener('click', generateChart);
@@ -597,10 +623,13 @@ document.addEventListener('DOMContentLoaded', function() {
         generateGridBtn.addEventListener('click', generateGrid);
     }
     
-    // Mettre à jour les champs quand le modèle change
     if (chartModelSelect) {
         chartModelSelect.addEventListener('change', updateChartFields);
-        // Initialiser au chargement
         updateChartFields();
+    }
+    
+    if (gridModelSelect) {
+        gridModelSelect.addEventListener('change', updateGridColumnsFromModel);
+        updateGridColumnsFromModel();
     }
 });

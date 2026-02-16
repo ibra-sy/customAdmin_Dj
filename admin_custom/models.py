@@ -2,6 +2,29 @@ from django.db import models
 from django.contrib.auth.models import User
 
 
+def default_dashboard_metrics_config():
+    """
+    Configuration par défaut des indicateurs du tableau de bord.
+    Liste vide pour rester indépendant du type de projet (e-commerce, blog, etc.).
+    L'utilisateur choisit ses indicateurs via « Personnaliser l'affichage ».
+    """
+    return []
+
+
+class UserDashboardConfig(models.Model):
+    """Configuration des indicateurs du tableau de bord par utilisateur (sauvegardée en base)."""
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='dashboard_config')
+    metrics_config = models.JSONField(default=default_dashboard_metrics_config)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        verbose_name = "Configuration tableau de bord"
+        verbose_name_plural = "Configurations tableau de bord"
+
+    def __str__(self):
+        return f"Config dashboard — {self.user.get_username()}"
+
+
 class DashboardGrid(models.Model):
     """Grille de données configurable pour le dashboard"""
     name = models.CharField(max_length=200, unique=True)

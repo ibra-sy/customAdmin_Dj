@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import DashboardGrid, DashboardChart
+from .models import DashboardGrid, DashboardChart, UserDashboardConfig
 from .modern_model_admin import ModernTemplateMixin
 
 
@@ -23,3 +23,14 @@ class DashboardChartAdmin(ModernTemplateMixin, admin.ModelAdmin):
     list_display = ['name', 'chart_type', 'model_name', 'field_name', 'frequency', 'created_at']
     search_fields = ['name', 'model_name', 'field_name']
     list_filter = ['chart_type', 'frequency', 'created_at']
+
+
+class UserDashboardConfigAdmin(admin.ModelAdmin):
+    """Admin en lecture pour la config tableau de bord par utilisateur."""
+    list_display = ['user', 'updated_at']
+    list_filter = ['updated_at']
+    search_fields = ['user__username']
+    readonly_fields = ['user', 'metrics_config', 'updated_at']
+
+    def has_add_permission(self, request):
+        return False

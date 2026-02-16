@@ -1,6 +1,8 @@
 from django.http import JsonResponse
+from django.urls import reverse
 from django.views.decorators.http import require_http_methods
 from django.views.decorators.csrf import csrf_exempt
+from django.contrib.admin.views.decorators import staff_member_required
 from django.utils import timezone
 from django.db.models import Sum, Avg, Count
 from django.apps import apps
@@ -164,9 +166,14 @@ def chart_data(request):
     })
 
 
+def _get_grid_columns_for_model(model_class):
+    """Retourne tous les champs du modèle (id, nom, slug, description, catégorie, prix, stock, etc.)."""
+    return [f.name for f in model_class._meta.fields]
+
+
 @require_http_methods(["GET"])
 def grid_data(request):
-    """API pour récupérer les données de grille"""
+    """API pour récupérer les données de grille. Si columns est vide, utilise tous les champs du modèle."""
     grid_id = request.GET.get('grid_id')
     model_name = request.GET.get('model')
     columns = request.GET.getlist('columns')
@@ -178,6 +185,12 @@ def grid_data(request):
     if not model_class:
         return JsonResponse({'error': 'Invalid model'}, status=400)
     
+    # Si aucune colonne fournie, utiliser tous les champs du modèle
+    if not columns:
+        columns = _get_grid_columns_for_model(model_class)
+    if not columns:
+        columns = ['pk']
+    
     # Récupérer les données
     queryset = model_class.objects.all()
     
@@ -188,8 +201,8 @@ def grid_data(request):
         for col in columns:
             if hasattr(obj, col):
                 value = getattr(obj, col)
-                # Convertir les objets en string
-                if hasattr(value, '__str__'):
+                # Convertir les objets en string (FK, dates, etc.)
+                if hasattr(value, '__str__') and not isinstance(value, (int, float, type(None), bool)):
                     row[col] = str(value)
                 else:
                     row[col] = value
@@ -264,7 +277,7 @@ def stats_data(request):
 
 @require_http_methods(["GET"])
 def model_fields(request):
-    """API pour récupérer les champs numériques d'un modèle - utilise l'auto-découverte"""
+    """API pour récupérer les champs numériques d'un modèle (graphiques)."""
     model_name = request.GET.get('model')
     
     if not model_name:
@@ -286,10 +299,172 @@ def model_fields(request):
                                      'PositiveIntegerField', 'BigIntegerField', 'SmallIntegerField']:
                         numeric_fields.append(field.name)
             except Exception:
-                # Ignorer les champs qui ne peuvent pas être inspectés
                 continue
     
     return JsonResponse({
         'model': model_name,
         'fields': numeric_fields,
     })
+
+
+@require_http_methods(["GET"])
+def grid_model_fields(request):
+    """API pour récupérer tous les champs d'un modèle (grilles)."""
+    model_name = request.GET.get('model')
+    if not model_name:
+        return JsonResponse({'error': 'Model name is required'}, status=400)
+    model_class = get_model_class(model_name)
+    if not model_class:
+        return JsonResponse({'error': f'Model "{model_name}" not found'}, status=404)
+    fields = _get_grid_columns_for_model(model_class)
+    if not fields:
+        fields = ['pk']
+    return JsonResponse({'model': model_name, 'fields': fields})
+
+
+def _get_numeric_fields_for_dashboard(model):
+    """Retourne les champs numériques d'un modèle (pour dashboard)."""
+    result = []
+    for field in model._meta.get_fields():
+        if hasattr(field, 'name'):
+            try:
+                field_obj = model._meta.get_field(field.name)
+                if hasattr(field_obj, 'get_internal_type'):
+                    ft = field_obj.get_internal_type()
+                    if ft in ('DecimalField', 'IntegerField', 'FloatField', 'BigIntegerField',
+                              'PositiveIntegerField', 'SmallIntegerField'):
+                        result.append(field.name)
+            except Exception:
+                pass
+    return result
+
+
+@staff_member_required
+@require_http_methods(["GET"])
+def dashboard_models(request):
+    """Retourne la liste des modèles avec leurs champs numériques."""
+    result = []
+    for app_config in apps.get_app_configs():
+        if app_config.name in ('contenttypes', 'sessions', 'admin', 'auth', 'messages', 'staticfiles'):
+            continue
+        for model in app_config.get_models():
+            if model._meta.abstract or model._meta.proxy:
+                continue
+            numeric_fields = _get_numeric_fields_for_dashboard(model)
+            result.append({
+                'app': app_config.label,
+                'model': model.__name__,
+                'verbose_name': str(model._meta.verbose_name),
+                'numeric_fields': numeric_fields,
+            })
+    return JsonResponse({'models': result})
+
+
+@staff_member_required
+@require_http_methods(["GET", "POST"])
+def dashboard_metrics(request):
+    """Calcule les métriques (count, sum, avg) à partir d'une config JSON."""
+    if request.method == 'GET':
+        config_raw = request.GET.get('config', '[]')
+        try:
+            config = json.loads(config_raw) if config_raw else []
+        except json.JSONDecodeError:
+            return JsonResponse({'error': 'JSON invalide'}, status=400)
+    else:
+        try:
+            body = json.loads(request.body) if request.body else {}
+            config = body.get('config', [])
+        except json.JSONDecodeError:
+            return JsonResponse({'error': 'JSON invalide'}, status=400)
+
+    if not isinstance(config, list):
+        return JsonResponse({'error': 'config doit être une liste'}, status=400)
+
+    results = []
+    for item in config:
+        if not isinstance(item, dict):
+            continue
+        app = item.get('app')
+        model_name = item.get('model')
+        metric_type = item.get('type', 'count')
+        field = item.get('field')
+        label = item.get('label', '')
+
+        if not app or not model_name:
+            continue
+
+        try:
+            model = apps.get_model(app, model_name)
+        except LookupError:
+            continue
+
+        numeric_fields = _get_numeric_fields_for_dashboard(model)
+
+        if metric_type == 'count':
+            value = model.objects.count()
+        elif metric_type == 'sum' and field and field in numeric_fields:
+            agg = model.objects.aggregate(v=Sum(field))
+            value = agg['v'] or 0
+            if hasattr(value, '__float__'):
+                value = float(value)
+        elif metric_type == 'avg' and field and field in numeric_fields:
+            agg = model.objects.aggregate(v=Avg(field))
+            value = round(float(agg['v'] or 0), 2)
+        else:
+            continue
+
+        admin_url = ''
+        try:
+            admin_url = reverse(
+                f'admin:{model._meta.app_label}_{model._meta.model_name}_changelist'
+            )
+        except Exception:
+            pass
+
+        results.append({
+            'label': label or f"{model._meta.verbose_name} ({metric_type})",
+            'value': value,
+            'admin_url': admin_url,
+        })
+
+    return JsonResponse({'metrics': results})
+
+
+def _default_metrics_config():
+    """Config par défaut des indicateurs (même structure que le modèle)."""
+    from .models import default_dashboard_metrics_config
+    return default_dashboard_metrics_config()
+
+
+@staff_member_required
+@require_http_methods(["GET"])
+def dashboard_config_get(request):
+    """Retourne la configuration des indicateurs du tableau de bord pour l'utilisateur connecté."""
+    from .models import UserDashboardConfig
+    try:
+        config_obj = UserDashboardConfig.objects.get(user=request.user)
+        config = config_obj.metrics_config
+        if not isinstance(config, list) or len(config) == 0:
+            config = _default_metrics_config()
+    except UserDashboardConfig.DoesNotExist:
+        config = _default_metrics_config()
+    return JsonResponse({'config': config})
+
+
+@staff_member_required
+@require_http_methods(["POST"])
+def dashboard_config_save(request):
+    """Enregistre la configuration des indicateurs du tableau de bord pour l'utilisateur connecté."""
+    from .models import UserDashboardConfig
+    try:
+        body = json.loads(request.body) if request.body else {}
+        config = body.get('config', [])
+    except json.JSONDecodeError:
+        return JsonResponse({'error': 'JSON invalide'}, status=400)
+    if not isinstance(config, list):
+        return JsonResponse({'error': 'config doit être une liste'}, status=400)
+    obj, _ = UserDashboardConfig.objects.update_or_create(
+        user=request.user,
+        defaults={'metrics_config': config},
+    )
+    return JsonResponse({'ok': True, 'config': obj.metrics_config})

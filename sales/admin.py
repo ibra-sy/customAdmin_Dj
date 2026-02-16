@@ -1,4 +1,6 @@
 from django.contrib import admin
+from django.utils.html import format_html
+from django.urls import reverse
 from admin_custom.modern_model_admin import ModernTemplateMixin
 from .models import Order, OrderItem, Invoice, Payment
 
@@ -45,10 +47,17 @@ class OrderAdmin(ModernTemplateMixin, admin.ModelAdmin):
 
 @admin.register(OrderItem)
 class OrderItemAdmin(ModernTemplateMixin, admin.ModelAdmin):
-    list_display = ['order', 'product', 'quantity', 'unit_price', 'subtotal', 'created_at']
+    list_display = ['order', 'product', 'quantity', 'unit_price', 'subtotal', 'created_at', 'lien_vers_commande']
     search_fields = ['order__order_number', 'product__name', 'product__sku']
     list_filter = ['created_at']
-    readonly_fields = ['created_at']
+    readonly_fields = ['created_at', 'lien_vers_commande']
+
+    def lien_vers_commande(self, obj):
+        if not obj or not obj.order_id:
+            return '-'
+        url = reverse('admin:sales_order_change', args=[obj.order_id], current_app=self.admin_site.name)
+        return format_html('<a href="{}"><i class="fas fa-external-link-alt"></i> Voir la commande</a>', url)
+    lien_vers_commande.short_description = 'Commande (parent)'
 
 
 class PaymentInline(admin.TabularInline):
@@ -65,17 +74,30 @@ class PaymentInline(admin.TabularInline):
 
 @admin.register(Invoice)
 class InvoiceAdmin(ModernTemplateMixin, admin.ModelAdmin):
-    list_display = ['invoice_number', 'order', 'status', 'total_amount', 'issued_date', 'due_date', 'created_at']
+    list_display = ['invoice_number', 'order', 'status', 'total_amount', 'issued_date', 'due_date', 'created_at', 'lien_vers_commande']
     search_fields = ['invoice_number', 'order__order_number', 'order__user__username']
     list_filter = ['status', 'issued_date', 'due_date', 'created_at']
-    # Le numéro de facture est généré automatiquement : lecture seule dans l'admin.
-    readonly_fields = ['invoice_number', 'created_at', 'updated_at']
+    readonly_fields = ['invoice_number', 'created_at', 'updated_at', 'lien_vers_commande']
     inlines = [PaymentInline]
+
+    def lien_vers_commande(self, obj):
+        if not obj or not obj.order_id:
+            return '-'
+        url = reverse('admin:sales_order_change', args=[obj.order_id], current_app=self.admin_site.name)
+        return format_html('<a href="{}"><i class="fas fa-external-link-alt"></i> Voir la commande</a>', url)
+    lien_vers_commande.short_description = 'Commande (parent)'
 
 
 @admin.register(Payment)
 class PaymentAdmin(ModernTemplateMixin, admin.ModelAdmin):
-    list_display = ['invoice', 'amount', 'method', 'status', 'payment_date', 'transaction_id', 'created_at']
+    list_display = ['invoice', 'amount', 'method', 'status', 'payment_date', 'transaction_id', 'created_at', 'lien_vers_facture']
     search_fields = ['transaction_id', 'invoice__invoice_number', 'invoice__order__order_number']
     list_filter = ['method', 'status', 'payment_date', 'created_at']
-    readonly_fields = ['created_at', 'updated_at']
+    readonly_fields = ['created_at', 'updated_at', 'lien_vers_facture']
+
+    def lien_vers_facture(self, obj):
+        if not obj or not obj.invoice_id:
+            return '-'
+        url = reverse('admin:sales_invoice_change', args=[obj.invoice_id], current_app=self.admin_site.name)
+        return format_html('<a href="{}"><i class="fas fa-external-link-alt"></i> Voir la facture</a>', url)
+    lien_vers_facture.short_description = 'Facture (parent)'

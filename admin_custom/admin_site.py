@@ -91,6 +91,7 @@ class CustomAdminSite(admin.AdminSite):
             path('charts/', self.admin_view(custom_views.charts_view), name='admin_charts'),
             path('grids/', self.admin_view(custom_views.grids_view), name='admin_grids'),
             path('dashboard/', self.admin_view(custom_views.dashboard_view), name='admin_dashboard'),
+            path('dashboard-customize/', self.admin_view(custom_views.dashboard_customize_page), name='dashboard_customize'),
             path('settings/', self.admin_view(custom_views.classic_settings), name='classic_settings'),
         ]
         

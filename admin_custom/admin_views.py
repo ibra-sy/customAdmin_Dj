@@ -1,6 +1,7 @@
 from django.contrib import admin
 from django.contrib.admin.views.decorators import staff_member_required
 from django.shortcuts import render
+from django.urls import reverse
 from django.db.models import Sum
 from django.apps import apps
 
@@ -92,6 +93,20 @@ def dashboard_view(request):
         'stats': stats,
     })
     return render(request, 'admin_custom/dashboard.html', context)
+
+
+@staff_member_required
+def dashboard_customize_page(request):
+    """Page dédiée pour personnaliser l'affichage du tableau de bord (indicateurs depuis la base)."""
+    custom_admin_site = get_custom_admin_site()
+    context = custom_admin_site.each_context(request)
+    is_modern = request.session.get(SESSION_INTERFACE_KEY, INTERFACE_CLASSIC) == INTERFACE_MODERN
+    context.update({
+        'title': 'Personnaliser l\'affichage du tableau de bord',
+        'dashboard_url': reverse('admin:modern_dashboard' if is_modern else 'admin:admin_dashboard'),
+        'index_url': reverse('admin:index'),
+    })
+    return render(request, 'admin_custom/dashboard_customize.html', context)
 
 
 @staff_member_required

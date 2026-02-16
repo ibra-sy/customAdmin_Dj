@@ -51,62 +51,39 @@ def autodiscover_models(custom_admin_site=None, exclude_apps=None, exclude_model
     exclude_apps.extend(default_exclude_apps)
     
     # ÉTAPE 1 : Charger tous les fichiers admin.py pour déclencher les @admin.register()
-    # Cela permet de détecter toutes les classes ModelAdmin définies
     autodiscover_modules('admin', register_to=admin.site)
     
-    # ÉTAPE 2 : Parcourir tous les modèles enregistrés dans admin.site
-    # et les ré-enregistrer dans custom_admin_site
+    # ÉTAPE 2 : Ré-enregistrer tous les modèles sur custom_admin_site avec leur classe ModelAdmin.
+    # Obligatoire pour que les inlines (ex. OrderItem, Invoice sous Order) soient bien pris en compte
+    # quand on partage le dossier admin_custom : on obtient des instances fraîches avec inlines.
     registered_count = 0
-    
-    for model, admin_class in admin.site._registry.items():
+    registry_items = list(admin.site._registry.items())
+    for model, admin_instance in registry_items:
         app_label = model._meta.app_label
-        
-        # Ignorer les apps exclues
-        if app_label in exclude_apps:
+        if app_label in exclude_apps or app_label == 'admin_custom':
             continue
-        
-        # Ignorer admin_custom lui-même
-        if app_label == 'admin_custom':
-            continue
-        
-        # Ignorer les modèles exclus
         model_name = f"{app_label}.{model._meta.model_name}"
         if model_name in exclude_models or model.__name__ in exclude_models:
             continue
-        
-        # Ignorer les modèles abstraits
         if model._meta.abstract:
             continue
-        
-        # Ignorer les modèles proxy (sauf si explicitement demandé)
         if model._meta.proxy and not admin_custom_config.get('INCLUDE_PROXY', False):
             continue
-        
-        # Ré-enregistrer dans custom_admin_site avec la même classe d'admin
         try:
-            # Désenregistrer si déjà enregistré (au cas où)
             if model in custom_admin_site._registry:
                 custom_admin_site.unregister(model)
-            
-            # Créer une nouvelle instance de la classe d'admin pour custom_admin_site
-            # On utilise la classe (admin_class.__class__) et on crée une nouvelle instance
-            admin_class_type = admin_class.__class__
-            
-            # Enregistrer avec la classe d'admin détectée
-            custom_admin_site.register(model, admin_class_type)
+            admin_class = admin_instance.__class__
+            custom_admin_site.register(model, admin_class)
             registered_count += 1
         except admin.sites.AlreadyRegistered:
-            # Déjà enregistré, ignorer
             pass
-        except Exception as e:
-            # En cas d'erreur, essayer avec un ModelAdmin par défaut
+        except Exception:
             try:
                 if model in custom_admin_site._registry:
                     custom_admin_site.unregister(model)
                 custom_admin_site.register(model)
                 registered_count += 1
             except Exception:
-                # Ignorer les erreurs silencieusement
                 pass
     
     # ÉTAPE 3 : Enregistrer les modèles non encore enregistrés
@@ -198,7 +175,8 @@ def get_all_models_for_charts():
 
 def get_all_models_for_grids():
     """
-    Retourne tous les modèles disponibles pour les grilles.
+    Retourne tous les modèles disponibles pour les grilles, avec la liste
+    de tous les champs (concrets, non relation inversée) pour afficher toute la grille.
     """
     models_list = []
     
@@ -210,10 +188,14 @@ def get_all_models_for_grids():
             if model._meta.abstract or model._meta.proxy:
                 continue
             
+            # Tous les champs du modèle (id, nom, slug, description, catégorie, prix, stock, etc.)
+            fields = [f.name for f in model._meta.fields]
+            
             models_list.append({
                 'name': model.__name__,
                 'label': model._meta.verbose_name.title(),
                 'app': model._meta.app_label,
+                'fields': fields,
             })
     
     return models_list
