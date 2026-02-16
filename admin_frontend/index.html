@@ -1,0 +1,881 @@
+<!doctype html>
+<html lang="fr" data-theme="light">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Admin Console</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="assets/styles.css" />
+</head>
+<body>
+  <a class="skip-link" href="#main">Aller au contenu</a>
+
+  <div class="app" data-layout="default">
+    <aside class="sidebar" aria-label="Navigation principale">
+      <div class="sidebar__brand">
+        <div class="brandmark" aria-hidden="true"></div>
+        <div class="brand">
+          <div class="brand__title">Modern Admin</div>
+          <div class="brand__subtitle">Backoffice</div>
+        </div>
+      </div>
+
+      <div class="sidebar__search" role="search">
+        <label class="sr-only" for="navSearch">Rechercher</label>
+        <input id="navSearch" class="input input--search" placeholder="Rechercher…" autocomplete="off" />
+      </div>
+
+      <nav class="nav" aria-label="Sections">
+        <a class="nav__item is-active" href="#" data-view="dashboard">
+          <span class="nav__icon" aria-hidden="true">▦</span>
+          <span class="nav__label" data-term="nav.dashboard">Dashboard</span>
+        </a>
+        <a class="nav__item" href="#" data-view="orders">
+          <span class="nav__icon" aria-hidden="true">⧉</span>
+          <span class="nav__label" data-term="nav.orders">Commandes</span>
+          <span class="nav__badge" data-badge>12</span>
+        </a>
+        <a class="nav__item" href="#" data-view="products">
+          <span class="nav__icon" aria-hidden="true">◼</span>
+          <span class="nav__label" data-term="nav.products">Produits</span>
+        </a>
+        <a class="nav__item" href="#" data-view="customers">
+          <span class="nav__icon" aria-hidden="true">◉</span>
+          <span class="nav__label" data-term="nav.customers">Clients</span>
+        </a>
+        <a class="nav__item" href="#" data-view="users">
+          <span class="nav__icon" aria-hidden="true">◎</span>
+          <span class="nav__label" data-term="nav.users">Utilisateurs</span>
+        </a>
+        <a class="nav__item" href="#" data-view="settings">
+          <span class="nav__icon" aria-hidden="true">⚙</span>
+          <span class="nav__label" data-term="nav.settings">Paramètres</span>
+        </a>
+      </nav>
+
+      <div class="sidebar__footer">
+        <div class="user">
+          <div class="avatar" aria-hidden="true">A</div>
+          <div class="user__meta">
+            <div class="user__name">Admin</div>
+            <div class="user__role">Superuser</div>
+          </div>
+        </div>
+
+        <button class="button button--ghost" type="button" data-action="logout">Se déconnecter</button>
+      </div>
+    </aside>
+
+    <div class="shell">
+      <header class="topbar" aria-label="Barre supérieure">
+        <button class="icon-button" type="button" data-action="toggle-sidebar" aria-label="Ouvrir/Fermer le menu">
+          <span aria-hidden="true">≡</span>
+        </button>
+
+        <div class="topbar__title" id="pageTitle">Dashboard</div>
+
+        <div class="topbar__spacer"></div>
+
+        <div class="topbar__controls">
+          <div class="field" style="width: auto; margin-bottom: 0;">
+             <label class="sr-only" for="termSelectTop">Terminologie</label>
+             <select id="termSelectTop" class="input" data-action="terminology" style="padding: 6px 10px; height: 40px; width: auto;">
+               <option value="standard">Standard</option>
+               <option value="commerce">Commerce</option>
+               <option value="en">English</option>
+             </select>
+          </div>
+
+          <div class="theme-controls" aria-label="Personnalisation">
+            <label class="toggle" for="themeMode">
+              <span class="toggle__label">Dark</span>
+              <input id="themeMode" type="checkbox" role="switch" aria-label="Basculer mode sombre" />
+              <span class="toggle__ui" aria-hidden="true"></span>
+            </label>
+
+            <label class="color" aria-label="Couleur principale">
+              <span class="sr-only">Couleur principale</span>
+              <input type="color" value="#4f46e5" data-action="primary-color" aria-label="Choisir la couleur principale" />
+            </label>
+          </div>
+
+          <button class="icon-button" type="button" aria-label="Notifications" data-action="notifications">
+            <span aria-hidden="true">⟡</span>
+          </button>
+
+          <button class="icon-button" type="button" aria-label="Aide" data-action="help">
+            <span aria-hidden="true">?</span>
+          </button>
+        </div>
+      </header>
+
+      <div class="toast" data-toast role="status" aria-live="polite"></div>
+
+      <main id="main" class="main">
+        <section class="view is-active" data-view="dashboard" aria-label="Dashboard">
+          <div class="page-head">
+            <div>
+              <h1 class="h1">Aperçu</h1>
+              <p class="muted">Pilotage rapide, actions fréquentes et état du système.</p>
+            </div>
+            <div class="page-head__actions">
+              <button class="button" type="button" data-term="actions.create_product" data-action="go-to-products">Créer un produit</button>
+              <button class="button button--secondary" type="button" data-term="actions.new_order" data-action="go-to-orders">Nouvelle commande</button>
+            </div>
+          </div>
+
+          <div class="grid grid--kpi">
+            <article class="card kpi" tabindex="0">
+              <div class="kpi__meta">
+                <div class="kpi__label">Chiffre d’affaires</div>
+                <div class="kpi__value">12 480 000</div>
+                <div class="kpi__hint"><span class="pill pill--good">+12%</span> vs. 30 jours</div>
+              </div>
+              <div class="kpi__spark" aria-hidden="true">
+                <div class="spark" style="--a: 40; --b: 65; --c: 55; --d: 78; --e: 70"></div>
+              </div>
+            </article>
+
+            <article class="card kpi" tabindex="0">
+              <div class="kpi__meta">
+                <div class="kpi__label">Commandes</div>
+                <div class="kpi__value">1 248</div>
+                <div class="kpi__hint"><span class="pill">Temps réel</span> 18 en attente</div>
+              </div>
+              <div class="kpi__spark" aria-hidden="true">
+                <div class="spark" style="--a: 55; --b: 52; --c: 70; --d: 60; --e: 74"></div>
+              </div>
+            </article>
+
+            <article class="card kpi" tabindex="0">
+              <div class="kpi__meta">
+                <div class="kpi__label">Panier moyen</div>
+                <div class="kpi__value">42 500</div>
+                <div class="kpi__hint"><span class="pill pill--good">+4%</span> vs. semaine</div>
+              </div>
+              <div class="kpi__spark" aria-hidden="true">
+                <div class="spark" style="--a: 62; --b: 66; --c: 60; --d: 72; --e: 75"></div>
+              </div>
+            </article>
+
+            <article class="card kpi" tabindex="0">
+              <div class="kpi__meta">
+                <div class="kpi__label">Taux d’erreur</div>
+                <div class="kpi__value">0.18%</div>
+                <div class="kpi__hint"><span class="pill pill--warn">Surveillance</span> API stable</div>
+              </div>
+              <div class="kpi__spark" aria-hidden="true">
+                <div class="spark" style="--a: 20; --b: 15; --c: 18; --d: 12; --e: 16"></div>
+              </div>
+            </article>
+          </div>
+
+          <div class="grid grid--two">
+            <section class="card" aria-label="Activité récente">
+              <div class="card__head">
+                <h2 class="h2">Activité récente</h2>
+                <button class="button button--ghost" type="button" data-action="go-to-orders">Voir tout</button>
+              </div>
+              <div class="timeline">
+                <div class="timeline__item">
+                  <div class="dot" aria-hidden="true"></div>
+                  <div class="timeline__content">
+                    <div class="timeline__title">Commande #A-1042 validée</div>
+                    <div class="timeline__meta">Il y a 5 min · Paiement Orange Money</div>
+                  </div>
+                </div>
+                <div class="timeline__item">
+                  <div class="dot" aria-hidden="true"></div>
+                  <div class="timeline__content">
+                    <div class="timeline__title">Produit “Sneakers X” mis à jour</div>
+                    <div class="timeline__meta">Il y a 22 min · Stock +20</div>
+                  </div>
+                </div>
+                <div class="timeline__item">
+                  <div class="dot" aria-hidden="true"></div>
+                  <div class="timeline__content">
+                    <div class="timeline__title">Nouveau client: K. A.</div>
+                    <div class="timeline__meta">Il y a 1 h · Inscription web</div>
+                  </div>
+                </div>
+                <div class="timeline__item">
+                  <div class="dot" aria-hidden="true"></div>
+                  <div class="timeline__content">
+                    <div class="timeline__title">Export CSV des commandes</div>
+                    <div class="timeline__meta">Il y a 3 h · Par Admin</div>
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            <section class="card" aria-label="Raccourcis">
+              <div class="card__head">
+                <h2 class="h2">Raccourcis</h2>
+                <button class="button button--ghost" type="button" data-action="go-to-settings">Personnaliser</button>
+              </div>
+
+              <div class="quick">
+                <button class="quick__item" type="button" data-action="go-to-products">
+                  <div class="quick__icon" aria-hidden="true">＋</div>
+                  <div class="quick__label">Ajouter produit</div>
+                  <div class="quick__hint">Catalogue</div>
+                </button>
+                <button class="quick__item" type="button" data-action="go-to-orders">
+                  <div class="quick__icon" aria-hidden="true">⇢</div>
+                  <div class="quick__label">Générer facture</div>
+                  <div class="quick__hint">Commandes</div>
+                </button>
+                <button class="quick__item" type="button" data-action="go-to-orders">
+                  <div class="quick__icon" aria-hidden="true">⟲</div>
+                  <div class="quick__label">Remboursement</div>
+                  <div class="quick__hint">Paiements</div>
+                </button>
+                <button class="quick__item" type="button" data-action="export-data">
+                  <div class="quick__icon" aria-hidden="true">⎙</div>
+                  <div class="quick__label">Export</div>
+                  <div class="quick__hint">Rapports</div>
+                </button>
+                <button class="quick__item" type="button" data-action="switch-interface">
+                  <div class="quick__icon" aria-hidden="true">⇄</div>
+                  <div class="quick__label">Interface</div>
+                  <div class="quick__hint">Aurora</div>
+                </button>
+              </div>
+            </section>
+          </div>
+
+          <section class="card" aria-label="Graphiques">
+            <div class="card__head">
+              <h2 class="h2">Graphiques Personnalisables</h2>
+              <div class="card__head-actions">
+                <button class="button button--secondary" type="button" data-action="charts-open">Configurer</button>
+                <button class="button button--ghost" type="button" data-action="charts-reset">Réinitialiser</button>
+              </div>
+            </div>
+
+            <div class="charts">
+              <div class="charts__panel" hidden data-charts-panel>
+                <div class="charts__panel-head">
+                  <div>
+                    <div class="charts__title">Personnalisation</div>
+                    <div class="charts__desc">Active/désactive les widgets, choisis leurs métriques et leur ordre.</div>
+                  </div>
+                  <button class="icon-button" type="button" data-action="charts-close" aria-label="Fermer">
+                    <span aria-hidden="true">×</span>
+                  </button>
+                </div>
+
+                <div class="charts__controls" data-charts-controls>
+                  <div class="charts__control" data-chart-control="sales">
+                    <label class="check">
+                      <input type="checkbox" checked data-chart-enabled="sales" />
+                      <span>Ventes</span>
+                    </label>
+                    <select class="input" data-chart-metric="sales" aria-label="Métrique">
+                      <option value="revenue">Chiffre d’affaires</option>
+                      <option value="orders">Commandes</option>
+                      <option value="aov">Panier moyen</option>
+                    </select>
+                    <div class="charts__order">
+                      <button class="button button--ghost" type="button" data-action="chart-up" data-chart="sales">↑</button>
+                      <button class="button button--ghost" type="button" data-action="chart-down" data-chart="sales">↓</button>
+                    </div>
+                  </div>
+
+                  <div class="charts__control" data-chart-control="funnel">
+                    <label class="check">
+                      <input type="checkbox" checked data-chart-enabled="funnel" />
+                      <span>Conversion</span>
+                    </label>
+                    <select class="input" data-chart-metric="funnel" aria-label="Métrique">
+                      <option value="conversion">Taux de conversion</option>
+                      <option value="abandon">Abandon panier</option>
+                      <option value="refunds">Remboursements</option>
+                    </select>
+                    <div class="charts__order">
+                      <button class="button button--ghost" type="button" data-action="chart-up" data-chart="funnel">↑</button>
+                      <button class="button button--ghost" type="button" data-action="chart-down" data-chart="funnel">↓</button>
+                    </div>
+                  </div>
+
+                  <div class="charts__control" data-chart-control="traffic">
+                    <label class="check">
+                      <input type="checkbox" checked data-chart-enabled="traffic" />
+                      <span>Trafic</span>
+                    </label>
+                    <select class="input" data-chart-metric="traffic" aria-label="Métrique">
+                      <option value="visitors">Visiteurs</option>
+                      <option value="sessions">Sessions</option>
+                      <option value="bounce">Taux de rebond</option>
+                    </select>
+                    <div class="charts__order">
+                      <button class="button button--ghost" type="button" data-action="chart-up" data-chart="traffic">↑</button>
+                      <button class="button button--ghost" type="button" data-action="chart-down" data-chart="traffic">↓</button>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="charts__panel-actions">
+                  <button class="button" type="button" data-action="charts-save">Enregistrer</button>
+                  <button class="button button--secondary" type="button" data-action="charts-close">Fermer</button>
+                </div>
+              </div>
+
+              <div class="charts__grid" data-charts-grid>
+                <article class="card chart" data-chart="sales">
+                  <div class="chart__head">
+                    <div>
+                      <div class="chart__title" data-chart-title="sales">Ventes</div>
+                      <div class="chart__meta" data-chart-meta="sales">Chiffre d’affaires · 30 jours</div>
+                    </div>
+                    <select class="input chart__select" data-chart-quick="sales" aria-label="Période">
+                      <option value="7">7 jours</option>
+                      <option value="30" selected>30 jours</option>
+                      <option value="90">90 jours</option>
+                    </select>
+                  </div>
+                  <div class="chart__canvas" data-chart-canvas="sales" role="img" aria-label="Graphique ventes"></div>
+                </article>
+
+                <article class="card chart" data-chart="funnel">
+                  <div class="chart__head">
+                    <div>
+                      <div class="chart__title" data-chart-title="funnel">Conversion</div>
+                      <div class="chart__meta" data-chart-meta="funnel">Taux de conversion · 30 jours</div>
+                    </div>
+                    <select class="input chart__select" data-chart-quick="funnel" aria-label="Période">
+                      <option value="7">7 jours</option>
+                      <option value="30" selected>30 jours</option>
+                      <option value="90">90 jours</option>
+                    </select>
+                  </div>
+                  <div class="chart__canvas" data-chart-canvas="funnel" role="img" aria-label="Graphique conversion"></div>
+                </article>
+
+                <article class="card chart" data-chart="traffic">
+                  <div class="chart__head">
+                    <div>
+                      <div class="chart__title" data-chart-title="traffic">Trafic</div>
+                      <div class="chart__meta" data-chart-meta="traffic">Visiteurs · 30 jours</div>
+                    </div>
+                    <select class="input chart__select" data-chart-quick="traffic" aria-label="Période">
+                      <option value="7">7 jours</option>
+                      <option value="30" selected>30 jours</option>
+                      <option value="90">90 jours</option>
+                    </select>
+                  </div>
+                  <div class="chart__canvas" data-chart-canvas="traffic" role="img" aria-label="Graphique trafic"></div>
+                </article>
+              </div>
+            </div>
+          </section>
+
+          <section class="card" aria-label="Dernières commandes">
+            <div class="card__head">
+              <h2 class="h2">Dernières commandes</h2>
+              <div class="card__head-actions">
+                <button class="button button--secondary" type="button" data-action="go-to-orders">Filtrer</button>
+                <button class="button" type="button" data-action="go-to-orders">Ouvrir la liste</button>
+              </div>
+            </div>
+
+            <div class="table-wrap" role="region" aria-label="Table commandes" tabindex="0">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th scope="col">Référence</th>
+                    <th scope="col">Client</th>
+                    <th scope="col">Statut</th>
+                    <th scope="col">Total</th>
+                    <th scope="col">Date</th>
+                    <th scope="col" class="ta-right">Action</th>
+                  </tr>
+                </thead>
+                <tbody id="ordersTbody" data-orders-body>
+                  <tr>
+                    <td><span class="mono">A-1042</span></td>
+                    <td>K. A.</td>
+                    <td><span class="status status--ok">Payée</span></td>
+                    <td>58 900</td>
+                    <td>Aujourd’hui</td>
+                    <td class="ta-right"><button class="button button--ghost" type="button" data-action="view-details" data-id="A-1042">Détails</button></td>
+                  </tr>
+                  <tr>
+                    <td><span class="mono">A-1041</span></td>
+                    <td>S. D.</td>
+                    <td><span class="status status--warn">En attente</span></td>
+                    <td>21 000</td>
+                    <td>Aujourd’hui</td>
+                    <td class="ta-right"><button class="button button--ghost" type="button" data-action="view-details" data-id="A-1041">Détails</button></td>
+                  </tr>
+                  <tr>
+                    <td><span class="mono">A-1040</span></td>
+                    <td>M. N.</td>
+                    <td><span class="status">Préparation</span></td>
+                    <td>103 500</td>
+                    <td>Hier</td>
+                    <td class="ta-right"><button class="button button--ghost" type="button" data-action="view-details" data-id="A-1040">Détails</button></td>
+                  </tr>
+                  <tr>
+                    <td><span class="mono">A-1039</span></td>
+                    <td>J. P.</td>
+                    <td><span class="status status--bad">Échec</span></td>
+                    <td>14 900</td>
+                    <td>Hier</td>
+                    <td class="ta-right"><button class="button button--ghost" type="button" data-action="view-details" data-id="A-1039">Détails</button></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          <section class="card" id="userFormSection" hidden style="margin-top: 20px;">
+            <h2 class="h2" style="margin-bottom: 14px;">Nouvel Utilisateur</h2>
+            <form class="form" action="#" method="post">
+              <div class="form__grid">
+                <div class="field">
+                  <label class="label">Nom d'utilisateur</label>
+                  <input class="input" placeholder="jdoe" />
+                </div>
+                <div class="field">
+                  <label class="label">Email</label>
+                  <input class="input" type="email" placeholder="email@exemple.com" />
+                </div>
+                <div class="field">
+                  <label class="label">Mot de passe</label>
+                  <input class="input" type="password" placeholder="••••••••" />
+                </div>
+                <div class="field">
+                  <label class="label">Rôle</label>
+                  <select class="input">
+                    <option>Staff</option>
+                    <option>Superuser</option>
+                  </select>
+                </div>
+              </div>
+              <div class="form__actions">
+                <button class="button" type="button" onclick="this.closest('#userFormSection').hidden=true">Enregistrer</button>
+                <button class="button button--ghost" type="button" onclick="this.closest('#userFormSection').hidden=true">Annuler</button>
+              </div>
+            </form>
+          </section>
+        </section>
+
+        <section class="view" data-view="orders" aria-label="Commandes">
+          <div class="page-head">
+            <div>
+              <h1 class="h1">Commandes</h1>
+              <p class="muted">Liste, recherche et actions rapides.</p>
+            </div>
+            <div class="page-head__actions">
+              <button class="button" type="button" data-action="create-order">Créer</button>
+              <button class="button button--secondary" type="button" data-action="export-data">Exporter</button>
+            </div>
+          </div>
+
+          <section class="card">
+            <div class="filters">
+              <div class="field">
+                <label class="label" for="qOrders">Recherche</label>
+                <input id="qOrders" class="input" placeholder="Référence, client, statut…" />
+              </div>
+              <div class="field">
+                <label class="label" for="statusOrders">Statut</label>
+                <select id="statusOrders" class="input">
+                  <option>Tous</option>
+                  <option>Payée</option>
+                  <option>En attente</option>
+                  <option>Préparation</option>
+                  <option>Échec</option>
+                </select>
+              </div>
+              <div class="field">
+                <label class="label" for="dateOrders">Période</label>
+                <select id="dateOrders" class="input">
+                  <option>7 jours</option>
+                  <option>30 jours</option>
+                  <option>90 jours</option>
+                </select>
+              </div>
+              <div class="filters__actions">
+                <button class="button" type="button" data-action="apply-filters">Appliquer</button>
+                <button class="button button--ghost" type="button" data-action="reset-filters">Réinitialiser</button>
+              </div>
+            </div>
+
+            <div class="table-wrap" role="region" aria-label="Table commandes" tabindex="0">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th scope="col">Référence</th>
+                    <th scope="col">Client</th>
+                    <th scope="col">Statut</th>
+                    <th scope="col">Total</th>
+                    <th scope="col">Paiement</th>
+                    <th scope="col" class="ta-right">Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><span class="mono">A-1042</span></td>
+                    <td>K. A.</td>
+                    <td><span class="status status--ok">Payée</span></td>
+                    <td>58 900</td>
+                    <td>OM</td>
+                    <td class="ta-right">
+                      <div class="row-actions">
+                        <button class="button button--ghost" type="button" data-action="view-details" data-id="A-1042">Voir</button>
+                        <button class="button button--ghost" type="button" data-action="edit-order" data-id="A-1042">Modifier</button>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td><span class="mono">A-1041</span></td>
+                    <td>S. D.</td>
+                    <td><span class="status status--warn">En attente</span></td>
+                    <td>21 000</td>
+                    <td>MTN</td>
+                    <td class="ta-right">
+                      <div class="row-actions">
+                        <button class="button button--ghost" type="button" data-action="view-details" data-id="A-1041">Voir</button>
+                        <button class="button button--ghost" type="button" data-action="edit-order" data-id="A-1041">Modifier</button>
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="pagination" aria-label="Pagination">
+              <button class="button button--secondary" type="button" disabled data-action="prev-page">Précédent</button>
+              <div class="pagination__meta">Page <span class="mono">1</span> sur <span class="mono">42</span></div>
+              <button class="button button--secondary" type="button" data-action="next-page">Suivant</button>
+            </div>
+          </section>
+        </section>
+
+        <section class="view" data-view="products" aria-label="Produits">
+          <div class="page-head">
+            <div>
+              <h1 class="h1">Produits</h1>
+              <p class="muted">Gestion du catalogue.</p>
+            </div>
+            <div class="page-head__actions">
+              <button class="button" type="button" data-action="reset-product-form">Ajouter</button>
+            </div>
+          </div>
+
+          <section class="card">
+            <div class="split">
+              <div>
+                <h2 class="h2">Créer / Modifier</h2>
+                <p class="muted">Exemple de formulaire style admin (adaptable aux forms Django).</p>
+              </div>
+              <div class="pill">Brouillon</div>
+            </div>
+
+            <form class="form" action="#" method="post" id="productForm">
+              <div class="form__grid">
+                <div class="field">
+                  <label class="label" for="pName">Nom</label>
+                  <input id="pName" class="input" placeholder="Nom du produit" />
+                </div>
+                <div class="field">
+                  <label class="label" for="pSku">SKU</label>
+                  <input id="pSku" class="input" placeholder="EX: SNK-2026" />
+                </div>
+                <div class="field">
+                  <label class="label" for="pPrice">Prix</label>
+                  <input id="pPrice" class="input" placeholder="0" inputmode="numeric" />
+                </div>
+                <div class="field">
+                  <label class="label" for="pStock">Stock</label>
+                  <input id="pStock" class="input" placeholder="0" inputmode="numeric" />
+                </div>
+                <div class="field field--full">
+                  <label class="label" for="pDesc">Description</label>
+                  <textarea id="pDesc" class="input" rows="5" placeholder="Description courte…"></textarea>
+                </div>
+              </div>
+
+              <div class="form__actions">
+                <button class="button" type="button" data-action="save-product">Enregistrer</button>
+                <button class="button button--secondary" type="button" data-action="save-product-continue">Enregistrer et continuer</button>
+                <button class="button button--ghost" type="button" data-action="cancel-product">Annuler</button>
+              </div>
+            </form>
+          </section>
+        </section>
+
+        <section class="view" data-view="customers" aria-label="Clients">
+          <div class="page-head">
+            <div>
+              <h1 class="h1">Clients</h1>
+              <p class="muted">Gestion de la base client.</p>
+            </div>
+            <div class="page-head__actions">
+              <button class="button" type="button" data-action="create-customer">Ajouter un client</button>
+            </div>
+          </div>
+
+          <section class="card">
+            <div class="table-wrap" role="region" aria-label="Table clients" tabindex="0">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th scope="col">Nom</th>
+                    <th scope="col">Email</th>
+                    <th scope="col">Téléphone</th>
+                    <th scope="col">Statut</th>
+                    <th scope="col" class="ta-right">Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><span class="mono">Konan A.</span></td>
+                    <td>konan.a@example.com</td>
+                    <td>+225 07 07 00 00 01</td>
+                    <td><span class="status status--ok">Actif</span></td>
+                    <td class="ta-right">
+                      <div class="row-actions">
+                        <button class="button button--ghost" type="button">Modifier</button>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td><span class="mono">Sery D.</span></td>
+                    <td>sery.d@example.com</td>
+                    <td>+225 05 05 00 00 02</td>
+                    <td><span class="status status--ok">Actif</span></td>
+                    <td class="ta-right">
+                      <div class="row-actions">
+                        <button class="button button--ghost" type="button">Modifier</button>
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          <section class="card" id="customerFormSection" hidden style="margin-top: 20px;">
+            <h2 class="h2" style="margin-bottom: 14px;">Nouveau Client</h2>
+            <form class="form" action="#" method="post">
+              <div class="form__grid">
+                <div class="field">
+                  <label class="label">Nom complet</label>
+                  <input class="input" placeholder="Ex: Jean Dupont" />
+                </div>
+                <div class="field">
+                  <label class="label">Email</label>
+                  <input class="input" type="email" placeholder="email@exemple.com" />
+                </div>
+                <div class="field">
+                  <label class="label">Téléphone</label>
+                  <input class="input" placeholder="+225 ..." />
+                </div>
+                <div class="field">
+                  <label class="label">Adresse</label>
+                  <input class="input" placeholder="Abidjan, Cocody..." />
+                </div>
+              </div>
+              <div class="form__actions">
+                <button class="button" type="button" onclick="this.closest('#customerFormSection').hidden=true">Enregistrer</button>
+                <button class="button button--ghost" type="button" onclick="this.closest('#customerFormSection').hidden=true">Annuler</button>
+              </div>
+            </form>
+          </section>
+        </section>
+
+        <section class="view" data-view="users" aria-label="Utilisateurs">
+          <div class="page-head">
+            <div>
+              <h1 class="h1">Utilisateurs</h1>
+              <p class="muted">Gestion des accès et des rôles.</p>
+            </div>
+            <div class="page-head__actions">
+              <button class="button" type="button" data-action="create-user">Ajouter un utilisateur</button>
+            </div>
+          </div>
+
+          <section class="card">
+            <div class="table-wrap" role="region" aria-label="Table utilisateurs" tabindex="0">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th scope="col">Utilisateur</th>
+                    <th scope="col">Email</th>
+                    <th scope="col">Rôle</th>
+                    <th scope="col">Dernière connexion</th>
+                    <th scope="col" class="ta-right">Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>
+                      <div class="user">
+                        <div class="avatar" style="width:28px;height:28px;font-size:12px;">A</div>
+                        <div class="user__name">admin</div>
+                      </div>
+                    </td>
+                    <td>admin@example.com</td>
+                    <td><span class="pill pill--good">Superuser</span></td>
+                    <td>Aujourd'hui</td>
+                    <td class="ta-right">
+                      <div class="row-actions">
+                        <button class="button button--ghost" type="button">Modifier</button>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <div class="user">
+                        <div class="avatar" style="width:28px;height:28px;font-size:12px;">J</div>
+                        <div class="user__name">jean</div>
+                      </div>
+                    </td>
+                    <td>jean@example.com</td>
+                    <td><span class="pill">Staff</span></td>
+                    <td>Hier</td>
+                    <td class="ta-right">
+                      <div class="row-actions">
+                        <button class="button button--ghost" type="button">Modifier</button>
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+        </section>
+
+        <section class="view" data-view="settings" aria-label="Paramètres">
+          <div class="page-head">
+            <div>
+              <h1 class="h1">Paramètres</h1>
+              <p class="muted">Mode + Couleur globale. (Dans Django: stocké en DB.)</p>
+            </div>
+          </div>
+
+          <section class="card">
+            <div class="settings">
+              <div class="settings__row">
+                <div>
+                  <div class="settings__title">Interface d'administration</div>
+                  <div class="settings__desc">Choisissez l'interface d'administration que vous souhaitez utiliser.</div>
+                </div>
+              </div>
+              <div class="settings__row" style="margin-top: 12px;">
+                <div class="settings__controls">
+                  <button class="button" type="button" data-action="open-django-admin">Ouvrir Django Admin</button>
+                </div>
+              </div>
+              
+              <div class="interface-switch">
+                <div class="interface-card" data-action="switch-interface-classic">
+                  <div class="interface-card__icon">
+                    <span aria-hidden="true">≣</span>
+                  </div>
+                  <div class="interface-card__title">INTERFACE CLASSIQUE</div>
+                  <div class="interface-card__desc">AdminLTE, tableau de bord traditionnel</div>
+                  <div class="interface-card__action">
+                    <span>→ PASSER À CETTE INTERFACE</span>
+                  </div>
+                </div>
+
+                <div class="interface-card" data-action="switch-interface-modern">
+                  <div class="interface-card__icon">
+                    <span aria-hidden="true">❖</span>
+                  </div>
+                  <div class="interface-card__title">INTERFACE MODERNE</div>
+                  <div class="interface-card__desc">Design épuré, sidebar, thèmes</div>
+                  <div class="interface-card__action">
+                    <span>→ PASSER À CETTE INTERFACE</span>
+                  </div>
+                </div>
+
+                <div class="interface-card is-active" data-action="switch-interface-aurora">
+                  <div class="interface-card__icon">
+                    <span aria-hidden="true">✦</span>
+                  </div>
+                  <div class="interface-card__title">INTERFACE AURORA</div>
+                  <div class="interface-card__desc">Ultra-minimal, halos de couleur et fluidité</div>
+                  <div class="interface-card__action">
+                    <span>✓ ACTUELLE</span>
+                  </div>
+                </div>
+              </div>
+              <div class="settings__row" style="margin-top: 16px;">
+                <div class="settings__controls">
+                  <label class="toggle" for="adminUiToggle">
+                    <span class="toggle__label">Moderne</span>
+                    <input id="adminUiToggle" type="checkbox" role="switch" aria-label="Basculer interface" />
+                    <span class="toggle__ui" aria-hidden="true"></span>
+                  </label>
+                </div>
+              </div>
+
+              <div class="settings__row" style="margin-top: 32px; padding-top: 32px; border-top: 1px solid var(--border);">
+                <div>
+                  <div class="settings__title">Apparence</div>
+                  <div class="settings__desc">Choisis le mode et la couleur principale du backoffice.</div>
+                </div>
+                <div class="settings__controls">
+                  <button class="button button--secondary" type="button" data-action="set-light">Light</button>
+                  <button class="button button--secondary" type="button" data-action="set-dark">Dark</button>
+                </div>
+              </div>
+
+              <div class="settings__row">
+                <div>
+                  <div class="settings__title">Couleur principale</div>
+                  <div class="settings__desc">Appliquée à la navigation, boutons, liens et états actifs.</div>
+                </div>
+                <div class="settings__controls">
+                  <input class="input input--color" type="color" value="#4f46e5" data-action="primary-color" aria-label="Choisir la couleur principale" />
+                  <button class="button" type="button" data-action="random-color">Surprise</button>
+                </div>
+              </div>
+
+              <div class="settings__row">
+                <div>
+                  <div class="settings__title">Sauvegarde</div>
+                  <div class="settings__desc">Ici c’est persisté en localStorage. En Django, on persistera en DB (singleton) avec un formulaire admin.</div>
+                </div>
+                <div class="settings__controls">
+                  <button class="button" type="button" data-action="save-theme">Enregistrer</button>
+                  <button class="button button--ghost" type="button" data-action="reset-theme">Réinitialiser</button>
+                </div>
+              </div>
+
+              <div class="settings__row">
+                <div>
+                  <div class="settings__title">Terminologie</div>
+                  <div class="settings__desc">Change les libellés de l’interface (ex: “Produits” → “Articles”).</div>
+                </div>
+                <div class="settings__controls">
+                  <select class="input" data-action="terminology" aria-label="Choisir une terminologie">
+                    <option value="standard">Standard</option>
+                    <option value="commerce">Commerce</option>
+                    <option value="en">English</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </section>
+        </section>
+      </main>
+
+      <footer class="footer">
+        <div class="muted">© Admin Console</div>
+        <div class="muted">Version UI: <span class="mono">0.1</span></div>
+      </footer>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="assets/app.js"></script>
+</body>
+</html>
