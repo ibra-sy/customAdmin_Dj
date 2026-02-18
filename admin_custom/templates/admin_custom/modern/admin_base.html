@@ -179,7 +179,10 @@
           <div class="dropdown-menu">
             <a href="{% url 'admin:password_change' %}" class="dropdown-item"><i class="fa-solid fa-key"></i> Changer le mot de passe</a>
             <div class="dropdown-divider"></div>
-            <a href="{% url 'admin:logout' %}" class="dropdown-item"><i class="fa-solid fa-right-from-bracket"></i> Déconnexion</a>
+            <form method="post" action="{% url 'admin:logout' %}" style="margin:0;">
+              {% csrf_token %}
+              <button type="submit" class="dropdown-item border-0 w-100 text-start bg-transparent" style="cursor:pointer;"><i class="fa-solid fa-right-from-bracket"></i> Déconnexion</button>
+            </form>
           </div>
         </div>
       </div>

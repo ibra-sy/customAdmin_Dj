@@ -13,4 +13,7 @@ urlpatterns = [
     path('api/dashboard-metrics/', views.dashboard_metrics, name='dashboard_metrics'),
     path('api/dashboard-config/', views.dashboard_config_get, name='dashboard_config_get'),
     path('api/dashboard-config/save/', views.dashboard_config_save, name='dashboard_config_save'),
+    path('api/dashboard-charts/', views.dashboard_charts_get, name='dashboard_charts_get'),
+    path('api/dashboard-chart/save/', views.dashboard_chart_save, name='dashboard_chart_save'),
+    path('api/dashboard-chart/delete/', views.dashboard_chart_delete, name='dashboard_chart_delete'),
 ]

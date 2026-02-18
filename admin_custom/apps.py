@@ -113,15 +113,21 @@ class AdminCustomConfig(AppConfig):
         
         # 3) Remplacer User, Group, Permission par nos classes d'admin
         from django.contrib.auth.models import User, Group, Permission
-        from django.contrib.auth.admin import GroupAdmin
+        from django.contrib.auth.admin import UserAdmin as DjangoUserAdmin, GroupAdmin
         from .user_admin import CustomUserAdmin
         from .modern_model_admin import ModernTemplateMixin
         
-        for model in (User, Group, Permission):
+        # User : ne remplacer que si l'admin actuel est exactement celui de Django (conserver l'admin métier du projet)
+        if User in custom_admin_site._registry:
+            current_user_admin_instance = custom_admin_site._registry[User]
+            if type(current_user_admin_instance) is DjangoUserAdmin:
+                custom_admin_site.unregister(User)
+                custom_admin_site.register(User, CustomUserAdmin)
+        
+        for model in (Group, Permission):
             if model in custom_admin_site._registry:
                 custom_admin_site.unregister(model)
         
-        custom_admin_site.register(User, CustomUserAdmin)
         custom_admin_site.register(Group, GroupAdmin)
         custom_admin_site.register(Permission, type(
             'PermissionAdmin', (ModernTemplateMixin, admin.ModelAdmin), {

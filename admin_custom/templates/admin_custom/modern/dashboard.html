@@ -4,10 +4,13 @@
 {% block content %}
 <h1 class="page-title">Tableau de bord</h1>
 
-<div class="mb-3">
+<div class="mb-3 d-flex gap-2 flex-wrap">
   <a href="{% url 'admin:dashboard_customize' %}" class="btn btn-sm btn-outline-primary" id="btn-customize-dashboard" title="Choisir les indicateurs affichés">
     <i class="fa-solid fa-sliders"></i> Personnaliser l'affichage
   </a>
+  <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#createChartModal" id="btn-create-chart">
+    <i class="fa-solid fa-plus"></i> Créer un graphique
+  </button>
 </div>
 
 <div class="row g-4 mb-5" id="dashboard-metrics-row" data-customize-url="{% url 'admin:dashboard_customize' %}" style="--bs-gutter-x:1.5rem; --bs-gutter-y:1.5rem;">
@@ -100,31 +103,37 @@
 })();
 </script>
 
+<!-- Section Graphiques -->
+<div class="row g-4 mb-5" id="dashboard-charts-row">
+  <!-- Les graphiques seront chargés ici dynamiquement -->
+</div>
+
+<!-- Section Liens rapides - Pleine largeur -->
 <div class="row g-4 mb-5">
-  <div class="col-12 col-lg-8">
+  <div class="col-12">
     <div class="card">
-      <div class="card-header">Tendances - Revenus</div>
-      <div class="card-body" style="height:320px;">
-        <canvas id="chart-line"></canvas>
+      <div class="card-header">
+        <h3 class="mb-0"><i class="fa-solid fa-link"></i> Liens rapides</h3>
       </div>
-    </div>
-  </div>
-  <div class="col-12 col-lg-4">
-    <div class="card">
-      <div class="card-header">Liens rapides</div>
       <div class="card-body">
-        <div class="d-flex flex-column gap-2">
-          <a href="{% url 'admin:admin_charts' %}" class="btn btn-primary">
-            <i class="fa-solid fa-chart-line"></i> Graphiques
-          </a>
-          <a href="{% url 'admin:admin_grids' %}" class="btn btn-secondary">
-            <i class="fa-solid fa-table"></i> Grilles de données
-          </a>
+        <div class="row g-3">
+          <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+            <a href="{% url 'admin:admin_charts' %}" class="btn btn-primary w-100">
+              <i class="fa-solid fa-chart-line"></i> Graphiques
+            </a>
+          </div>
+          <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+            <a href="{% url 'admin:admin_grids' %}" class="btn btn-secondary w-100">
+              <i class="fa-solid fa-table"></i> Grilles de données
+            </a>
+          </div>
           {% for app in app_list %}
           {% for model in app.models %}
-          <a href="{{ model.admin_url }}" class="btn btn-secondary btn-sm">
-            <i class="fa-solid fa-arrow-right"></i> {{ model.name }}
-          </a>
+          <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+            <a href="{{ model.admin_url }}" class="btn btn-outline-secondary w-100">
+              <i class="fa-solid fa-arrow-right"></i> {{ model.name }}
+            </a>
+          </div>
           {% endfor %}
           {% endfor %}
         </div>
@@ -133,31 +142,80 @@
   </div>
 </div>
 
-<div class="row g-4">
-  <div class="col-12">
-    <div class="card">
-      <div class="card-header">Accès aux applications</div>
-      <div class="card-body">
-        <div class="row g-3">
-          {% for app in app_list %}
-          <div class="col-md-6 col-lg-4">
-            <div class="card" style="border:1px solid var(--color-border);">
-              <div class="card-header" style="font-size:1rem;">{{ app.name }}</div>
-              <div class="card-body">
-                <div class="d-flex flex-wrap gap-2">
-                  {% for model in app.models %}
-                  <a href="{{ model.admin_url }}" class="btn btn-primary btn-sm">{{ model.name }}</a>
-                  {% empty %}
-                  <span class="text-muted">Aucun modèle</span>
-                  {% endfor %}
-                </div>
-              </div>
+<!-- Modal pour créer/éditer un graphique -->
+<div class="modal fade" id="createChartModal" tabindex="-1" aria-labelledby="createChartModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="createChartModalLabel">Créer un graphique</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form id="chartForm">
+          <input type="hidden" id="chartId" name="id">
+          <div class="mb-3">
+            <label for="chartName" class="form-label">Nom du graphique *</label>
+            <input type="text" class="form-control" id="chartName" name="name" required>
+          </div>
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label for="chartModel" class="form-label">Modèle *</label>
+              <select class="form-select" id="chartModel" name="model_name" required>
+                <option value="">-- Sélectionner un modèle --</option>
+              </select>
+            </div>
+            <div class="col-md-6 mb-3">
+              <label for="chartField" class="form-label">Champ *</label>
+              <select class="form-select" id="chartField" name="field_name" required>
+                <option value="">-- Sélectionner un modèle d'abord --</option>
+              </select>
             </div>
           </div>
-          {% empty %}
-          <p class="text-muted">Aucune application configurée.</p>
-          {% endfor %}
-        </div>
+          <div class="row">
+            <div class="col-md-4 mb-3">
+              <label for="chartType" class="form-label">Type de graphique *</label>
+              <select class="form-select" id="chartType" name="chart_type" required>
+                <option value="line">Courbe</option>
+                <option value="bar">Histogramme</option>
+                <option value="pie">Camembert</option>
+                <option value="doughnut">Donut</option>
+                <option value="area">Aire</option>
+              </select>
+            </div>
+            <div class="col-md-4 mb-3">
+              <label for="chartFrequency" class="form-label">Fréquence *</label>
+              <select class="form-select" id="chartFrequency" name="frequency" required>
+                <option value="day">Jour</option>
+                <option value="week">Semaine</option>
+                <option value="month" selected>Mois</option>
+                <option value="quarter">Trimestre</option>
+                <option value="year">Année</option>
+              </select>
+            </div>
+            <div class="col-md-4 mb-3">
+              <label for="chartOperation" class="form-label">Opération *</label>
+              <select class="form-select" id="chartOperation" name="operation" required>
+                <option value="sum" selected>Somme</option>
+                <option value="avg">Moyenne</option>
+                <option value="count">Nombre</option>
+              </select>
+            </div>
+          </div>
+          <div class="mb-3">
+            <button type="button" class="btn btn-outline-primary" id="btn-preview-chart">
+              <i class="fa-solid fa-eye"></i> Aperçu
+            </button>
+          </div>
+          <div id="chartPreview" style="display:none;">
+            <canvas id="previewChartCanvas"></canvas>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+        <button type="button" class="btn btn-primary" id="btn-save-chart">
+          <i class="fa-solid fa-save"></i> Enregistrer
+        </button>
       </div>
     </div>
   </div>
@@ -166,35 +224,5 @@
 
 {% block extrajs %}
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-  fetch('/admin_custom/api/chart-data/?model=Order&field=total_amount&type=line&frequency=month&operation=sum')
-    .then(function(r) { return r.json(); })
-    .then(function(data) {
-      var ctx = document.getElementById('chart-line');
-      if (ctx && data.labels) {
-        new Chart(ctx.getContext('2d'), {
-          type: 'line',
-          data: {
-            labels: data.labels,
-            datasets: [{
-              label: 'Revenus (€)',
-              data: data.data,
-              borderColor: 'rgb(59, 130, 246)',
-              backgroundColor: 'rgba(59, 130, 246, 0.1)',
-              tension: 0.4,
-              fill: true
-            }]
-          },
-          options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            scales: { y: { beginAtZero: true } }
-          }
-        });
-      }
-    })
-    .catch(function() {});
-});
-</script>
+<script src="{% static 'admin_custom/js/dashboard_charts.js' %}"></script>
 {% endblock %}

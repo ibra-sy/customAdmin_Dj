@@ -64,10 +64,12 @@ def patched_changelist_view(self, request, extra_context=None):
     try:
         response = self._original_changelist_view(request, extra_context)
         
-        # Intercepter TemplateResponse pour forcer le template si nécessaire
+        # Intercepter TemplateResponse : forcer le template personnalisé en mode classique ET moderne
+        # (en mode classique, sans ça, la réponse peut encore utiliser admin/change_list.html → cadre Django)
         if isinstance(response, TemplateResponse):
-            if use_modern and 'admin/change_list.html' in str(response.template_name):
-                response.template_name = 'admin_custom/modern/change_list.html'
+            resp_name = str(response.template_name)
+            if 'admin/change_list.html' in resp_name and 'admin_custom' not in resp_name:
+                response.template_name = template_name
                 if 'admin_base_template' not in response.context_data:
                     response.context_data['admin_base_template'] = admin_base_template
         
@@ -103,10 +105,11 @@ def patched_changeform_view(self, request, object_id=None, form_url='', extra_co
     try:
         response = self._original_changeform_view(request, object_id, form_url, extra_context)
         
-        # Intercepter TemplateResponse pour forcer le template si nécessaire
+        # Intercepter TemplateResponse : forcer le template personnalisé en mode classique ET moderne
         if isinstance(response, TemplateResponse):
-            if use_modern and 'admin/change_form.html' in str(response.template_name):
-                response.template_name = 'admin_custom/modern/change_form.html'
+            resp_name = str(response.template_name)
+            if 'admin/change_form.html' in resp_name and 'admin_custom' not in resp_name:
+                response.template_name = template_name
                 if 'admin_base_template' not in response.context_data:
                     response.context_data['admin_base_template'] = admin_base_template
         

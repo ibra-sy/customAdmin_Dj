@@ -61,7 +61,8 @@ class DashboardChart(models.Model):
         ('year', 'Année'),
     ]
 
-    name = models.CharField(max_length=200, unique=True)
+    name = models.CharField(max_length=200)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='dashboard_charts', null=True, blank=True)
     chart_type = models.CharField(max_length=20, choices=CHART_TYPES, default='line')
     model_name = models.CharField(max_length=200)  # Nom du modèle principal
     field_name = models.CharField(max_length=200)  # Champ à analyser
@@ -76,3 +77,4 @@ class DashboardChart(models.Model):
     class Meta:
         verbose_name = "Graphique"
         verbose_name_plural = "Graphiques"
+        unique_together = [['name', 'user']]  # Un nom unique par utilisateur

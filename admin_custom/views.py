@@ -469,3 +469,110 @@ def dashboard_config_save(request):
         defaults={'metrics_config': config},
     )
     return JsonResponse({'ok': True, 'config': obj.metrics_config})
+
+
+@staff_member_required
+@require_http_methods(["GET"])
+def dashboard_charts_get(request):
+    """Retourne tous les graphiques sauvegardés pour l'utilisateur connecté."""
+    from .models import DashboardChart
+    charts = DashboardChart.objects.filter(user=request.user).order_by('-created_at')
+    charts_data = []
+    for chart in charts:
+        charts_data.append({
+            'id': chart.id,
+            'name': chart.name,
+            'chart_type': chart.chart_type,
+            'model_name': chart.model_name,
+            'field_name': chart.field_name,
+            'frequency': chart.frequency,
+            'operation': chart.operation,
+        })
+    return JsonResponse({'charts': charts_data})
+
+
+@staff_member_required
+@require_http_methods(["POST"])
+def dashboard_chart_save(request):
+    """Enregistre un graphique pour l'utilisateur connecté."""
+    from .models import DashboardChart
+    try:
+        body = json.loads(request.body) if request.body else {}
+        name = body.get('name', '').strip()
+        chart_type = body.get('chart_type', 'line')
+        model_name = body.get('model_name', '')
+        field_name = body.get('field_name', '')
+        frequency = body.get('frequency', 'month')
+        operation = body.get('operation', 'sum')
+        chart_id = body.get('id')  # Pour la mise à jour
+        
+        if not name or not model_name or not field_name:
+            return JsonResponse({'error': 'Nom, modèle et champ sont requis'}, status=400)
+        
+        if chart_id:
+            # Mise à jour
+            try:
+                chart = DashboardChart.objects.get(id=chart_id, user=request.user)
+                chart.name = name
+                chart.chart_type = chart_type
+                chart.model_name = model_name
+                chart.field_name = field_name
+                chart.frequency = frequency
+                chart.operation = operation
+                chart.save()
+            except DashboardChart.DoesNotExist:
+                return JsonResponse({'error': 'Graphique non trouvé'}, status=404)
+        else:
+            # Création
+            chart, created = DashboardChart.objects.get_or_create(
+                name=name,
+                user=request.user,
+                defaults={
+                    'chart_type': chart_type,
+                    'model_name': model_name,
+                    'field_name': field_name,
+                    'frequency': frequency,
+                    'operation': operation,
+                }
+            )
+            if not created:
+                return JsonResponse({'error': 'Un graphique avec ce nom existe déjà'}, status=400)
+        
+        return JsonResponse({
+            'ok': True,
+            'chart': {
+                'id': chart.id,
+                'name': chart.name,
+                'chart_type': chart.chart_type,
+                'model_name': chart.model_name,
+                'field_name': chart.field_name,
+                'frequency': chart.frequency,
+                'operation': chart.operation,
+            }
+        })
+    except json.JSONDecodeError:
+        return JsonResponse({'error': 'JSON invalide'}, status=400)
+    except Exception as e:
+        return JsonResponse({'error': str(e)}, status=400)
+
+
+@staff_member_required
+@require_http_methods(["POST"])
+def dashboard_chart_delete(request):
+    """Supprime un graphique pour l'utilisateur connecté."""
+    from .models import DashboardChart
+    try:
+        body = json.loads(request.body) if request.body else {}
+        chart_id = body.get('id')
+        
+        if not chart_id:
+            return JsonResponse({'error': 'ID du graphique requis'}, status=400)
+        
+        try:
+            chart = DashboardChart.objects.get(id=chart_id, user=request.user)
+            chart.delete()
+            return JsonResponse({'ok': True})
+        except DashboardChart.DoesNotExist:
+            return JsonResponse({'error': 'Graphique non trouvé'}, status=404)
+    except json.JSONDecodeError:
+        return JsonResponse({'error': 'JSON invalide'}, status=400)

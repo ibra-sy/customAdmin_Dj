@@ -8,6 +8,12 @@
 <link rel="stylesheet" href="{% static 'admin_custom/css/theme_override.css' %}">
 {% endblock %}
 
+{% block extrahead %}
+{{ block.super }}
+<script src="{% static 'admin/js/actions.js' %}"></script>
+<script src="{% static 'admin_custom/js/modern_admin_actions.js' %}"></script>
+{% endblock %}
+
 {% block content %}
 <div id="content-main" class="admin-frontend-changelist">
   <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:var(--space-4); margin-bottom:var(--space-6);">

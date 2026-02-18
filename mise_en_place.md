@@ -75,21 +75,31 @@ MIDDLEWARE = [
 
 #### TEMPLATES
 
-Vérifiez que `APP_DIRS = True` et que `django.template.context_processors.request` est présent :
+Vérifiez que `APP_DIRS = True` et que `django.template.context_processors.request` est présent. **Pour que l’interface classique (AdminLTE) s’affiche sur les listes et formulaires** (et non l’admin standard Django), ajoutez `DIRS` et créez la surcharge suivante :
 
 ```python
+# settings.py - BASE_DIR = Path(__file__).resolve().parent.parent
 TEMPLATES = [{
     'BACKEND': 'django.template.backends.django.DjangoTemplates',
-    'APP_DIRS': True,  # ← IMPORTANT
+    'DIRS': [BASE_DIR / 'templates'],   # ← requis pour l’interface classique
+    'APP_DIRS': True,
     'OPTIONS': {
         'context_processors': [
-            'django.template.context_processors.request',  # ← REQUIS
+            'django.template.context_processors.request',
             'django.contrib.auth.context_processors.auth',
             'django.contrib.messages.context_processors.messages',
         ],
     },
 }]
 ```
+
+Créez le dossier `templates/admin/` à la racine du projet et le fichier **`templates/admin/base_site.html`** avec le contenu suivant (une seule ligne) :
+
+```django
+{% extends "admin_custom/base_site.html" %}
+```
+
+Ainsi, toutes les pages admin (listes, formulaires) qui s’appuient sur `admin/base_site.html` utilisent le cadre AdminLTE de admin_custom en mode classique. Un exemple est fourni dans `admin_custom/project_override_example/admin_base_site.html` (à copier dans `templates/admin/base_site.html`).
 
 ### 3. Configurer `urls.py`
 
@@ -196,6 +206,7 @@ Après installation, vérifiez que :
 | **Les styles ne s'affichent pas** | `python manage.py collectstatic` puis Ctrl+Shift+R (hard refresh) |
 | **Erreur "No module named admin_custom"** | Vérifiez que le dossier `admin_custom/` est à la racine du projet et dans `INSTALLED_APPS` (en dernier) |
 | **Les inlines ne s'affichent pas** | Utilisez `path('admin/', custom_admin_site.urls)`. Vérifiez que vos `ModelAdmin` définissent bien `inlines`. Redémarrez le serveur. |
+| **Interface classique : listes/formulaires affichent l’admin Django (bleu/noir)** | Ajoutez `DIRS`: `[BASE_DIR / 'templates']` dans `TEMPLATES` et créez `templates/admin/base_site.html` avec : `{% extends "admin_custom/base_site.html" %}`. Redémarrez le serveur. |
 
 ---
 
@@ -244,10 +255,11 @@ class MonAppConfig(AppConfig):
 - [ ] `'admin_custom'` ajouté en dernier dans `INSTALLED_APPS`
 - [ ] Middleware ajouté à la fin de `MIDDLEWARE`
 - [ ] `path('admin/', custom_admin_site.urls)` dans `urls.py`
+- [ ] `DIRS`: `[BASE_DIR / 'templates']` dans `TEMPLATES` et fichier `templates/admin/base_site.html` créé (pour l’interface classique)
 - [ ] Migrations appliquées (`python manage.py migrate`)
 - [ ] Serveur Django redémarré
 - [ ] Vérification : `/admin/` affiche le thème personnalisé
-- [ ] Vérification : Les listes affichent toutes les colonnes
+- [ ] Vérification : Les listes (interface classique) restent en AdminLTE, pas en admin Django
 - [ ] Vérification : Les formulaires affichent les inlines en onglets
 
 ---

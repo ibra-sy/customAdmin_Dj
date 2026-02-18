@@ -7,8 +7,9 @@ Supporte deux interfaces : Classique (AdminLTE) et Moderne (Design 1).
 """
 from django.contrib import admin
 from django.contrib.admin import actions as admin_actions
-from django.urls import path, include
-from django.shortcuts import render
+from django.contrib.auth import logout as auth_logout
+from django.urls import path, include, reverse
+from django.shortcuts import render, redirect
 
 from . import admin_views as custom_views
 from . import auth_views
@@ -50,7 +51,7 @@ class CustomAdminSite(admin.AdminSite):
     login_template = 'admin_custom/auth/login_with_interface.html'
     change_list_template = 'admin_custom/change_list.html'
     change_form_template = 'admin_custom/change_form.html'
-    logout_template = 'admin/logout.html'  # Utiliser le template Django par défaut pour logout
+    logout_template = None  # Redirection directe vers la page de connexion (voir logout ci-dessous)
     password_change_template = 'admin/password_change_form.html'
     password_change_done_template = 'admin/password_change_done.html'
     
@@ -118,6 +119,12 @@ class CustomAdminSite(admin.AdminSite):
         else:
             context['admin_base_template'] = 'admin_custom/base.html'
         return context
+    
+    def logout(self, request, extra_context=None):
+        """Déconnexion puis redirection vers la page de connexion admin (évite le template manquant)."""
+        auth_logout(request)
+        request.current_app = self.name
+        return redirect(reverse('admin:login', current_app=self.name))
     
     def get_urls(self):
         """
