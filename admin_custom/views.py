@@ -167,16 +167,17 @@ def chart_data(request):
 
 
 def _get_grid_columns_for_model(model_class):
-    """Retourne tous les champs du modèle (id, nom, slug, description, catégorie, prix, stock, etc.)."""
-    return [f.name for f in model_class._meta.fields]
+    """Retourne tous les champs concrets du modèle (id, nom, slug, description, catégorie, prix, stock, etc.).
+    Utilise concrete_fields directement comme pour Order/Invoice qui fonctionnent bien."""
+    return [f.name for f in model_class._meta.concrete_fields]
 
 
 @require_http_methods(["GET"])
 def grid_data(request):
-    """API pour récupérer les données de grille. Si columns est vide, utilise tous les champs du modèle."""
+    """API pour récupérer les données de grille. Utilise toujours tous les champs concrets du modèle pour garantir l'affichage complet."""
     grid_id = request.GET.get('grid_id')
     model_name = request.GET.get('model')
-    columns = request.GET.getlist('columns')
+    requested_columns = request.GET.getlist('columns')
     
     if not model_name:
         return JsonResponse({'error': 'Model is required'}, status=400)
@@ -185,9 +186,9 @@ def grid_data(request):
     if not model_class:
         return JsonResponse({'error': 'Invalid model'}, status=400)
     
-    # Si aucune colonne fournie, utiliser tous les champs du modèle
-    if not columns:
-        columns = _get_grid_columns_for_model(model_class)
+    # TOUJOURS utiliser tous les champs concrets du modèle pour garantir l'affichage complet
+    # (comme Order/Invoice qui fonctionnent bien)
+    columns = _get_grid_columns_for_model(model_class)
     if not columns:
         columns = ['pk']
     

@@ -54,11 +54,59 @@ class CustomAdminSite(admin.AdminSite):
     password_change_template = 'admin/password_change_form.html'
     password_change_done_template = 'admin/password_change_done.html'
     
+    def _force_custom_templates(self, request=None):
+        """
+        Force l'utilisation des templates personnalisés pour tous les ModelAdmin enregistrés.
+        
+        Cette méthode centralise la logique de forçage des templates et garantit
+        que tous les ModelAdmin utilisent les bons templates selon l'interface active.
+        
+        Args:
+            request: Objet HttpRequest optionnel pour détecter l'interface active.
+                    Si None, utilise l'interface classique par défaut.
+        """
+        # Détecter l'interface active si request est fourni
+        if request:
+            use_modern = request.session.get(SESSION_INTERFACE_KEY) == INTERFACE_MODERN
+        else:
+            use_modern = False
+        
+        # Déterminer les templates à utiliser
+        if use_modern:
+            change_list_template = 'admin_custom/modern/change_list.html'
+            change_form_template = 'admin_custom/modern/change_form.html'
+        else:
+            change_list_template = 'admin_custom/change_list.html'
+            change_form_template = 'admin_custom/change_form.html'
+        
+        # Forcer sur toutes les instances et classes ModelAdmin enregistrées
+        for model, admin_instance in self._registry.items():
+            # Forcer sur l'instance
+            admin_instance.change_list_template = change_list_template
+            admin_instance.change_form_template = change_form_template
+            
+            # Forcer sur la classe
+            admin_class = admin_instance.__class__
+            admin_class.change_list_template = change_list_template
+            admin_class.change_form_template = change_form_template
+            
+            # Forcer sur toutes les classes parentes dans le MRO
+            for cls in admin_class.__mro__:
+                if (issubclass(cls, admin.ModelAdmin) and 
+                    cls != admin.ModelAdmin and 
+                    hasattr(cls, 'change_list_template')):
+                    cls.change_list_template = change_list_template
+                    cls.change_form_template = change_form_template
+    
     def each_context(self, request):
         """
         Ajoute le contexte pour tous les templates.
         En mode moderne : admin_interface et app_list pour la sidebar.
+        Force également les templates personnalisés pour tous les ModelAdmin.
         """
+        # Forcer les templates personnalisés avant de générer le contexte
+        self._force_custom_templates(request)
+        
         context = super().each_context(request)
         admin_interface = request.session.get(SESSION_INTERFACE_KEY, 'classic')
         context['admin_interface'] = admin_interface

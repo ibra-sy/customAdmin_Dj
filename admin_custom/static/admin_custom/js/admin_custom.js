@@ -375,11 +375,13 @@ function generateGrid() {
     const description = document.getElementById('grid-description').value || `Grille ${model}`;
     
     // Toujours utiliser les champs du modèle sélectionné (data-fields) pour afficher nom, slug, description, prix, stock, etc.
+    // Envoyer TOUJOURS toutes les colonnes disponibles pour garantir l'affichage complet
     const dataFields = modelSelect && modelSelect.selectedIndex >= 0
         ? (modelSelect.options[modelSelect.selectedIndex].getAttribute('data-fields') || '')
         : '';
     const columns = dataFields ? dataFields.split(',').map(function(c) { return c.trim(); }).filter(Boolean) : [];
-    const url = columns.length
+    // Toujours envoyer les colonnes si disponibles, sinon laisser l'API utiliser tous les champs du modèle
+    const url = columns.length > 0
         ? `/admin_custom/api/grid-data/?model=${encodeURIComponent(model)}&${columns.map(function(c) { return 'columns=' + encodeURIComponent(c); }).join('&')}`
         : `/admin_custom/api/grid-data/?model=${encodeURIComponent(model)}`;
     
