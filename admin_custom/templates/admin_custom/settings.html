@@ -43,7 +43,7 @@
                                     </div>
                                 </div>
                                 <div class="col-md-4 mb-3">
-                                    <a href="{{ switch_to_modern_url }}" class="text-decoration-none">
+                                    <a href="{{ switch_to_modern_url }}&next=/admin/modern/" class="text-decoration-none">
                                         <div class="card h-100 {% if current_interface == 'modern' %}border-primary{% else %}card-outline{% endif %}">
                                             <div class="card-body text-center">
                                                 <i class="fas fa-gauge-high fa-3x {% if current_interface == 'modern' %}text-primary{% else %}text-secondary{% endif %} mb-2"></i>
@@ -59,7 +59,7 @@
                                     </a>
                                 </div>
                                 <div class="col-md-4 mb-3">
-                                    <a href="/admin-console/" class="text-decoration-none">
+                                    <a href="/admin/switch-interface/?to=classic2&next=/admin-console/" class="text-decoration-none">
                                         <div class="card h-100 {% if current_interface == 'classic2' %}border-primary{% else %}card-outline{% endif %}">
                                             <div class="card-body text-center">
                                                 <i class="fas fa-chart-line fa-3x {% if current_interface == 'classic2' %}text-primary{% else %}text-secondary{% endif %} mb-2"></i>

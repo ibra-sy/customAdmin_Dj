@@ -11,6 +11,7 @@ from django.views.decorators.csrf import csrf_protect
 from django.utils.decorators import method_decorator
 from django.contrib.admin.views.decorators import staff_member_required
 from django.http import JsonResponse
+from django.utils.http import url_has_allowed_host_and_scheme
 
 
 SESSION_INTERFACE_KEY = 'admin_interface'
@@ -92,6 +93,9 @@ def switch_interface(request):
         to_interface = INTERFACE_CLASSIC
 
     request.session[SESSION_INTERFACE_KEY] = to_interface
+    next_url = request.GET.get('next')
+    if next_url and url_has_allowed_host_and_scheme(next_url, allowed_hosts={request.get_host()}, require_https=request.is_secure()):
+        return redirect(next_url)
     return redirect(get_interface_redirect_url(request, to_interface))
 
 

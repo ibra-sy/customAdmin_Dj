@@ -33,6 +33,9 @@ def admin_login_maquette(request):
     # Quand on est servi par Django, faire pointer le bouton vers l'URL protégée
     content = content.replace('href="admin_console.html"', 'href="/admin-console/"')
     content = content.replace("window.location.href = 'admin_console.html'", "window.location.href = '/admin-console/'")
+    # Réécrire les chemins d'assets pour passer par nos endpoints Django
+    content = content.replace('href="assets/styles.css"', 'href="/admin-frontend/assets/styles.css"')
+    content = content.replace('src="assets/app.js"', 'src="/admin-frontend/assets/app.js"')
     return HttpResponse(content, content_type="text/html; charset=utf-8")
 
 
@@ -44,6 +47,11 @@ def admin_console(request):
     if not console.is_file():
         raise Http404("admin_frontend/admin_console.html introuvable")
     content = _read_html_safe(console)
+    # Réécrire les chemins d'assets (le HTML original est prévu en statique)
+    content = content.replace('href="assets/styles.css"', 'href="/admin-frontend/assets/styles.css"')
+    content = content.replace('src="assets/app.js"', 'src="/admin-frontend/assets/app.js"')
+    # Brancher la déconnexion vers l'endpoint Django
+    content = content.replace('data-action="logout"', 'data-action="logout" data-logout-url="/admin-console/logout/"')
     return HttpResponse(content, content_type="text/html; charset=utf-8")
 
 
