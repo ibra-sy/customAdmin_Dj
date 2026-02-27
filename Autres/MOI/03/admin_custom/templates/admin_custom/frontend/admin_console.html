@@ -1,0 +1,260 @@
+{% extends "admin_custom/frontend/admin_base.html" %}
+{% load static i18n %}
+
+{% block title %}Admin Console - Dashboard{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* Admin Console Specific Styles */
+    .app-layout {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+    
+    .page-head {
+        margin-bottom: 2rem;
+    }
+    
+    .page-head h1 {
+        margin-bottom: 0.5rem;
+    }
+    
+    .grid-kpi {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 1rem;
+        margin-bottom: 2rem;
+    }
+    
+    .stat-card {
+        padding: 1.5rem;
+        border-radius: 0.5rem;
+        background: white;
+        border: 1px solid #e5e7eb;
+    }
+    
+    .stat-card h3 {
+        margin: 0 0 0.5rem 0;
+        font-size: 0.875rem;
+        color: #6b7280;
+        text-transform: uppercase;
+    }
+    
+    .stat-card .value {
+        font-size: 2rem;
+        font-weight: bold;
+        color: #1f2937;
+    }
+    
+    .stat-card .change {
+        font-size: 0.875rem;
+        color: #22c55e;
+        margin-top: 0.5rem;
+    }
+    
+    .grid-two {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+        gap: 2rem;
+        margin-bottom: 2rem;
+    }
+    
+    @media (max-width: 1024px) {
+        .grid-two {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="app-layout">
+    
+    <!-- Page Header -->
+    <div class="page-head">
+        <div>
+            <h1>Dashboard</h1>
+            <p class="text-muted">Bienvenue sur votre console d'administration</p>
+        </div>
+    </div>
+
+    <!-- KPI Cards -->
+    <div class="grid-kpi">
+        <div class="stat-card">
+            <h3>Commandes Totales</h3>
+            <div class="value" id="total-orders">150</div>
+            <div class="change">+12% vs le mois dernier</div>
+        </div>
+        
+        <div class="stat-card">
+            <h3>Revenu Mensuel</h3>
+            <div class="value" id="total-revenue">€12,500</div>
+            <div class="change">+8% vs le mois dernier</div>
+        </div>
+        
+        <div class="stat-card">
+            <h3>Utilisateurs Actifs</h3>
+            <div class="value" id="active-users">320</div>
+            <div class="change">+5% vs la semaine dernière</div>
+        </div>
+        
+        <div class="stat-card">
+            <h3>Taux de Conversion</h3>
+            <div class="value" id="conversion-rate">3.2%</div>
+            <div class="change">-0.5% vs le mois dernier</div>
+        </div>
+    </div>
+
+    <!-- Charts Section -->
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">Ventes par Mois</h5>
+                </div>
+                <div class="card-body">
+                    <canvas id="salesChart" height="300"></canvas>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-6">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">Distribution des Catégories</h5>
+                </div>
+                <div class="card-body">
+                    <canvas id="categoriesChart" height="300"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent Orders -->
+    <div class="card mt-4">
+        <div class="card-header">
+            <h5 class="mb-0">Dernières Commandes</h5>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-sm table-hover">
+                    <thead>
+                        <tr>
+                            <th>Commande ID</th>
+                            <th>Client</th>
+                            <th>Montant</th>
+                            <th>Date</th>
+                            <th>Statut</th>
+                        </tr>
+                    </thead>
+                    <tbody id="recent-orders">
+                        <tr>
+                            <td colspan="5" class="text-center text-muted">Chargement...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Initialize Charts.js
+    document.addEventListener('DOMContentLoaded', function() {
+        initializeDashboardCharts();
+        loadDashboardData();
+    });
+
+    function initializeDashboardCharts() {
+        // Sales Chart
+        const salesCtx = document.getElementById('salesChart');
+        if (salesCtx) {
+            new Chart(salesCtx, {
+                type: 'line',
+                data: {
+                    labels: ['Jan', 'Fév', 'Mar', 'Avr', 'Mai', 'Jun'],
+                    datasets: [{
+                        label: 'Ventes (€)',
+                        data: [12000, 15000, 13500, 18000, 16500, 20000],
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        backgroundColor: 'rgba(75, 192, 192, 0.1)',
+                        borderWidth: 2,
+                        tension: 0.4,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'top'
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function(value) {
+                                    return '€' + value.toLocaleString();
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Categories Chart
+        const categoriesCtx = document.getElementById('categoriesChart');
+        if (categoriesCtx) {
+            new Chart(categoriesCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Électronique', 'Vêtements', 'Livres', 'Autres'],
+                    datasets: [{
+                        data: [30, 25, 20, 25],
+                        backgroundColor: [
+                            'rgba(75, 192, 192, 0.8)',
+                            'rgba(54, 162, 235, 0.8)',
+                            'rgba(255, 206, 86, 0.8)',
+                            'rgba(153, 102, 255, 0.8)'
+                        ]
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        }
+                    }
+                }
+            });
+        }
+    }
+
+    function loadDashboardData() {
+        // call the metrics API and update the KPI cards
+        fetch('{% url "admin_custom:dashboard_metrics" %}?config=[]')
+            .then(r => r.json())
+            .then(data => {
+                if (data.orders !== undefined) {
+                    document.getElementById('total-orders').textContent = data.orders;
+                }
+                if (data.revenue !== undefined) {
+                    document.getElementById('total-revenue').textContent = '€' + data.revenue;
+                }
+                if (data.users !== undefined) {
+                    document.getElementById('active-users').textContent = data.users;
+                }
+            })
+            .catch(err => console.error('dashboard data', err));
+    }
+</script>
+{% endblock %}

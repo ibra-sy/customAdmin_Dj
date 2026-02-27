@@ -44,3 +44,6 @@ ENV/
 # OS
 .DS_Store
 Thumbs.db
+projet_*_context.txt
+fix_and_run.sh
+generate_context.ps1

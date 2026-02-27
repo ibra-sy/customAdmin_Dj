@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Utilisateurs - Administration</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="css/design_system.css">
+  <link rel="stylesheet" href="css/themes.css">
+  <link rel="stylesheet" href="css/modern_admin.css">
+  <link rel="stylesheet" href="css/professional_admin.css">
+  <link rel="stylesheet" href="css/ux_enhancements.css">
+  <link rel="stylesheet" href="css/admin_custom.css">
+</head>
+<body>
+<div class="admin-layout">
+  <div class="modal-backdrop" id="global-modal-backdrop" aria-hidden="true"></div>
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-header"><a href="dashboard.html" class="sidebar-logo"><i class="fa-solid fa-shield-halved"></i><span>Admin Panel</span></a></div>
+    <nav class="sidebar-nav">
+      <div class="nav-section"><div class="nav-section-title">Principal</div>
+        <a href="dashboard.html" class="nav-link"><i class="fa-solid fa-gauge-high"></i><span>Tableau de bord</span></a>
+        <a href="charts.html" class="nav-link"><i class="fa-solid fa-chart-line"></i><span>Graphiques</span></a>
+        <a href="chart_create.html" class="nav-link"><i class="fa-solid fa-plus"></i><span>Créer un graphique</span></a>
+      </div>
+      <div class="nav-section"><div class="nav-section-title">Contenu</div>
+        <a href="change_list.html" class="nav-link active"><i class="fa-solid fa-users"></i><span>Utilisateurs</span><span class="nav-badge">12</span></a>
+        <a href="change_list.html?model=article" class="nav-link"><i class="fa-solid fa-file-lines"></i><span>Articles</span></a>
+        <a href="change_list.html?model=product" class="nav-link"><i class="fa-solid fa-box"></i><span>Produits</span></a>
+      </div>
+      <div class="nav-section"><div class="nav-section-title">Système</div>
+        <a href="settings.html" class="nav-link"><i class="fa-solid fa-gear"></i><span>Paramètres</span></a>
+      </div>
+    </nav>
+    <div class="sidebar-footer"><div class="sidebar-user"><div class="sidebar-user-avatar">A</div><div class="sidebar-user-info"><div class="sidebar-user-name">Admin</div><div class="sidebar-user-role">Superutilisateur</div></div></div></div>
+  </aside>
+  <div class="main-wrapper">
+    <header class="header">
+      <div class="header-left"><button type="button" class="header-toggle-sidebar"><i class="fa-solid fa-bars"></i></button>
+        <nav class="breadcrumb"><a href="dashboard.html">Accueil</a><span class="breadcrumb-separator">/</span><span class="breadcrumb-current">Utilisateurs</span></nav>
+      </div>
+      <div class="header-search"><i class="fa-solid fa-search header-search-icon"></i><input type="search" placeholder="Rechercher… (Ctrl+K)"><kbd>Ctrl+K</kbd></div>
+      <div class="header-right">
+        <div class="dropdown dropdown-notifications" id="dropdown-notifications"><button type="button" class="header-btn" onclick="document.getElementById('dropdown-notifications').classList.toggle('open'); event.stopPropagation();"><i class="fa-solid fa-bell"></i><span class="badge-dot"></span></button><div class="dropdown-menu dropdown-menu-notifications" onclick="event.stopPropagation();"><div class="notifications-header"><h3 class="notifications-title">Notifications</h3><a href="notifications.html" class="notifications-header-link">Voir tout</a></div></div></div>
+        <div class="dropdown" id="dropdown-user-menu"><button type="button" class="user-menu-trigger" onclick="document.getElementById('dropdown-user-menu').classList.toggle('open'); event.stopPropagation();"><div class="user-menu-avatar">A</div><div class="user-menu-info"><span class="user-menu-name">Admin</span><span class="user-menu-role">Superutilisateur</span></div><i class="fa-solid fa-chevron-down" style="font-size:0.75rem;"></i></button><div class="dropdown-menu" onclick="event.stopPropagation();"><a href="profile.html" class="dropdown-item"><i class="fa-solid fa-user"></i> Voir mon profil</a><a href="settings.html" class="dropdown-item"><i class="fa-solid fa-gear"></i> Paramètres</a><div class="dropdown-divider"></div><a href="index.html" class="dropdown-item"><i class="fa-solid fa-right-from-bracket"></i> Déconnexion</a></div></div>
+      </div>
+    </header>
+    <main class="main-content">
+      <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:var(--space-4); margin-bottom:var(--space-6);">
+        <h1 class="page-title" style="margin:0;">Utilisateurs</h1>
+        <div class="page-actions">
+          <a href="add_form.html" class="btn btn-primary"><i class="fa-solid fa-plus"></i> Ajouter</a>
+          <div class="dropdown">
+            <button type="button" class="btn btn-secondary" data-dropdown-trigger><i class="fa-solid fa-download"></i> Exporter <i class="fa-solid fa-chevron-down" style="font-size:0.7rem;"></i></button>
+            <div class="dropdown-menu">
+              <a href="#" class="dropdown-item"><i class="fa-solid fa-file-csv"></i> Export CSV</a>
+              <a href="#" class="dropdown-item"><i class="fa-solid fa-file-excel"></i> Export Excel</a>
+              <a href="#" class="dropdown-item"><i class="fa-solid fa-file-pdf"></i> Export PDF</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card mb-4">
+        <div class="card-body" style="display:flex; flex-wrap:wrap; gap:var(--space-4); align-items:center;">
+          <div class="header-search" style="width:280px; margin:0;">
+            <i class="fa-solid fa-search header-search-icon"></i>
+            <input type="search" id="list-search" placeholder="Rechercher dans la liste…" aria-label="Recherche">
+          </div>
+          <select class="form-control form-select" style="width:180px;">
+            <option value="">Tous les statuts</option>
+            <option>Actif</option>
+            <option>Inactif</option>
+            <option>En attente</option>
+          </select>
+          <button type="button" class="btn btn-secondary" id="btn-filter"><i class="fa-solid fa-filter"></i> Filtres</button>
+          <button type="button" class="btn btn-danger" id="btn-delete-selected" style="margin-left:auto;" data-modal-open="modal-delete-selected" disabled><i class="fa-solid fa-trash"></i> Supprimer la sélection</button>
+        </div>
+      </div>
+
+      <div class="table-wrapper">
+        <table class="data-table" id="data-table">
+          <thead>
+            <tr>
+              <th style="width:40px;"><input type="checkbox" id="select-all" aria-label="Tout sélectionner"></th>
+              <th class="sortable" data-sort-dir="asc">Nom</th>
+              <th class="sortable">E-mail</th>
+              <th>Statut</th>
+              <th class="sortable">Date</th>
+              <th style="width:140px;">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><input type="checkbox" class="row-select" value="1"></td>
+              <td>Jean Dupont</td>
+              <td>jean.dupont@example.com</td>
+              <td><span class="badge badge-success">Actif</span></td>
+              <td>08/02/2025</td>
+              <td class="actions-cell">
+                <a href="#" class="btn btn-sm btn-secondary" title="Voir"><i class="fa-solid fa-eye"></i></a>
+                <a href="change_form.html" class="btn btn-sm btn-secondary" title="Éditer"><i class="fa-solid fa-pen"></i></a>
+                <button type="button" class="btn btn-sm btn-danger" title="Supprimer" data-modal-open="modal-delete"><i class="fa-solid fa-trash"></i></button>
+              </td>
+            </tr>
+            <tr>
+              <td><input type="checkbox" class="row-select" value="2"></td>
+              <td>Marie Martin</td>
+              <td>marie.martin@example.com</td>
+              <td><span class="badge badge-warning">En attente</span></td>
+              <td>07/02/2025</td>
+              <td class="actions-cell">
+                <a href="#" class="btn btn-sm btn-secondary"><i class="fa-solid fa-eye"></i></a>
+                <a href="#" class="btn btn-sm btn-secondary"><i class="fa-solid fa-pen"></i></a>
+                <button type="button" class="btn btn-sm btn-danger" data-modal-open="modal-delete"><i class="fa-solid fa-trash"></i></button>
+              </td>
+            </tr>
+            <tr>
+              <td><input type="checkbox" class="row-select" value="3"></td>
+              <td>Pierre Bernard</td>
+              <td>pierre.bernard@example.com</td>
+              <td><span class="badge badge-success">Actif</span></td>
+              <td>06/02/2025</td>
+              <td class="actions-cell">
+                <a href="#" class="btn btn-sm btn-secondary"><i class="fa-solid fa-eye"></i></a>
+                <a href="#" class="btn btn-sm btn-secondary"><i class="fa-solid fa-pen"></i></a>
+                <button type="button" class="btn btn-sm btn-danger" data-modal-open="modal-delete"><i class="fa-solid fa-trash"></i></button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <nav class="pagination" aria-label="Pagination">
+        <a href="#" class="page-link disabled"><i class="fa-solid fa-chevron-left"></i></a>
+        <a href="#" class="page-link active">1</a>
+        <a href="#" class="page-link">2</a>
+        <a href="#" class="page-link">3</a>
+        <a href="#" class="page-link"><i class="fa-solid fa-chevron-right"></i></a>
+      </nav>
+
+      <div class="modal" id="modal-delete" role="dialog">
+        <div class="modal-header">
+          <h2 class="modal-title">Confirmer la suppression</h2>
+          <button type="button" class="modal-close" data-modal-close aria-label="Fermer">&times;</button>
+        </div>
+        <div class="modal-body"><p>Êtes-vous sûr de vouloir supprimer cet élément ? Cette action est irréversible.</p></div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-modal-close>Annuler</button>
+          <button type="button" class="btn btn-danger" id="confirm-delete-btn"><i class="fa-solid fa-trash"></i> Supprimer</button>
+        </div>
+      </div>
+
+      <div class="modal" id="modal-delete-selected" role="dialog">
+        <div class="modal-header">
+          <h2 class="modal-title">Supprimer la sélection</h2>
+          <button type="button" class="modal-close" data-modal-close aria-label="Fermer">&times;</button>
+        </div>
+        <div class="modal-body">
+          <p>Vous êtes sur le point de supprimer <strong id="selected-count">0</strong> élément(s). Cette action est irréversible.</p>
+          <p>Voulez-vous continuer ?</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-modal-close>Annuler</button>
+          <button type="button" class="btn btn-danger" id="confirm-delete-selected-btn"><i class="fa-solid fa-trash"></i> Supprimer la sélection</button>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<script>
+document.addEventListener('click', function() { document.querySelectorAll('#header-right .dropdown.open').forEach(function(d) { d.classList.remove('open'); }); });
+</script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="js/admin_custom.js"></script>
+<script>
+(function() {
+  var selectAll = document.getElementById('select-all');
+  var rowSelects = document.querySelectorAll('.row-select');
+  var btnDeleteSelected = document.getElementById('btn-delete-selected');
+  var selectedCountEl = document.getElementById('selected-count');
+  function updateSelection() {
+    var n = document.querySelectorAll('.row-select:checked').length;
+    btnDeleteSelected.disabled = n === 0;
+    if (selectedCountEl) selectedCountEl.textContent = n;
+    if (selectAll) { selectAll.checked = n === rowSelects.length && n > 0; selectAll.indeterminate = n > 0 && n < rowSelects.length; }
+  }
+  if (selectAll) selectAll.addEventListener('change', function() { rowSelects.forEach(function(cb) { cb.checked = selectAll.checked; }); updateSelection(); });
+  rowSelects.forEach(function(cb) { cb.addEventListener('change', updateSelection); });
+  updateSelection();
+})();
+</script>
+</body>
+</html>

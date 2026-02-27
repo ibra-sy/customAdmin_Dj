@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Graphiques - Administration</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="css/design_system.css">
+  <link rel="stylesheet" href="css/themes.css">
+  <link rel="stylesheet" href="css/modern_admin.css">
+  <link rel="stylesheet" href="css/professional_admin.css">
+  <link rel="stylesheet" href="css/ux_enhancements.css">
+  <link rel="stylesheet" href="css/admin_custom.css">
+</head>
+<body>
+<div class="admin-layout">
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <a href="dashboard.html" class="sidebar-logo"><i class="fa-solid fa-shield-halved"></i><span>Admin Panel</span></a>
+    </div>
+    <nav class="sidebar-nav">
+      <div class="nav-section"><div class="nav-section-title">Principal</div>
+        <a href="dashboard.html" class="nav-link"><i class="fa-solid fa-gauge-high"></i><span>Tableau de bord</span></a>
+        <a href="charts.html" class="nav-link active"><i class="fa-solid fa-chart-line"></i><span>Graphiques</span></a>
+        <a href="chart_create.html" class="nav-link"><i class="fa-solid fa-plus"></i><span>Créer un graphique</span></a>
+      </div>
+      <div class="nav-section"><div class="nav-section-title">Contenu</div>
+        <a href="change_list.html" class="nav-link"><i class="fa-solid fa-users"></i><span>Utilisateurs</span><span class="nav-badge">12</span></a>
+        <a href="change_list.html?model=article" class="nav-link"><i class="fa-solid fa-file-lines"></i><span>Articles</span></a>
+        <a href="change_list.html?model=product" class="nav-link"><i class="fa-solid fa-box"></i><span>Produits</span></a>
+      </div>
+      <div class="nav-section"><div class="nav-section-title">Système</div>
+        <a href="settings.html" class="nav-link"><i class="fa-solid fa-gear"></i><span>Paramètres</span></a>
+      </div>
+    </nav>
+    <div class="sidebar-footer">
+      <div class="sidebar-user"><div class="sidebar-user-avatar">A</div><div class="sidebar-user-info"><div class="sidebar-user-name">Admin</div><div class="sidebar-user-role">Superutilisateur</div></div></div>
+    </div>
+  </aside>
+  <div class="main-wrapper">
+    <header class="header">
+      <div class="header-left">
+        <button type="button" class="header-toggle-sidebar"><i class="fa-solid fa-bars"></i></button>
+        <nav class="breadcrumb"><a href="dashboard.html">Accueil</a><span class="breadcrumb-separator">/</span><span class="breadcrumb-current">Graphiques</span></nav>
+      </div>
+      <div class="header-search"><i class="fa-solid fa-search header-search-icon"></i><input type="search" placeholder="Rechercher… (Ctrl+K)"><kbd>Ctrl+K</kbd></div>
+      <div class="header-right">
+        <div class="dropdown dropdown-notifications" id="dropdown-notifications">
+          <button type="button" class="header-btn" onclick="document.getElementById('dropdown-notifications').classList.toggle('open'); event.stopPropagation();"><i class="fa-solid fa-bell"></i><span class="badge-dot"></span></button>
+          <div class="dropdown-menu dropdown-menu-notifications" onclick="event.stopPropagation();">
+            <div class="notifications-header"><h3 class="notifications-title">Notifications</h3><span class="notifications-badge">5</span><a href="notifications.html" class="notifications-header-link">Voir tout</a></div>
+            <div class="notifications-list"><a href="#" class="notification-item notification-item-unread"><span class="notification-icon notification-icon-success"><i class="fa-solid fa-user-plus"></i></span><div class="notification-content"><span class="notification-text">Nouvel utilisateur — <strong>Jean Dupont</strong></span><span class="notification-time">Il y a 5 min</span></div></a></div>
+            <div class="notifications-footer"><a href="notifications.html" class="notifications-view-all">Voir tout</a></div>
+          </div>
+        </div>
+        <div class="dropdown" id="dropdown-user-menu">
+          <button type="button" class="user-menu-trigger" onclick="document.getElementById('dropdown-user-menu').classList.toggle('open'); event.stopPropagation();"><div class="user-menu-avatar">A</div><div class="user-menu-info"><span class="user-menu-name">Admin</span><span class="user-menu-role">Superutilisateur</span></div><i class="fa-solid fa-chevron-down" style="font-size:0.75rem;"></i></button>
+          <div class="dropdown-menu" onclick="event.stopPropagation();"><a href="profile.html" class="dropdown-item"><i class="fa-solid fa-user"></i> Voir mon profil</a><a href="settings.html" class="dropdown-item"><i class="fa-solid fa-gear"></i> Paramètres</a><div class="dropdown-divider"></div><a href="index.html" class="dropdown-item"><i class="fa-solid fa-right-from-bracket"></i> Déconnexion</a></div>
+        </div>
+      </div>
+    </header>
+    <main class="main-content">
+      <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:var(--space-4); margin-bottom:var(--space-6);">
+        <h1 class="page-title" style="margin:0;">Graphiques et analytics</h1>
+        <a href="chart_create.html" class="btn btn-primary"><i class="fa-solid fa-plus"></i> Créer un graphique</a>
+      </div>
+
+      <div id="saved-charts-section" style="display:none; margin-bottom:var(--space-6);">
+        <h2 style="font-size:var(--text-xl); font-weight:var(--font-semibold); margin-bottom:var(--space-4);">Mes graphiques créés</h2>
+        <div id="saved-charts-grid" class="row g-4"></div>
+      </div>
+
+      <div class="row g-4 mb-5">
+        <div class="col-12 col-lg-8">
+          <div class="card">
+            <div class="card-header">Évolution des ventes (ligne)</div>
+            <div class="card-body" style="height:360px;"><canvas id="chart-line-page" data-chart="line"></canvas></div>
+          </div>
+        </div>
+        <div class="col-12 col-lg-4">
+          <div class="card">
+            <div class="card-header">Répartition par statut</div>
+            <div class="card-body" style="height:360px;"><canvas id="chart-doughnut-page" data-chart="doughnut"></canvas></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row g-4">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-header">Comparaison par jour (barres)</div>
+            <div class="card-body" style="height:320px;"><canvas id="chart-bar-page" data-chart="bar"></canvas></div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<script>
+document.addEventListener('click', function() { document.querySelectorAll('#header-right .dropdown.open').forEach(function(d) { d.classList.remove('open'); }); });
+</script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<script src="js/admin_custom.js"></script>
+<script>
+(function() {
+  var saved = []; try { saved = JSON.parse(localStorage.getItem('admin_custom_charts') || '[]'); } catch (e) {}
+  var section = document.getElementById('saved-charts-section');
+  var grid = document.getElementById('saved-charts-grid');
+  var colors = ['#3B82F6', '#8B5CF6', '#06B6D4', '#10B981', '#F59E0B', '#EF4444', '#EC4899', '#6366F1'];
+  if (saved.length && section && grid && typeof Chart !== 'undefined') {
+    section.style.display = 'block';
+    saved.forEach(function(item, index) {
+      var col = document.createElement('div');
+      col.className = 'col-12 col-md-6 col-lg-4';
+      col.innerHTML = '<div class="card"><div class="card-header" style="display:flex; align-items:center; justify-content:space-between;"><span>' + (item.title || 'Sans titre') + '</span><button type="button" class="btn btn-sm btn-danger btn-remove-saved-chart" data-id="' + item.id + '" title="Supprimer"><i class="fa-solid fa-trash"></i></button></div><div class="card-body" style="height:280px; position:relative;"><canvas id="saved-chart-' + item.id + '"></canvas></div></div>';
+      grid.appendChild(col);
+      var canvas = document.getElementById('saved-chart-' + item.id);
+      if (canvas && typeof Chart !== 'undefined') {
+        try {
+          if (!canvas.getContext('2d')) {
+            console.warn('Cannot get 2D context for chart', item.id);
+            return;
+          }
+          var datasets = (item.datasets || []).map(function(d, i) {
+            var c = colors[i % colors.length];
+            return { label: d.label, data: d.data || [], backgroundColor: (item.type === 'doughnut' || item.type === 'pie') ? c : c + '99', borderColor: c, borderWidth: 2, fill: item.type === 'line', tension: 0.4 };
+          });
+          new Chart(canvas, { type: item.type || 'line', data: { labels: item.labels || [], datasets: datasets }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom' } }, scales: (item.type === 'doughnut' || item.type === 'pie') ? {} : { y: { beginAtZero: true } } } });
+        } catch (e) {
+          console.error('Error creating chart:', e);
+        }
+      }
+    });
+    grid.addEventListener('click', function(e) {
+      var btn = e.target.closest('.btn-remove-saved-chart');
+      if (!btn) return;
+      var id = parseInt(btn.getAttribute('data-id'), 10);
+      var list = JSON.parse(localStorage.getItem('admin_custom_charts') || '[]').filter(function(c) { return c.id !== id; });
+      localStorage.setItem('admin_custom_charts', JSON.stringify(list));
+      location.reload();
+    });
+  }
+})();
+</script>
+</body>
+</html>

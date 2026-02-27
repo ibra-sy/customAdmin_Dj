@@ -1,0 +1,256 @@
+{% extends "admin_custom/base_site.html" %}
+{% load static %}
+
+{% block extrastyle %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'admin_custom/css/admin_tools_cards.css' %}">
+<link rel="stylesheet" href="{% static 'admin_custom/css/business_apps_hover.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="content-wrapper">
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1 class="m-0">
+                        <i class="fas fa-tachometer-alt"></i> Tableau de bord
+                    </h1>
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="{% url 'admin:index' %}">Accueil</a></li>
+                        <li class="breadcrumb-item active">Dashboard</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="content">
+        <div class="container-fluid">
+            <!-- Quick Stats - Affichage direct sans animation -->
+            <div class="row">
+                <div class="col-lg-3 col-6">
+                    <div class="small-box bg-info-gradient">
+                        <div class="inner">
+                            <h3 id="stat-orders">-</h3>
+                            <p>Commandes</p>
+                        </div>
+                        <div class="icon">
+                            <i class="fas fa-shopping-cart"></i>
+                        </div>
+                        <a href="{% url 'admin:sales_order_changelist' %}" class="small-box-footer">
+                            Voir toutes <i class="fas fa-arrow-circle-right"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-6">
+                    <div class="small-box bg-success-gradient">
+                        <div class="inner">
+                            <h3 id="stat-revenue">-</h3>
+                            <p>Revenus</p>
+                        </div>
+                        <div class="icon">
+                            <i class="fas fa-money-bill"></i>
+                        </div>
+                        <a href="{% url 'admin:admin_dashboard' %}" class="small-box-footer">
+                            Détails <i class="fas fa-arrow-circle-right"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-6">
+                    <div class="small-box bg-warning-gradient">
+                        <div class="inner">
+                            <h3 id="stat-invoices">-</h3>
+                            <p>Factures</p>
+                        </div>
+                        <div class="icon">
+                            <i class="fas fa-file-invoice"></i>
+                        </div>
+                        <a href="{% url 'admin:sales_invoice_changelist' %}" class="small-box-footer">
+                            Voir toutes <i class="fas fa-arrow-circle-right"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-6">
+                    <div class="small-box bg-danger-gradient">
+                        <div class="inner">
+                            <h3 id="stat-products">-</h3>
+                            <p>Produits</p>
+                        </div>
+                        <div class="icon">
+                            <i class="fas fa-box"></i>
+                        </div>
+                        <a href="{% url 'admin:catalog_product_changelist' %}" class="small-box-footer">
+                            Voir tous <i class="fas fa-arrow-circle-right"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Outils d'administration - Section séparée -->
+            <div class="row mb-4" style="margin-top: 3rem;">
+                <div class="col-12">
+                    <div class="card card-outline card-info">
+                        <div class="card-header">
+                            <h3 class="card-title">
+                                <i class="fas fa-tools"></i> Outils d'administration
+                            </h3>
+                            <div class="card-tools">
+                                <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                                    <i class="fas fa-minus"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <a href="{% url 'admin:admin_dashboard' %}" class="admin-tool-card admin-tool-blue">
+                                        <i class="fas fa-chart-line fa-2x mb-2"></i><br>
+                                        <strong>Dashboard</strong><br>
+                                        <small>Vue d'ensemble complète</small>
+                                    </a>
+                                </div>
+                                <div class="col-md-4">
+                                    <a href="{% url 'admin:admin_charts' %}" class="admin-tool-card admin-tool-green">
+                                        <i class="fas fa-chart-pie fa-2x mb-2"></i><br>
+                                        <strong>Graphiques</strong><br>
+                                        <small>Créer des graphiques dynamiques</small>
+                                    </a>
+                                </div>
+                                <div class="col-md-4">
+                                    <a href="{% url 'admin:admin_grids' %}" class="admin-tool-card admin-tool-purple">
+                                        <i class="fas fa-table fa-2x mb-2"></i><br>
+                                        <strong>Grilles de données</strong><br>
+                                        <small>Visualiser et analyser les données</small>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Applications métier - Interface simplifiée -->
+            <div class="row">
+                <div class="col-12 mb-3">
+                    <h3 class="mb-0">
+                        <i class="fas fa-folder-open"></i> Applications métier
+                    </h3>
+                    <hr>
+                </div>
+                {% for app in app_list %}
+                <div class="col-lg-6 col-md-6 mb-4">
+                    <div class="card card-outline card-primary">
+                        <div class="card-header d-flex align-items-center justify-content-between">
+                            <h3 class="card-title mb-0">
+                                <i class="fas fa-folder-open"></i> {{ app.name }}
+                            </h3>
+                            <div class="card-tools">
+                                <button type="button" class="btn btn-tool collapse-toggle" data-card-widget="collapse">
+                                    <i class="fas fa-chevron-down"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="card-body p-0">
+                            <ul class="nav nav-pills flex-column">
+                                {% for model in app.models %}
+                                <li class="nav-item">
+                                    <a href="{% if model.admin_url %}{{ model.admin_url }}{% else %}#{% endif %}" class="nav-link d-flex align-items-center justify-content-between">
+                                        <div class="d-flex align-items-center">
+                                            <i class="fas fa-circle nav-icon"></i>
+                                            <span class="nav-text ml-2">{{ model.name }}</span>
+                                        </div>
+                                        {% if model.add_url %}
+                                        <a href="{{ model.add_url }}" class="btn btn-primary btn-sm btn-add-modern" title="Ajouter {{ model.name }}">
+                                            <i class="fas fa-plus"></i> Ajouter
+                                        </a>
+                                        {% endif %}
+                                    </a>
+                                </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Charger les statistiques SANS animation - affichage direct
+    fetch('/admin_custom/api/stats/')
+        .then(response => response.json())
+        .then(data => {
+            // Affichage direct sans animation
+            const ordersEl = document.getElementById('stat-orders');
+            const revenueEl = document.getElementById('stat-revenue');
+            const invoicesEl = document.getElementById('stat-invoices');
+            const productsEl = document.getElementById('stat-products');
+            
+            if (ordersEl) ordersEl.textContent = data.orders || 0;
+            if (revenueEl) revenueEl.textContent = (data.revenue || 0).toLocaleString('fr-FR', {maximumFractionDigits: 0}) + ' FCFA';
+            if (invoicesEl) invoicesEl.textContent = data.invoices || 0;
+            if (productsEl) productsEl.textContent = data.products || 0;
+        });
+    
+    // Graphique rapide
+    fetch('/admin_custom/api/chart-data/?model=Order&field=total_amount&type=line&frequency=month&operation=sum')
+        .then(response => response.json())
+        .then(data => {
+            const ctx = document.getElementById('quick-chart').getContext('2d');
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: data.labels,
+                    datasets: [{
+                        label: 'Revenus (FCFA)',
+                        data: data.data,
+                        borderColor: 'rgb(0, 123, 255)',
+                        backgroundColor: 'rgba(0, 123, 255, 0.1)',
+                        tension: 0.4,
+                        fill: true,
+                        pointRadius: 5,
+                        pointHoverRadius: 7,
+                        pointBackgroundColor: '#fff',
+                        pointBorderColor: 'rgb(0, 123, 255)',
+                        pointBorderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: true,
+                            position: 'top'
+                        },
+                        tooltip: {
+                            backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                            padding: 12,
+                            cornerRadius: 8
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: {
+                                color: 'rgba(0, 0, 0, 0.05)'
+                            }
+                        },
+                        x: {
+                            grid: {
+                                display: false
+                            }
+                        }
+                    }
+                }
+            });
+        });
+});
+</script>
+{% endblock %}
