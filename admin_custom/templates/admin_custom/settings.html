@@ -73,7 +73,7 @@
                         </div>
                         <div class="card-body">
                             <p class="text-muted">Gérez votre profil et vos préférences.</p>
-                            <a href="{% url 'admin:auth_user_change' user.pk %}" class="btn btn-primary">
+                            <a href="{% url user_change_url_name user.pk %}" class="btn btn-primary">
                                 <i class="fas fa-pen"></i> Modifier mon profil
                             </a>
                         </div>

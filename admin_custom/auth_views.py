@@ -14,12 +14,15 @@ from django.utils.decorators import method_decorator
 SESSION_INTERFACE_KEY = 'admin_interface'
 INTERFACE_CLASSIC = 'classic'
 INTERFACE_MODERN = 'modern'
+INTERFACE_FRONTEND = 'frontend'
 
 
 def get_interface_redirect_url(request, interface):
     """Retourne l'URL de redirection selon l'interface choisie."""
     if interface == INTERFACE_MODERN:
         return reverse('admin:modern_dashboard')
+    elif interface == INTERFACE_FRONTEND:
+        return reverse('admin:frontend_dashboard')
     return reverse('admin:index')
 
 
@@ -73,17 +76,28 @@ def select_interface_login(request):
     })
 
 
+@require_http_methods(["GET", "POST"])
+def logout_get_view(request):
+    """
+    Déconnexion acceptant GET (lien « Déconnexion ») pour compatibilité avec l'admin.
+    Django 5 exige POST par défaut ; cette vue permet le clic sur le lien.
+    """
+    if request.user.is_authenticated:
+        logout(request)
+    return redirect('admin:login')
+
+
 @require_http_methods(["GET"])
 def switch_interface(request):
     """
     Permet de basculer entre les interfaces.
-    URL: /admin/switch-interface/?to=modern ou ?to=classic
+    URL: /admin/switch-interface/?to=modern ou ?to=classic ou ?to=frontend
     """
     if not request.user.is_authenticated:
         return redirect('admin:login')
 
     to_interface = request.GET.get('to', INTERFACE_CLASSIC)
-    if to_interface not in (INTERFACE_CLASSIC, INTERFACE_MODERN):
+    if to_interface not in (INTERFACE_CLASSIC, INTERFACE_MODERN, INTERFACE_FRONTEND):
         to_interface = INTERFACE_CLASSIC
 
     request.session[SESSION_INTERFACE_KEY] = to_interface

@@ -2,11 +2,13 @@
 UserAdmin personnalisé avec interface améliorée
 """
 from django.contrib import admin
+from django.contrib.auth import get_user_model
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
-from django.contrib.auth.models import User
 from django.utils.translation import gettext_lazy as _
 
 from .modern_model_admin import ModernTemplateMixin
+
+User = get_user_model()
 
 
 class CustomUserAdmin(ModernTemplateMixin, BaseUserAdmin):

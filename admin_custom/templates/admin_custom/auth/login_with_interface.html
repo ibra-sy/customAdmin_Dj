@@ -41,7 +41,7 @@
 
     <form method="post" action="" id="login-form">
       {% csrf_token %}
-      <div class="interface-choices">
+      <div class="interface-choices" style="flex-wrap:wrap;">
         <label class="interface-card {% if selected_interface == 'classic' %}selected{% endif %}" id="card-classic">
           <input type="radio" name="admin_interface" value="classic" {% if selected_interface == 'classic' %}checked{% endif %}>
           <i class="fa-solid fa-layer-group" style="font-size:1.5rem; display:block; margin-bottom:0.5rem; color:var(--color-primary);"></i>
@@ -53,6 +53,12 @@
           <i class="fa-solid fa-gauge-high" style="font-size:1.5rem; display:block; margin-bottom:0.5rem; color:var(--color-primary);"></i>
           <strong>Interface Moderne</strong>
           <div style="font-size:0.75rem; color:var(--color-text-muted); margin-top:0.25rem;">Design épuré, sidebar moderne</div>
+        </label>
+        <label class="interface-card {% if selected_interface == 'frontend' %}selected{% endif %}" id="card-frontend">
+          <input type="radio" name="admin_interface" value="frontend" {% if selected_interface == 'frontend' %}checked{% endif %}>
+          <i class="fa-solid fa-window-maximize" style="font-size:1.5rem; display:block; margin-bottom:0.5rem; color:var(--color-primary);"></i>
+          <strong>Interface Frontend</strong>
+          <div style="font-size:0.75rem; color:var(--color-text-muted); margin-top:0.25rem;">Console SPA, interface complète</div>
         </label>
       </div>
 

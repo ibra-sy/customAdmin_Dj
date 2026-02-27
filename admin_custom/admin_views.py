@@ -1,6 +1,7 @@
 from django.contrib import admin
 from django.contrib.admin.views.decorators import staff_member_required
 from django.shortcuts import render
+from django.urls import reverse
 from django.db.models import Sum
 from django.apps import apps
 
@@ -66,7 +67,7 @@ def dashboard_view(request):
             
             model_name = model.__name__.lower()
             
-            # Chercher des champs de montant
+            # Chercher des champs de montant (total_amount, amount, prix_total, montant)
             if hasattr(model, 'total_amount'):
                 count = model.objects.count()
                 revenue = float(model.objects.aggregate(Sum('total_amount'))['total_amount__sum'] or 0)
@@ -75,6 +76,16 @@ def dashboard_view(request):
             elif hasattr(model, 'amount'):
                 count = model.objects.count()
                 revenue = float(model.objects.aggregate(Sum('amount'))['amount__sum'] or 0)
+                stats[f'total_{model_name}'] = count
+                total_revenue += revenue
+            elif hasattr(model, 'prix_total'):
+                count = model.objects.count()
+                revenue = float(model.objects.aggregate(Sum('prix_total'))['prix_total__sum'] or 0)
+                stats[f'total_{model_name}'] = count
+                total_revenue += revenue
+            elif hasattr(model, 'montant'):
+                count = model.objects.count()
+                revenue = float(model.objects.aggregate(Sum('montant'))['montant__sum'] or 0)
                 stats[f'total_{model_name}'] = count
                 total_revenue += revenue
             else:
@@ -95,14 +106,37 @@ def dashboard_view(request):
 
 
 @staff_member_required
-def classic_settings(request):
-    """Page Paramètres - interface classique, avec option pour passer à l'interface moderne."""
+def dashboard_customize_page(request):
+    """Page dédiée pour personnaliser l'affichage du tableau de bord (indicateurs depuis la base)."""
     custom_admin_site = get_custom_admin_site()
     context = custom_admin_site.each_context(request)
+    is_modern = request.session.get(SESSION_INTERFACE_KEY, INTERFACE_CLASSIC) == INTERFACE_MODERN
+    context.update({
+        'title': 'Personnaliser l\'affichage du tableau de bord',
+        'dashboard_url': reverse('admin:modern_dashboard' if is_modern else 'admin:admin_dashboard'),
+        'index_url': reverse('admin:index'),
+    })
+    return render(request, 'admin_custom/dashboard_customize.html', context)
+
+
+@staff_member_required
+def classic_settings(request):
+    """Page Paramètres - interface classique, avec option pour passer à l'interface moderne."""
+    from django.contrib.auth import get_user_model
+    from django.contrib import admin
+    
+    custom_admin_site = get_custom_admin_site()
+    context = custom_admin_site.each_context(request)
+    
+    # Obtenir le nom d'URL correct pour le modèle utilisateur personnalisé
+    User = get_user_model()
+    user_change_url_name = f"admin:{User._meta.app_label}_{User._meta.model_name}_change"
+    
     context.update({
         'title': 'Paramètres',
         'current_interface': request.session.get(SESSION_INTERFACE_KEY, INTERFACE_CLASSIC),
         'switch_to_classic_url': '/admin/switch-interface/?to=classic',
         'switch_to_modern_url': '/admin/switch-interface/?to=modern',
+        'user_change_url_name': user_change_url_name,
     })
     return render(request, 'admin_custom/settings.html', context)

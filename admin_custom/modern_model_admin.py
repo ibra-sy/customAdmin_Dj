@@ -78,21 +78,45 @@ class ModernTemplateMixin:
         return _use_modern_templates(request)
 
     def changelist_view(self, request, extra_context=None):
+        use_modern = self._use_modern_templates(request)
         orig = self.change_list_template
-        if self._use_modern_templates(request):
+        
+        if use_modern:
             self.change_list_template = self.modern_change_list_template
+            admin_base_template = 'admin_custom/modern/admin_base.html'
+        else:
+            self.change_list_template = 'admin_custom/change_list.html'
+            admin_base_template = 'admin_custom/base.html'
+        
+        # Ajouter admin_base_template au contexte
+        if extra_context is None:
+            extra_context = {}
+        extra_context['admin_base_template'] = admin_base_template
+        
         try:
             return super().changelist_view(request, extra_context)
         finally:
             self.change_list_template = orig
 
     def changeform_view(self, request, object_id=None, form_url='', extra_context=None):
+        use_modern = self._use_modern_templates(request)
         orig_form = self.change_form_template
         orig_add = self.add_form_template
-        if self._use_modern_templates(request):
+        
+        if use_modern:
             self.change_form_template = self.modern_change_form_template
+            admin_base_template = 'admin_custom/modern/admin_base.html'
             if object_id is None and getattr(self, 'modern_add_form_template', None):
                 self.add_form_template = self.modern_add_form_template
+        else:
+            self.change_form_template = 'admin_custom/change_form.html'
+            admin_base_template = 'admin_custom/base.html'
+        
+        # Ajouter admin_base_template au contexte
+        if extra_context is None:
+            extra_context = {}
+        extra_context['admin_base_template'] = admin_base_template
+        
         try:
             return super().changeform_view(request, object_id, form_url, extra_context)
         finally:

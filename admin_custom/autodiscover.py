@@ -11,6 +11,50 @@ from django.conf import settings
 from django.utils.module_loading import autodiscover_modules
 
 
+def _find_model_admin_classes(app_label):
+    """
+    Trouve toutes les classes ModelAdmin dans le module admin.py d'une app.
+    Retourne un dictionnaire {model: admin_class}.
+    """
+    import importlib
+    model_admin_map = {}
+    try:
+        admin_module = importlib.import_module(f"{app_label}.admin")
+        # Chercher toutes les classes ModelAdmin dans le module
+        for attr_name in dir(admin_module):
+            attr = getattr(admin_module, attr_name)
+            if (isinstance(attr, type) and 
+                issubclass(attr, admin.ModelAdmin) and 
+                attr != admin.ModelAdmin and
+                attr_name.endswith('Admin')):
+                # Vérifier si cette classe a un attribut 'model' (défini par @admin.register)
+                # ou si on peut le déduire du nom de la classe
+                try:
+                    # Les classes ModelAdmin ont souvent un attribut '__wrapped__' ou '__model__'
+                    # défini par le décorateur @admin.register
+                    if hasattr(attr, '__wrapped__'):
+                        # Le décorateur @admin.register stocke le modèle dans __wrapped__
+                        model = getattr(attr, '__wrapped__', None)
+                        if model:
+                            model_admin_map[model] = attr
+                    else:
+                        # Essayer de deviner le modèle depuis le nom de la classe
+                        # Ex: CategoryAdmin -> Category
+                        model_name = attr_name.replace('Admin', '')
+                        try:
+                            app_config = apps.get_app_config(app_label)
+                            model = app_config.get_model(model_name)
+                            if model:
+                                model_admin_map[model] = attr
+                        except:
+                            pass
+                except:
+                    pass
+    except (ImportError, AttributeError):
+        pass
+    return model_admin_map
+
+
 def autodiscover_models(custom_admin_site=None, exclude_apps=None, exclude_models=None):
     """
     Découvre automatiquement tous les modèles Django du projet
@@ -50,63 +94,67 @@ def autodiscover_models(custom_admin_site=None, exclude_apps=None, exclude_model
     exclude_apps = list(exclude_apps) if exclude_apps else []
     exclude_apps.extend(default_exclude_apps)
     
-    # ÉTAPE 1 : Charger tous les fichiers admin.py pour déclencher les @admin.register()
-    # Cela permet de détecter toutes les classes ModelAdmin définies
+    # ÉTAPE 1 : Parcourir directement les apps et leurs modules admin.py pour trouver les classes ModelAdmin
+    # Cette approche évite les problèmes d'ordre d'importation et garantit qu'on récupère les vraies classes
+    registered_count = 0
+    model_admin_map = {}  # {model: admin_class}
+    
+    # Parcourir toutes les apps installées
+    for app_config in apps.get_app_configs():
+        app_label = app_config.name
+        if app_label in exclude_apps or app_label == 'admin_custom':
+            continue
+        if app_label.startswith('django.contrib'):
+            continue
+        
+        # Chercher les classes ModelAdmin dans le module admin.py de l'app
+        admin_classes = _find_model_admin_classes(app_label)
+        model_admin_map.update(admin_classes)
+    
+    # ÉTAPE 2 : Enregistrer les modèles sur custom_admin_site avec leurs classes ModelAdmin
+    # Si une classe ModelAdmin a été trouvée dans admin.py, l'utiliser
+    # Sinon, utiliser l'enregistrement depuis admin.site (fallback)
+    
+    # D'abord, charger les admin.py pour que admin.site soit peuplé (fallback)
     autodiscover_modules('admin', register_to=admin.site)
     
-    # ÉTAPE 2 : Parcourir tous les modèles enregistrés dans admin.site
-    # et les ré-enregistrer dans custom_admin_site
-    registered_count = 0
-    
-    for model, admin_class in admin.site._registry.items():
+    # Ensuite, enregistrer sur custom_admin_site en utilisant les classes trouvées
+    registry_items = list(admin.site._registry.items())
+    for model, admin_instance in registry_items:
         app_label = model._meta.app_label
-        
-        # Ignorer les apps exclues
-        if app_label in exclude_apps:
+        if app_label in exclude_apps or app_label == 'admin_custom':
             continue
-        
-        # Ignorer admin_custom lui-même
-        if app_label == 'admin_custom':
-            continue
-        
-        # Ignorer les modèles exclus
         model_name = f"{app_label}.{model._meta.model_name}"
         if model_name in exclude_models or model.__name__ in exclude_models:
             continue
-        
-        # Ignorer les modèles abstraits
         if model._meta.abstract:
             continue
-        
-        # Ignorer les modèles proxy (sauf si explicitement demandé)
         if model._meta.proxy and not admin_custom_config.get('INCLUDE_PROXY', False):
             continue
-        
-        # Ré-enregistrer dans custom_admin_site avec la même classe d'admin
         try:
-            # Désenregistrer si déjà enregistré (au cas où)
+            # Utiliser la classe ModelAdmin trouvée dans admin.py si disponible
+            # Sinon, utiliser celle du registre admin.site
+            if model in model_admin_map:
+                admin_class = model_admin_map[model]
+            else:
+                admin_class = admin_instance.__class__
+            
+            # Si le modèle est déjà enregistré, le désenregistrer d'abord
             if model in custom_admin_site._registry:
                 custom_admin_site.unregister(model)
-            
-            # Créer une nouvelle instance de la classe d'admin pour custom_admin_site
-            # On utilise la classe (admin_class.__class__) et on crée une nouvelle instance
-            admin_class_type = admin_class.__class__
-            
-            # Enregistrer avec la classe d'admin détectée
-            custom_admin_site.register(model, admin_class_type)
+            # Ré-enregistrer avec la classe ModelAdmin originale (tous les attributs seront préservés)
+            custom_admin_site.register(model, admin_class)
             registered_count += 1
         except admin.sites.AlreadyRegistered:
-            # Déjà enregistré, ignorer
             pass
         except Exception as e:
-            # En cas d'erreur, essayer avec un ModelAdmin par défaut
+            # En cas d'erreur, essayer d'enregistrer avec un ModelAdmin par défaut
             try:
                 if model in custom_admin_site._registry:
                     custom_admin_site.unregister(model)
                 custom_admin_site.register(model)
                 registered_count += 1
             except Exception:
-                # Ignorer les erreurs silencieusement
                 pass
     
     # ÉTAPE 3 : Enregistrer les modèles non encore enregistrés
@@ -198,7 +246,8 @@ def get_all_models_for_charts():
 
 def get_all_models_for_grids():
     """
-    Retourne tous les modèles disponibles pour les grilles.
+    Retourne tous les modèles disponibles pour les grilles, avec la liste
+    de tous les champs (concrets, non relation inversée) pour afficher toute la grille.
     """
     models_list = []
     
@@ -210,10 +259,15 @@ def get_all_models_for_grids():
             if model._meta.abstract or model._meta.proxy:
                 continue
             
+            # Tous les champs concrets du modèle (id, nom, slug, description, catégorie, prix, stock, etc.)
+            # Utiliser concrete_fields directement comme pour Order/Invoice qui fonctionnent bien
+            fields = [f.name for f in model._meta.concrete_fields]
+            
             models_list.append({
                 'name': model.__name__,
                 'label': model._meta.verbose_name.title(),
                 'app': model._meta.app_label,
+                'fields': fields,
             })
     
     return models_list

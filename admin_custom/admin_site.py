@@ -13,7 +13,8 @@ from django.shortcuts import render
 from . import admin_views as custom_views
 from . import auth_views
 from . import modern_views
-from .auth_views import SESSION_INTERFACE_KEY, INTERFACE_MODERN
+from . import frontend_views
+from .auth_views import SESSION_INTERFACE_KEY, INTERFACE_MODERN, INTERFACE_FRONTEND
 
 
 def _delete_selected_modern_aware(modeladmin, request, queryset):
@@ -54,11 +55,65 @@ class CustomAdminSite(admin.AdminSite):
     password_change_template = 'admin/password_change_form.html'
     password_change_done_template = 'admin/password_change_done.html'
     
+    def _force_custom_templates(self, request=None):
+        """
+        Force l'utilisation des templates personnalisés pour tous les ModelAdmin enregistrés.
+        
+        Cette méthode centralise la logique de forçage des templates et garantit
+        que tous les ModelAdmin utilisent les bons templates selon l'interface active.
+        
+        Args:
+            request: Objet HttpRequest optionnel pour détecter l'interface active.
+                    Si None, utilise l'interface classique par défaut.
+        """
+        # Détecter l'interface active si request est fourni
+        if request:
+            interface = request.session.get(SESSION_INTERFACE_KEY, 'classic')
+            use_modern = interface == INTERFACE_MODERN
+            use_frontend = interface == INTERFACE_FRONTEND
+        else:
+            use_modern = False
+            use_frontend = False
+        
+        # Déterminer les templates à utiliser
+        if use_frontend:
+            change_list_template = 'admin_custom/frontend/change_list.html'
+            change_form_template = 'admin_custom/frontend/change_form.html'
+        elif use_modern:
+            change_list_template = 'admin_custom/modern/change_list.html'
+            change_form_template = 'admin_custom/modern/change_form.html'
+        else:
+            change_list_template = 'admin_custom/change_list.html'
+            change_form_template = 'admin_custom/change_form.html'
+        
+        # Forcer sur toutes les instances et classes ModelAdmin enregistrées
+        for model, admin_instance in self._registry.items():
+            # Forcer sur l'instance
+            admin_instance.change_list_template = change_list_template
+            admin_instance.change_form_template = change_form_template
+            
+            # Forcer sur la classe
+            admin_class = admin_instance.__class__
+            admin_class.change_list_template = change_list_template
+            admin_class.change_form_template = change_form_template
+            
+            # Forcer sur toutes les classes parentes dans le MRO
+            for cls in admin_class.__mro__:
+                if (issubclass(cls, admin.ModelAdmin) and 
+                    cls != admin.ModelAdmin and 
+                    hasattr(cls, 'change_list_template')):
+                    cls.change_list_template = change_list_template
+                    cls.change_form_template = change_form_template
+    
     def each_context(self, request):
         """
         Ajoute le contexte pour tous les templates.
         En mode moderne : admin_interface et app_list pour la sidebar.
+        Force également les templates personnalisés pour tous les ModelAdmin.
         """
+        # Forcer les templates personnalisés avant de générer le contexte
+        self._force_custom_templates(request)
+        
         context = super().each_context(request)
         admin_interface = request.session.get(SESSION_INTERFACE_KEY, 'classic')
         context['admin_interface'] = admin_interface
@@ -67,6 +122,11 @@ class CustomAdminSite(admin.AdminSite):
             context['user_display'] = request.user.get_short_name() or request.user.get_username() if request.user.is_authenticated else ''
             context['user_initial'] = (context['user_display'][0] if context['user_display'] else 'A').upper()
             context['admin_base_template'] = 'admin_custom/modern/admin_base.html'
+        elif admin_interface == INTERFACE_FRONTEND:
+            context['app_list'] = self.get_app_list(request)
+            context['user_display'] = request.user.get_short_name() or request.user.get_username() if request.user.is_authenticated else ''
+            context['user_initial'] = (context['user_display'][0] if context['user_display'] else 'A').upper()
+            context['admin_base_template'] = 'admin_custom/frontend/admin_base.html'
         else:
             context['admin_base_template'] = 'admin_custom/base.html'
         return context
@@ -81,6 +141,7 @@ class CustomAdminSite(admin.AdminSite):
         # URLs personnalisées - en premier pour override le login
         custom_urls = [
             path('login/', auth_views.select_interface_login, name='login'),
+            path('logout/', self.admin_view(auth_views.logout_get_view), name='logout'),
             path('switch-interface/', auth_views.switch_interface, name='switch_interface'),
             path('modern/', include([
                 path('', self.admin_view(modern_views.modern_dashboard), name='modern_dashboard'),
@@ -88,9 +149,18 @@ class CustomAdminSite(admin.AdminSite):
                 path('grids/', self.admin_view(modern_views.modern_grids), name='modern_grids'),
                 path('settings/', self.admin_view(modern_views.modern_settings), name='modern_settings'),
             ])),
+            path('frontend/', include([
+                path('', self.admin_view(frontend_views.frontend_dashboard), name='frontend_dashboard'),
+                path('charts/', self.admin_view(frontend_views.frontend_charts), name='frontend_charts'),
+                path('grids/', self.admin_view(frontend_views.frontend_grids), name='frontend_grids'),
+                path('settings/', self.admin_view(frontend_views.frontend_settings), name='frontend_settings'),
+                path('profile/', self.admin_view(frontend_views.frontend_profile), name='frontend_profile'),
+                path('notifications/', self.admin_view(frontend_views.frontend_notifications), name='frontend_notifications'),
+            ])),
             path('charts/', self.admin_view(custom_views.charts_view), name='admin_charts'),
             path('grids/', self.admin_view(custom_views.grids_view), name='admin_grids'),
             path('dashboard/', self.admin_view(custom_views.dashboard_view), name='admin_dashboard'),
+            path('dashboard-customize/', self.admin_view(custom_views.dashboard_customize_page), name='dashboard_customize'),
             path('settings/', self.admin_view(custom_views.classic_settings), name='classic_settings'),
         ]
         
@@ -101,7 +171,12 @@ class CustomAdminSite(admin.AdminSite):
         Retourne la liste des applications, en excluant admin_custom
         et en ajoutant les icônes pour l'interface moderne.
         """
-        app_list = super().get_app_list(request, app_label)
+        # explicit super call used to satisfy type checkers (Pylance sometimes
+        # misinterprets parameter count with bare super()).
+        # explicit super call used to satisfy type checkers; we ignore the
+        # call-arg warning because django's signature is (self, request, app_label)
+        # but Pylance sometimes counts differently when called via super().
+        app_list = super(CustomAdminSite, self).get_app_list(request, app_label)  # type: ignore[call-arg]
         
         model_icons = {
             'userprofile': 'fa-user',

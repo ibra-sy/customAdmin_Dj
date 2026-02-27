@@ -1,12 +1,12 @@
 """
-Vues pour l'interface Moderne (Design 1)
+Vues pour l'interface Frontend (Admin Console SPA)
 """
 from django.shortcuts import render, redirect
 from django.contrib.admin.views.decorators import staff_member_required
 from django.db.models import Sum
 from django.apps import apps
 
-from .auth_views import SESSION_INTERFACE_KEY, INTERFACE_MODERN, INTERFACE_CLASSIC
+from .auth_views import SESSION_INTERFACE_KEY, INTERFACE_FRONTEND, INTERFACE_CLASSIC
 from .autodiscover import get_all_models_for_charts, get_all_models_for_grids
 
 
@@ -15,19 +15,21 @@ def get_custom_admin_site():
     return custom_admin_site
 
 
-def _ensure_modern_interface(request):
-    """Redirige vers l'interface classique si l'utilisateur a choisi classique."""
-    if request.session.get(SESSION_INTERFACE_KEY) != INTERFACE_MODERN:
+def _ensure_frontend_interface(request):
+    """Redirige vers l'interface classique si l'utilisateur n'a pas choisi frontend."""
+    if request.session.get(SESSION_INTERFACE_KEY) != INTERFACE_FRONTEND:
         return redirect('admin:index')
     return None
 
 
-def _get_modern_context(request, extra=None):
+def _get_frontend_context(request, extra=None):
+    """Retourne le contexte pour les templates frontend."""
     context = get_custom_admin_site().each_context(request)
     context['user_display'] = request.user.get_short_name() or request.user.get_username()
     context['user_initial'] = (context['user_display'][0] if context['user_display'] else 'A').upper()
     context['switch_to_classic_url'] = '/admin/switch-interface/?to=classic'
     context['switch_to_modern_url'] = '/admin/switch-interface/?to=modern'
+    context['switch_to_frontend_url'] = '/admin/switch-interface/?to=frontend'
     context['current_interface'] = request.session.get(SESSION_INTERFACE_KEY, INTERFACE_CLASSIC)
     if extra:
         context.update(extra)
@@ -35,13 +37,13 @@ def _get_modern_context(request, extra=None):
 
 
 @staff_member_required
-def modern_dashboard(request):
-    """Tableau de bord interface moderne."""
-    redirect_check = _ensure_modern_interface(request)
+def frontend_dashboard(request):
+    """Tableau de bord interface frontend (Admin Console)."""
+    redirect_check = _ensure_frontend_interface(request)
     if redirect_check:
         return redirect_check
 
-    # Stats - même logique que l'API stats (fallback Order/Commande, Payment/Paiement, Product/Produit)
+    # Stats - même logique que l'API stats
     from .views import get_model_class
     order_model = get_model_class('Order') or get_model_class('Commande')
     invoice_model = get_model_class('Invoice')
@@ -73,66 +75,84 @@ def modern_dashboard(request):
                 total_revenue += float(model.objects.aggregate(Sum('montant'))['montant__sum'] or 0)
     stats['revenue'] = total_revenue
 
-    context = _get_modern_context(request, {
-        'title': 'Tableau de bord',
+    context = _get_frontend_context(request, {
+        'title': 'Admin Console',
         'page': 'dashboard',
         'stats': stats,
         'app_list': get_custom_admin_site().get_app_list(request),
     })
-    return render(request, 'admin_custom/modern/dashboard.html', context)
+    return render(request, 'admin_custom/frontend/admin_console.html', context)
 
 
 @staff_member_required
-def modern_charts(request):
-    """Graphiques - interface moderne."""
-    redirect_check = _ensure_modern_interface(request)
+def frontend_charts(request):
+    """Graphiques - interface frontend."""
+    redirect_check = _ensure_frontend_interface(request)
     if redirect_check:
         return redirect_check
 
     models = get_all_models_for_charts()
-    context = _get_modern_context(request, {
+    context = _get_frontend_context(request, {
         'title': 'Graphiques',
         'page': 'charts',
         'models': models,
-        'app_list': get_custom_admin_site().get_app_list(request),
     })
-    return render(request, 'admin_custom/modern/charts.html', context)
+    return render(request, 'admin_custom/frontend/charts.html', context)
 
 
 @staff_member_required
-def modern_grids(request):
-    """Grilles - interface moderne."""
-    redirect_check = _ensure_modern_interface(request)
+def frontend_grids(request):
+    """Grilles - interface frontend."""
+    redirect_check = _ensure_frontend_interface(request)
     if redirect_check:
         return redirect_check
 
     models = get_all_models_for_grids()
-    context = _get_modern_context(request, {
+    context = _get_frontend_context(request, {
         'title': 'Grilles de données',
         'page': 'grids',
         'models': models,
-        'app_list': get_custom_admin_site().get_app_list(request),
     })
-    return render(request, 'admin_custom/modern/grids.html', context)
+    return render(request, 'admin_custom/frontend/grids.html', context)
 
 
 @staff_member_required
-@staff_member_required
-def modern_settings(request):
-    """Paramètres - accessible depuis les deux interfaces pour changer d'interface."""
-    # Pas de redirection : la page paramètres doit être accessible pour changer d'interface
-    from django.contrib.auth import get_user_model
-    
-    User = get_user_model()
-    user_change_url_name = f"admin:{User._meta.app_label}_{User._meta.model_name}_change"
+def frontend_settings(request):
+    """Paramètres - interface frontend."""
+    redirect_check = _ensure_frontend_interface(request)
+    if redirect_check:
+        return redirect_check
 
-    context = _get_modern_context(request, {
+    context = _get_frontend_context(request, {
         'title': 'Paramètres',
         'page': 'settings',
-        'app_list': get_custom_admin_site().get_app_list(request),
-        'user_change_url_name': user_change_url_name,
-        'current_interface': request.session.get(SESSION_INTERFACE_KEY, INTERFACE_CLASSIC),
-        'switch_to_classic_url': '/admin/switch-interface/?to=classic',
-        'switch_to_modern_url': '/admin/switch-interface/?to=modern',
     })
-    return render(request, 'admin_custom/modern/settings.html', context)
+    return render(request, 'admin_custom/frontend/settings.html', context)
+
+
+@staff_member_required
+def frontend_profile(request):
+    """Profil utilisateur - interface frontend."""
+    redirect_check = _ensure_frontend_interface(request)
+    if redirect_check:
+        return redirect_check
+
+    context = _get_frontend_context(request, {
+        'title': 'Mon profil',
+        'page': 'profile',
+    })
+    return render(request, 'admin_custom/frontend/profile.html', context)
+
+
+@staff_member_required
+def frontend_notifications(request):
+    """Notifications - interface frontend."""
+    redirect_check = _ensure_frontend_interface(request)
+    if redirect_check:
+        return redirect_check
+
+    context = _get_frontend_context(request, {
+        'title': 'Notifications',
+        'page': 'notifications',
+    })
+    return render(request, 'admin_custom/frontend/notifications.html', context)

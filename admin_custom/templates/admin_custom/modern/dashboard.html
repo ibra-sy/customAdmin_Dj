@@ -4,7 +4,13 @@
 {% block content %}
 <h1 class="page-title">Tableau de bord</h1>
 
-<div class="row g-4 mb-5" style="--bs-gutter-x:1.5rem; --bs-gutter-y:1.5rem;">
+<div class="mb-3">
+  <a href="{% url 'admin:dashboard_customize' %}" class="btn btn-sm btn-outline-primary" id="btn-customize-dashboard" title="Choisir les indicateurs affichés">
+    <i class="fa-solid fa-sliders"></i> Personnaliser l'affichage
+  </a>
+</div>
+
+<div class="row g-4 mb-5" id="dashboard-metrics-row" data-customize-url="{% url 'admin:dashboard_customize' %}" style="--bs-gutter-x:1.5rem; --bs-gutter-y:1.5rem;">
   <div class="col-12 col-sm-6 col-xl-3">
     <div class="metric-card">
       <div class="metric-icon primary"><i class="fa-solid fa-users"></i></div>
@@ -46,6 +52,53 @@
     </div>
   </div>
 </div>
+
+<script>
+(function() {
+  function getCookie(n){var c=document.cookie||'';var p=c.split('; ');for(var i=0;i<p.length;i++){if(p[i].indexOf(n+'=')===0)return p[i].slice(n.length+1);}return null;}
+  function loadConfigFromBackend(){return fetch('/admin_custom/api/dashboard-config/',{credentials:'same-origin'}).then(function(r){return r.json();}).then(function(d){return Array.isArray(d.config)?d.config:[];});}
+  function saveConfigToBackend(config){return fetch('/admin_custom/api/dashboard-config/save/',{method:'POST',credentials:'same-origin',headers:{'Content-Type':'application/json','X-CSRFToken':getCookie('csrftoken')},body:JSON.stringify({config:config})}).then(function(r){return r.json();});}
+  function loadMetrics(config){return fetch('/admin_custom/api/dashboard-metrics/?config='+encodeURIComponent(JSON.stringify(config))).then(function(r){return r.json();});}
+  function renderCards(metrics, config) {
+    var row = document.getElementById('dashboard-metrics-row');
+    if (!row) return;
+    if (!metrics || metrics.length === 0) {
+      var customizeUrl = row.getAttribute('data-customize-url') || '/admin/dashboard-customize/';
+      row.innerHTML = '<div class="col-12"><div class="metric-card" style="position:relative;"><div class="metric-icon primary"><i class="fa-solid fa-sliders"></i></div><div class="metric-content"><h3>&mdash;</h3><p>Aucun indicateur configuré</p><a href="' + customizeUrl + '" class="btn btn-primary btn-sm mt-2">Personnaliser l\'affichage</a></div></div></div>';
+      return;
+    }
+    var icons = ['fa-users', 'fa-cart-shopping', 'fa-file-invoice', 'fa-box', 'fa-chart-bar', 'fa-database'];
+    var iconClasses = ['primary', 'success', 'warning', 'danger', 'primary', 'secondary'];
+    row.innerHTML = metrics.map(function(m, i) {
+      var v = m.value;
+      if (typeof m.value === 'number') {
+        v = m.value % 1 !== 0 ? m.value.toFixed(2) : m.value;
+        if (Math.abs(m.value) >= 1000) v = (m.value || 0).toLocaleString('fr-FR', {maximumFractionDigits: 2});
+      }
+      var link = m.admin_url ? '<a href="' + m.admin_url + '" class="btn btn-primary btn-sm mt-2">Voir</a>' : '';
+      var delBtn = '<button type="button" class="btn-dash-remove" data-index="' + i + '" title="Supprimer cette colonne" style="position:absolute;top:6px;right:6px;background:rgba(0,0,0,0.15);border:none;border-radius:4px;color:inherit;cursor:pointer;padding:2px 8px;font-size:14px;">&times;</button>';
+      return '<div class="col-12 col-sm-6 col-xl-3"><div class="metric-card" style="position:relative;">' + delBtn + '<div class="metric-icon ' + iconClasses[i % iconClasses.length] + '"><i class="fa-solid ' + icons[i % icons.length] + '"></i></div><div class="metric-content"><h3>' + v + '</h3><p>' + m.label + '</p>' + link + '</div></div></div>';
+    }).join('');
+    row.querySelectorAll('.btn-dash-remove').forEach(function(btn) {
+      btn.onclick = function() {
+        var idx = parseInt(btn.dataset.index, 10);
+        loadConfigFromBackend().then(function(cfg) {
+          cfg.splice(idx, 1);
+          return saveConfigToBackend(cfg);
+        }).then(function() { refresh(); });
+      };
+    });
+  }
+  function refresh() {
+    loadConfigFromBackend().then(function(config) {
+      return loadMetrics(config).then(function(d) {
+        renderCards(d.metrics || [], config);
+      });
+    });
+  }
+  refresh();
+})();
+</script>
 
 <div class="row g-4 mb-5">
   <div class="col-12 col-lg-8">
@@ -115,7 +168,7 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-  fetch('/admin_custom/api/chart-data/?model=Order&field=total_amount&type=line&frequency=month&operation=sum')
+  fetch('/admin_custom/api/chart-data/?model=Commande&field=prix_total&type=line&frequency=month&operation=sum')
     .then(function(r) { return r.json(); })
     .then(function(data) {
       var ctx = document.getElementById('chart-line');
