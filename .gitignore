@@ -50,3 +50,4 @@ generate_context.ps1
 /Autres
 Autres.zip
 *.zip
+h origin main --force
