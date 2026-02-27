@@ -44,3 +44,10 @@ ENV/
 # OS
 .DS_Store
 Thumbs.db
+
+# Fichiers de configuration spécifiques à l'environnement de développement
+/Autres
+*.sh
+generate_context.ps1
+projet_django_custom_admin_context.txt
+projet_django_custom_admin_context_full.txt

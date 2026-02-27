@@ -3,14 +3,18 @@ requires = ["setuptools>=61.0", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "django-admin-custom"
-version = "0.1.0"
+name = "personnalisation-admin-django-IIT"
+version = "0.3.0"
 description = "Package Django réutilisable pour personnaliser l'interface d'administration avec graphiques dynamiques, grilles de données et thèmes modernes"
 readme = "README.md"
 requires-python = ">=3.10"
 license = {text = "MIT"}
 authors = [
-    {name = "Agile Custom Admin"}
+    {name = "Bléou Christ"},
+    {name = "Sylla Scheickna"},
+    {name = "Kossonou Marie Joseph"},
+    {name = "Kouassi Nissi"},
+    {name = "Yoboué Romuald"}
 ]
 keywords = ["django", "admin", "customization", "charts", "grids", "themes"]
 classifiers = [
